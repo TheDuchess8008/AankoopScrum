@@ -23,6 +23,7 @@ namespace PrulariaAankoopUI.Controllers
         public async Task<IActionResult> Index()
         {
             var prulariaComContext = _context.Artikelen.Include(a => a.Leveranciers);
+            ViewData["Categorie"] = new SelectList(_context.Categorieen, "CategorieId", "Naam");
             return View(await prulariaComContext.ToListAsync());
         }
 
@@ -159,6 +160,11 @@ namespace PrulariaAankoopUI.Controllers
         private bool ArtikelExists(int id)
         {
             return _context.Artikelen.Any(e => e.ArtikelId == id);
+        }
+
+        public IActionResult Filter()
+        {
+            return RedirectToAction(nameof(Index));
         }
     }
 }

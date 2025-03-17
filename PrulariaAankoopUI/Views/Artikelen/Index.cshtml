@@ -9,6 +9,17 @@
 <p>
     <a asp-action="Create">Create New</a>
 </p>
+<form asp-action="Filter">
+    <label class="control-label">Categorie</label>
+    <select class="form-control" asp-items="ViewBag.Categorie" style="width:auto"></select>
+    <label class="control-label">Alle</label>
+    <input type="radio" name="filter" value="Alle"/>
+    <label class="control-label">Actief</label>
+    <input type="radio" name="filter" value="Actief"/>
+    <label class="control-label">Non-Actief</label>
+    <input type="radio" name="filter" value="NonActief"/>
+    <input type="submit" value="Filter" class="btn btn-primary" />
+</form>
 <table class="table">
     <thead>
         <tr>
@@ -55,53 +66,54 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Ean)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Naam)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Beschrijving)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Prijs)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.GewichtInGram)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Bestelpeil)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Voorraad)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.MinimumVoorraad)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.MaximumVoorraad)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Levertijd)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.AantalBesteldLeverancier)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.MaxAantalInMagazijnPlaats)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Leveranciers.BtwNummer)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.ArtikelId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.ArtikelId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.ArtikelId">Delete</a>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Ean)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Naam)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Beschrijving)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Prijs)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.GewichtInGram)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Bestelpeil)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Voorraad)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.MinimumVoorraad)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.MaximumVoorraad)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Levertijd)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.AantalBesteldLeverancier)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.MaxAantalInMagazijnPlaats)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Leveranciers.BtwNummer)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.ArtikelId">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.ArtikelId">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.ArtikelId">Delete</a>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>
