@@ -1,4 +1,5 @@
-﻿@model IEnumerable<PrulariaAankoopData.Models.Artikel>
+﻿@using PrulariaAankoopData.Models
+@model ArtikelViewModel
 
 @{
     ViewData["Title"] = "Artikelen";
@@ -10,15 +11,34 @@
     <a asp-action="Create">Create New</a>
 </p>
 <form asp-action="Filter">
-    <label class="control-label">Categorie</label>
-    <select class="form-control" asp-items="ViewBag.Categorie" style="width:auto"></select>
-    <label class="control-label">Alle</label>
-    <input type="radio" name="filter" value="Alle"/>
-    <label class="control-label">Actief</label>
-    <input type="radio" name="filter" value="Actief"/>
-    <label class="control-label">Non-Actief</label>
-    <input type="radio" name="filter" value="NonActief"/>
-    <input type="submit" value="Filter" class="btn btn-primary" />
+    <div class="row">
+        <div class="col-md-3">
+            <select asp-for="@Model.CategorieId" class="form-control" asp-items="ViewBag.Categorie" style="width:auto">
+                <option value=></option>
+            </select>
+            <label class="control-label">Categorie</label>
+        </div>
+        <div class="col-md-3">
+            <select asp-for="@Model.ActiefStatus" class="form-control" style="width:155px">
+                <option value=></option>
+                <option value="Actief">Actief</option>
+                <option value="NonActief">Non-Actief</option>
+            </select>
+            <label class="control-label">Actief/Non-Actief</label>
+        </div>
+        <div class="col-md-2">
+            <input type="submit" value="Filteren" class="btn btn-primary" />
+        </div>
+
+    </div>
+    <!--
+    <label for="Alle">Alle</label>
+    <input asp-for="@Model.ActiefStatus" type="radio" name="filter" value="Alle" id="Alle" checked/>
+    <label for="Actief">Actief</label>
+    <input asp-for="@Model.ActiefStatus" type="radio" name="filter" value="Actief" id="Actief" />
+    <label for="NonActief">Non-Actief</label>
+    <input asp-for="@Model.ActiefStatus" type="radio" name="filter" value="NonActief" id="NonActief" />
+    -->
 </form>
 <table class="table">
     <thead>
@@ -66,7 +86,7 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (var item in Model)
+        @foreach (var item in Model.Artikelen)
         {
             <tr>
                 <td>
