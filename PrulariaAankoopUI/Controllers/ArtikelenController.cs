@@ -7,18 +7,16 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using PrulariaAankoopData.Models;
 using PrulariaAankoopData.Repositories;
+using PrulariaAankoopService.Services;
 
 namespace PrulariaAankoopUI.Controllers
 {
     public class ArtikelenController : Controller
     {
         private readonly PrulariaComContext _context;
+        private ArtikelenService _artikelenService;
 
-        public ArtikelenController(PrulariaComContext context)
-        {
-            _context = context;
-        }
-
+        
         // GET: Artikelen
         public async Task<IActionResult> Index()
         {
@@ -159,6 +157,36 @@ namespace PrulariaAankoopUI.Controllers
         private bool ArtikelExists(int id)
         {
             return _context.Artikelen.Any(e => e.ArtikelId == id);
+        }
+        public ArtikelenController(PrulariaComContext context)
+        {
+            _context = context;
+        }
+
+        public ArtikelenController(ArtikelenService artikelenService)
+        {
+            _artikelenService = artikelenService;
+        }
+        public IActionResult GetArtikelByIdIfNotExists(int id)
+        {
+            try
+            {
+                // Roep de servicemethode aan om het artikel op te halen
+                var artikel = _artikelenService.GetArtikelByIdIfNotExists(id);
+
+                // Retourneer het artikel als antwoord
+                return Ok(artikel);
+            }
+            catch (ArgumentException ex)
+            {
+                // Handel ongeldige invoer af
+                return BadRequest(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                // Handel andere uitzonderingen af
+                return StatusCode(500, "Er is een fout opgetreden bij het ophalen van het artikel.");
+            }
         }
     }
 }
