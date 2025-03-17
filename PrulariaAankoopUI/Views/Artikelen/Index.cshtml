@@ -1,0 +1,107 @@
+﻿@model IEnumerable<PrulariaAankoopData.Models.Artikel>
+
+@{
+    ViewData["Title"] = "Artikelen";
+}
+
+<h1>Artikelen</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Ean)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Naam)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Beschrijving)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Prijs)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.GewichtInGram)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Bestelpeil)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Voorraad)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.MinimumVoorraad)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.MaximumVoorraad)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Levertijd)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.AantalBesteldLeverancier)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.MaxAantalInMagazijnPlaats)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Leveranciers)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Ean)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Naam)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Beschrijving)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Prijs)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.GewichtInGram)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Bestelpeil)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Voorraad)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.MinimumVoorraad)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.MaximumVoorraad)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Levertijd)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.AantalBesteldLeverancier)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.MaxAantalInMagazijnPlaats)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Leveranciers.BtwNummer)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.ArtikelId">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.ArtikelId">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.ArtikelId">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

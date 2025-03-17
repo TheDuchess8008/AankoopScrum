@@ -1,0 +1,87 @@
+﻿@model PrulariaAankoopData.Models.Artikel
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create</h1>
+
+<h4>Artikel</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Ean" class="control-label"></label>
+                <input asp-for="Ean" class="form-control" />
+                <span asp-validation-for="Ean" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Naam" class="control-label"></label>
+                <input asp-for="Naam" class="form-control" />
+                <span asp-validation-for="Naam" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Beschrijving" class="control-label"></label>
+                <input asp-for="Beschrijving" class="form-control" />
+                <span asp-validation-for="Beschrijving" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Prijs" class="control-label"></label>
+                <input asp-for="Prijs" class="form-control" />
+                <span asp-validation-for="Prijs" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="GewichtInGram" class="control-label"></label>
+                <input asp-for="GewichtInGram" class="form-control" />
+                <span asp-validation-for="GewichtInGram" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Bestelpeil" class="control-label"></label>
+                <input asp-for="Bestelpeil" class="form-control" />
+                <span asp-validation-for="Bestelpeil" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Voorraad" class="control-label"></label>
+                <input asp-for="Voorraad" class="form-control" />
+                <span asp-validation-for="Voorraad" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="MinimumVoorraad" class="control-label"></label>
+                <input asp-for="MinimumVoorraad" class="form-control" />
+                <span asp-validation-for="MinimumVoorraad" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="MaximumVoorraad" class="control-label"></label>
+                <input asp-for="MaximumVoorraad" class="form-control" />
+                <span asp-validation-for="MaximumVoorraad" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="AantalBesteldLeverancier" class="control-label"></label>
+                <input asp-for="AantalBesteldLeverancier" class="form-control" />
+                <span asp-validation-for="AantalBesteldLeverancier" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="MaxAantalInMagazijnPlaats" class="control-label"></label>
+                <input asp-for="MaxAantalInMagazijnPlaats" class="form-control" />
+                <span asp-validation-for="MaxAantalInMagazijnPlaats" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="LeveranciersId" class="control-label"></label>
+                <select asp-for="LeveranciersId" class ="form-control" asp-items="ViewBag.LeveranciersId"></select>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

@@ -1,0 +1,56 @@
+using Microsoft.AspNetCore.Localization;
+using Microsoft.EntityFrameworkCore;
+using PrulariaAankoopData.Repositories;
+using PrulariaAankoopUI;
+using System.Globalization;
+
+var builder = WebApplication.CreateBuilder(args);
+
+// Add services to the container.
+builder.Services.AddDbContext<PrulariaComContext>(
+        options => options.UseMySQL(
+         builder.Configuration.GetConnectionString("PrulariaComConnection"),
+                           x => x.MigrationsAssembly("naamvanhetdataproject")));
+
+builder.Services.AddControllersWithViews();
+
+builder.Services.Configure<RequestLocalizationOptions>(options =>
+{
+    var supportedCultures = new List<CultureInfo> {
+                    new CultureInfo("nl-BE"),
+                };
+    options.SupportedCultures = supportedCultures;
+    options.SupportedUICultures = supportedCultures;
+    options.DefaultRequestCulture = new RequestCulture("nl-BE");
+
+});
+
+builder.Services.AddLocalization();
+builder.Services.AddControllersWithViews((options) =>
+{
+    options.ModelBinderProviders.Insert(0, new CustomBinderProvider());
+});
+
+
+var app = builder.Build();
+
+// Configure the HTTP request pipeline.
+if (!app.Environment.IsDevelopment())
+{
+    app.UseExceptionHandler("/Home/Error");
+}
+app.UseRouting();
+
+app.UseAuthorization();
+
+app.UseRequestLocalization();
+
+app.MapStaticAssets();
+
+app.MapControllerRoute(
+    name: "default",
+    pattern: "{controller=Home}/{action=Index}/{id?}")
+    .WithStaticAssets();
+
+
+app.Run();
