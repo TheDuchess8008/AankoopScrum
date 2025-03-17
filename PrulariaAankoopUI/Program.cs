@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Localization;
 using Microsoft.EntityFrameworkCore;
 using PrulariaAankoopData.Repositories;
+using PrulariaAankoopService.Services;
 using PrulariaAankoopUI;
 using System.Globalization;
 
@@ -12,6 +13,8 @@ builder.Services.AddDbContext<PrulariaComContext>(
          builder.Configuration.GetConnectionString("PrulariaComConnection"),
                            x => x.MigrationsAssembly("naamvanhetdataproject")));
 
+builder.Services.AddScoped<IArtikelenRepository, ArtikelRepository>();
+builder.Services.AddScoped<ArtikelenService>();
 builder.Services.AddControllersWithViews();
 
 builder.Services.Configure<RequestLocalizationOptions>(options =>
