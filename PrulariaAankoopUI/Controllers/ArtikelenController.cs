@@ -7,39 +7,26 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using PrulariaAankoopData.Models;
 using PrulariaAankoopData.Repositories;
+using PrulariaAankoopService.Services;
 
 namespace PrulariaAankoopUI.Controllers
 {
     public class ArtikelenController : Controller
     {
         private readonly PrulariaComContext _context;
+        private readonly ArtikelenService _artikelenService;
 
-        public ArtikelenController(PrulariaComContext context)
+        public ArtikelenController(PrulariaComContext context, ArtikelenService artikelService)
         {
             _context = context;
+            _artikelenService = artikelService;
         }
 
         // GET: Artikelen
         public async Task<IActionResult> Index(ArtikelViewModel form)
         {
             ViewData["Categorie"] = new SelectList(_context.Categorieen, "CategorieId", "Naam");
-            form.Artikelen = await (from artikel in _context.Artikelen.Include("Categorieën").Include("Leveranciers")
-                                    select artikel).ToListAsync();
-            var filterLijst = new ArtikelViewModel();
-            foreach (var artikel in form.Artikelen)
-            {
-                foreach (var categorie in artikel.Categorieën)
-                {
-                    if (categorie.CategorieId == form.CategorieId || form.CategorieId == 0)
-                    {
-                        if (artikel.MaximumVoorraad > 0 && form.ActiefStatus == "Actief" || artikel.MaximumVoorraad == 0 && form.ActiefStatus == "NonActief" || form.ActiefStatus == null)
-                        {
-                            filterLijst.Artikelen.Add(artikel);
-                        }
-                    }
-                }
-            }
-            return View(filterLijst);
+            return View(await _artikelenService.MaakGefilterdeLijstArtikelen(form));
         }
 
         // GET: Artikelen/Details/5
@@ -51,7 +38,7 @@ namespace PrulariaAankoopUI.Controllers
             }
 
             var artikel = await _context.Artikelen
-                .Include(a => a.Leveranciers)
+                .Include(a => a.Leverancier)
                 .FirstOrDefaultAsync(m => m.ArtikelId == id);
             if (artikel == null)
             {
@@ -147,7 +134,7 @@ namespace PrulariaAankoopUI.Controllers
             }
 
             var artikel = await _context.Artikelen
-                .Include(a => a.Leveranciers)
+                .Include(a => a.Leverancier)
                 .FirstOrDefaultAsync(m => m.ArtikelId == id);
             if (artikel == null)
             {

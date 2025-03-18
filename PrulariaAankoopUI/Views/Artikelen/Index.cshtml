@@ -13,20 +13,21 @@
 <form asp-action="Filter">
     <div class="row">
         <div class="col-md-3">
+            <label class="control-label">Categorie</label>
             <select asp-for="@Model.CategorieId" class="form-control" asp-items="ViewBag.Categorie" style="width:auto">
                 <option value=></option>
             </select>
-            <label class="control-label">Categorie</label>
         </div>
         <div class="col-md-3">
+            <label class="control-label">Actief/Non-Actief</label>
             <select asp-for="@Model.ActiefStatus" class="form-control" style="width:155px">
                 <option value=></option>
                 <option value="Actief">Actief</option>
                 <option value="NonActief">Non-Actief</option>
             </select>
-            <label class="control-label">Actief/Non-Actief</label>
         </div>
         <div class="col-md-2">
+            <br />
             <input type="submit" value="Filteren" class="btn btn-primary" />
         </div>
 
@@ -44,13 +45,13 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Ean)
-            </th>
-            <th>
                 @Html.DisplayNameFor(model => model.Naam)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Beschrijving)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Ean)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Prijs)
@@ -80,7 +81,7 @@
                 @Html.DisplayNameFor(model => model.MaxAantalInMagazijnPlaats)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Leveranciers)
+                @Html.DisplayNameFor(model => model.Leverancier)
             </th>
             <th></th>
         </tr>
@@ -90,13 +91,13 @@
         {
             <tr>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Ean)
-                </td>
-                <td>
                     @Html.DisplayFor(modelItem => item.Naam)
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Beschrijving)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Ean)
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Prijs)
@@ -126,7 +127,7 @@
                     @Html.DisplayFor(modelItem => item.MaxAantalInMagazijnPlaats)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Leveranciers.BtwNummer)
+                    @Html.DisplayFor(modelItem => item.Leverancier.Naam)
                 </td>
                 <td>
                     <a asp-action="Edit" asp-route-id="@item.ArtikelId">Edit</a> |
