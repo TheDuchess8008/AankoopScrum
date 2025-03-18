@@ -7,16 +7,19 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using PrulariaAankoopData.Models;
 using PrulariaAankoopData.Repositories;
+using PrulariaAankoopService.Services;
 
 namespace PrulariaAankoopUI.Controllers
 {
     public class ArtikelenController : Controller
     {
         private readonly PrulariaComContext _context;
+        private readonly ArtikelenService artikelenService;
 
-        public ArtikelenController(PrulariaComContext context)
+        public ArtikelenController(PrulariaComContext context, ArtikelenService artikelenService)
         {
             _context = context;
+            this.artikelenService = artikelenService;
         }
 
         // GET: Artikelen
@@ -57,12 +60,16 @@ namespace PrulariaAankoopUI.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ArtikelId,Ean,Naam,Beschrijving,Prijs,GewichtInGram,Bestelpeil,Voorraad,MinimumVoorraad,MaximumVoorraad,Levertijd,AantalBesteldLeverancier,MaxAantalInMagazijnPlaats,LeveranciersId")] Artikel artikel)
+        public async Task<IActionResult> Create(Artikel artikel)
         {
-            if (ModelState.IsValid)
+            artikel.Leveranciers = await _context.Leveranciers.FindAsync(artikel.LeveranciersId);
+
+            if(artikelenService.CheckOfArtikelBestaat(artikel)) 
+                ModelState.AddModelError("Naam", "Een artikel met deze naam bestaat al.");
+
+            if (this.ModelState.IsValid)
             {
-                _context.Add(artikel);
-                await _context.SaveChangesAsync();
+                artikelenService.AddArtikel(artikel);
                 return RedirectToAction(nameof(Index));
             }
             ViewData["LeveranciersId"] = new SelectList(_context.Leveranciers, "LeveranciersId", "BtwNummer", artikel.LeveranciersId);
