@@ -26,7 +26,20 @@ public class ArtikelenService
     {
         var artikelLijst = new ArtikelViewModel();
         artikelLijst.Artikel = await _artikelenRepository.GetArtikelById(id);
-        artikelLijst.Categorieën = await _artikelenRepository.GetAlleCategorieen();
+        var alleCategorieen = await _artikelenRepository.GetAlleCategorieen();
+        var hoofdCategorie = new Categorie();
+        foreach (var artikelCategorie in artikelLijst.Artikel.Categorieën)
+        {
+            foreach (var categorie in alleCategorieen)
+            {
+                if (artikelCategorie.CategorieId == categorie.CategorieId)
+                {
+                    hoofdCategorie = alleCategorieen[(int)categorie.HoofdCategorieId - 1];
+                    if (!artikelLijst.Categorieën.Contains(hoofdCategorie))
+                        artikelLijst.Hoofdcategorieën.Add(hoofdCategorie);
+                }
+            }
+        }
         return (artikelLijst);
     }
 }
