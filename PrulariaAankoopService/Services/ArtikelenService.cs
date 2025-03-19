@@ -1,52 +1,27 @@
-﻿using PrulariaAankoopData.Models;
+﻿using System;
+using PrulariaAankoopData.Models;
 using PrulariaAankoopData.Repositories;
-using System;
-using System.Linq;
 
-namespace PrulariaAankoopService.Services;
-
-public class ArtikelenService
+namespace PrulariaAankoopService.Services
 {
-    private readonly PrulariaComContext _context;
-
-    public ArtikelenService(PrulariaComContext context)
+    public class ArtikelenService
     {
-        _context = context ?? throw new ArgumentNullException(nameof(context));
-    }
+        private readonly IArtikelenRepository _artikelenRepository;
 
-    public Artikel GetArtikelByIdIfNotExists(int artikelId)
-    {
-        // Valideer het artikel ID (bijv. controleer of het een positief getal is)
-        if (artikelId <= 0)
+        public ArtikelenService(IArtikelenRepository artikelenRepository)
         {
-            throw new ArgumentException("Ongeldig artikel ID. Het ID moet een positief getal zijn.", nameof(artikelId));
+            _artikelenRepository = artikelenRepository ?? throw new ArgumentNullException(nameof(artikelenRepository));
         }
 
-        // Controleer of het artikel al bestaat
-        var bestaandArtikel = _context.Artikelen.FirstOrDefault(a => a.ArtikelId == artikelId);
-
-        // Als het artikel niet bestaat, maak een nieuw artikel aan
-        if (bestaandArtikel == null)
+        public async Task<Artikel> DetailsService(int artikelId)
         {
-            var nieuwArtikel = MaakNieuwArtikel(artikelId); // Maak een nieuw artikel aan
-            _context.Artikelen.Add(nieuwArtikel);
-            _context.SaveChanges();
-            return nieuwArtikel;
+
+            var artikel = await _artikelenRepository.GetArtikelById(artikelId);
+            if (artikel == null)
+            {
+                throw new Exception($"Artikel met ID {artikelId} werd niet gevonden.");
+            }
+            return artikel;
         }
-
-        // Als het artikel al bestaat, retourneer het
-        return bestaandArtikel;
-    }
-
-    private Artikel MaakNieuwArtikel(int artikelId)
-    {
-        // Maak een nieuw artikel aan met standaardwaarden
-        return new Artikel
-        {
-            ArtikelId = artikelId,
-            Naam = "Nieuw Artikel",
-            Prijs = 10.0m,
-            Voorraad = 100
-        };
     }
 }

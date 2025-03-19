@@ -13,7 +13,6 @@ builder.Services.AddDbContext<PrulariaComContext>(
          builder.Configuration.GetConnectionString("PrulariaComConnection"),
                            x => x.MigrationsAssembly("naamvanhetdataproject")));
 
-builder.Services.AddScoped<IArtikelenRepository, ArtikelRepository>();
 builder.Services.AddScoped<ArtikelenService>();
 builder.Services.AddControllersWithViews();
 
