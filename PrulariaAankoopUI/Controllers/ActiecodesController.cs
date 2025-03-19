@@ -5,15 +5,19 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using MySqlX.XDevAPI.Common;
 using PrulariaAankoopData.Models;
 using PrulariaAankoopData.Repositories;
 using PrulariaAankoopService.Services;
 using PrulariaAankoopUI.Models;
+using PrulariaAankoopService.Services;
 
 namespace PrulariaAankoopUI.Controllers
 {
     public class ActiecodesController : Controller
     {
+        private readonly PrulariaComContext _context;
+        private readonly ActiecodesService _actiecodesService;
 
         private readonly ActiecodesService _actiecodesService;
 
@@ -69,19 +73,32 @@ namespace PrulariaAankoopUI.Controllers
         }
 
         // POST: Actiecodes/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ActiecodeId,Naam,GeldigVanDatum,GeldigTotDatum,IsEenmalig")] Actiecode actiecode)
+        public async Task<IActionResult> Create(NieuweActiecodeViewModel model)
         {
             if (ModelState.IsValid)
             {
-                _actiecodesService.Add(actiecode);
-                await _actiecodesService.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                // als de actiecode nog niet in de database bestaat:
+                if (_actiecodesService.IsActiCodeNieuw(model.Naam, model.GeldigVanDatum, model.GeldigTotDatum ))
+                {
+                    var actiecode = new Actiecode()
+                    {
+                        Naam = model.Naam,
+                        GeldigVanDatum = model.GeldigVanDatum,
+                        GeldigTotDatum = model.GeldigTotDatum,
+                        IsEenmalig = model.IsEenmalig,
+                    };
+                    await _actiecodesService.RegistrerenActiecodeAsync(actiecode);
+                    return RedirectToAction("Index");
+                }
+                // als de actiecode in de database WEL bestaat:
+                else
+                {
+                    ViewBag.bestaandeActiecode = "De Actiecode bestaat al in de database";
+                }
             }
-            return View(actiecode);
+            return View(model);
         }
 
         // GET: Actiecodes/Edit/5

@@ -11,7 +11,10 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<PrulariaComContext>(
         options => options.UseMySQL(
          builder.Configuration.GetConnectionString("PrulariaComConnection"),
-                           x => x.MigrationsAssembly("PrulariaAankoopData")));
+                           x => x.MigrationsAssembly("naamvanhetdataproject")));
+
+
+builder.Services.AddControllersWithViews();
 
 builder.Services.AddTransient<ActiecodesService>();
 builder.Services.AddTransient<IActiecodesRepository, SQLActiecodesRepository>();
@@ -24,7 +27,6 @@ builder.Services.AddTransient<ILeveranciersRepository, SQLLeveranciersRepository
 builder.Services.AddTransient<SecurityService>();
 builder.Services.AddTransient<ISecurityRepository, SQLSecurityRepository>();
 
-builder.Services.AddControllersWithViews();
 
 builder.Services.Configure<RequestLocalizationOptions>(options =>
 {

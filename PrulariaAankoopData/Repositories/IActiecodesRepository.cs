@@ -5,6 +5,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
+using PrulariaAankoopData.Models;
 
 namespace PrulariaAankoopData.Repositories;
 public interface IActiecodesRepository
@@ -21,4 +22,6 @@ public interface IActiecodesRepository
     bool Any(Func<Actiecode, bool> predicate);
     void Remove(Actiecode actiecode);
 
+    Task<Actiecode> ToevoegActiecodeAsync(Actiecode actiecode);
+    bool IsActiCodeNieuw(string naam, DateTime geldigVanDatum, DateTime geldigTotDatum);
 }
