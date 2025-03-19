@@ -22,7 +22,7 @@ public class ArtikelenService
         filterLijst.Categorieën = await _artikelenRepository.GetAlleCategorieen();
         return filterLijst;
     }
-    public async Task<ArtikelViewModel> DetailsService(int id)
+    public async Task<ArtikelViewModel> MaakDetailsArtikel(int id)
     {
         var artikelLijst = new ArtikelViewModel();
         artikelLijst.Artikel = await _artikelenRepository.GetArtikelById(id);
