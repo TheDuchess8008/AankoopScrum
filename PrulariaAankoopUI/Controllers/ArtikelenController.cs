@@ -7,16 +7,19 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using PrulariaAankoopData.Models;
 using PrulariaAankoopData.Repositories;
+using PrulariaAankoopService.Services;
 
 namespace PrulariaAankoopUI.Controllers
 {
     public class ArtikelenController : Controller
     {
         private readonly PrulariaComContext _context;
+        private readonly ArtikelenService _artikelenService;
 
-        public ArtikelenController(PrulariaComContext context)
+        public ArtikelenController(PrulariaComContext context, ArtikelenService artikelenService)
         {
             _context = context;
+            _artikelenService = artikelenService;
         }
 
         // GET: Artikelen
@@ -159,6 +162,34 @@ namespace PrulariaAankoopUI.Controllers
         private bool ArtikelExists(int id)
         {
             return _context.Artikelen.Any(e => e.ArtikelId == id);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> BevestigSetNonActief(int artikelId)
+        {
+            var artikel = await _artikelenService.GetArtikelByIdAsync(artikelId);
+            if (artikel == null)
+            {
+                return NotFound();
+            }
+            return View(artikel);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> SetArtikelNonActief(int artikelId)
+        {
+            try
+            {
+                await _artikelenService.SetArtikelNonActiefAsync(artikelId);
+                TempData["SuccessMessage"] = "Artikel is succesvol op non-actief gezet."; 
+                return RedirectToAction("Index");
+            }
+            catch (Exception ex)
+            {
+                TempData["ErrorMessage"] = $"Fout bij op nul zetten: {ex.Message}";
+                return RedirectToAction("Index");
+            }
         }
     }
 }
