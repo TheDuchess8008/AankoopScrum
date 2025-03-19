@@ -16,7 +16,12 @@ namespace PrulariaAankoopUI.Controllers
         private readonly PrulariaComContext _context;
         private readonly ArtikelenService _artikelenService;
 
-        
+        public ArtikelenController(PrulariaComContext context, ArtikelenService artikelenService)
+        {
+            _context = context;
+            _artikelenService = artikelenService;
+        }
+
         // GET: Artikelen
         public async Task<IActionResult> Index()
         {
@@ -41,7 +46,7 @@ namespace PrulariaAankoopUI.Controllers
             }
 
             return View(artikel);
-            
+
         }
 
         // GET: Artikelen/Create
@@ -159,12 +164,7 @@ namespace PrulariaAankoopUI.Controllers
         {
             return _context.Artikelen.Any(e => e.ArtikelId == id);
         }
-        public ArtikelenController(PrulariaComContext context)
-        {
-            _context = context;
-        }
 
-       
-        
+
     }
 }
