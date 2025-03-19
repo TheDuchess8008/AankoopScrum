@@ -24,10 +24,10 @@ namespace PrulariaAankoopUI.Controllers
         // GET: Actiecodes
         public async Task<IActionResult> Index()
         {
-            var actiecodes = await _actiecodesService.GetAllActiecodesAsync();
-            return View(actiecodes);
+            return View(await _context.Actiecodes.ToListAsync());
         }
-        [HttpGet]
+       
+            [HttpGet]
         public async Task<IActionResult> ActiecodeWijzigen(int id)
         {
             var model = await _actiecodesService.GetActiecodeVoorWijzigingAsync(id);
