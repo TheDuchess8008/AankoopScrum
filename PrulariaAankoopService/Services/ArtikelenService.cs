@@ -18,22 +18,8 @@ public class ArtikelenService
     public async Task<ArtikelViewModel> MaakGefilterdeLijstArtikelen(ArtikelViewModel form)
     {
         ArtikelViewModel filterLijst = new();
-        form.Artikelen = await _artikelenRepository.GetListArtikelen(form.CategorieId);
-        foreach (var artikel in form.Artikelen)
-        {
-            for (int i = 0; i < artikel.Categorieën.Count; i++)
-            {
-                if (artikel.Categorieën[i].CategorieId == form.CategorieId || form.CategorieId == 0)
-                {
-                    if (artikel.MaximumVoorraad > 0 && form.ActiefStatus == "Actief" ||
-                        artikel.MaximumVoorraad == 0 && form.ActiefStatus == "NonActief" ||
-                        form.ActiefStatus == null)
-                    {
-                        filterLijst.Artikelen.Add(artikel);
-                    }
-                }
-            }
-        }
+        filterLijst.Artikelen = await _artikelenRepository.GetArtikelenMetFilteren(form.CategorieId, form.ActiefStatus);
+        filterLijst.Categorieën = await _artikelenRepository.GetAlleCategorieen();
         return filterLijst;
     }
     public async Task<ArtikelViewModel> DetailsService(int id)

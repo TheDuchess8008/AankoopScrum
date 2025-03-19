@@ -21,23 +21,22 @@ public class SQLArtikelenRepository : IArtikelenRepository
                 .Include(c => c.Categorieën)
                 .FirstOrDefaultAsync(m => m.ArtikelId == id);
     }
-    public async Task<List<Artikel>> GetListArtikelen(int categorieId)
+    public async Task<List<Artikel>> GetArtikelenMetFilteren(int? categorieId, string? actiefStatus)
     {
-        if (categorieId == 0)
+        IQueryable<Artikel> query = _context.Artikelen.Include(c => c.Categorieën)
+            .Include(l => l.Leverancier);
+        if (categorieId != 0)
+            query = query.Where(a => a.Categorieën.Any(c => c.CategorieId == categorieId));
+        if (actiefStatus == "Actief")
         {
-            return await (_context.Artikelen
-            .Include(c => c.Categorieën)
-            .Include(l => l.Leverancier)
-            .OrderBy(a => a.Naam)).ToListAsync();
+            query = query.Where(a => a.MaximumVoorraad > 0);
         }
-        else
+        if (actiefStatus == "NonActief")
         {
-            return await (_context.Artikelen
-            .Include(c => c.Categorieën)
-            .Include(l => l.Leverancier)
-            
-            .OrderBy(a => a.Naam)).ToListAsync();
+            query = query.Where(a => a.MaximumVoorraad == 0);
         }
+        var gefilterdeLijstArtikelen = await query.OrderBy(a => a.Naam).ToListAsync();
+        return gefilterdeLijstArtikelen;
     }
     public async Task<List<Categorie>> GetAlleCategorieen()
     {
