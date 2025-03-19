@@ -185,9 +185,15 @@ namespace PrulariaAankoopUI.Controllers
                 TempData["SuccessMessage"] = "Artikel is succesvol op non-actief gezet."; 
                 return RedirectToAction("Index");
             }
+            catch (DbUpdateConcurrencyException)
+            {
+                TempData["ErrorMessage"] = "Het artikel is al gewijzigd door een andere gebruiker." +
+                    " Probeer het opnieuw.";
+                return RedirectToAction("Index");
+            }
             catch (Exception ex)
             {
-                TempData["ErrorMessage"] = $"Fout bij op nul zetten: {ex.Message}";
+                TempData["ErrorMessage"] = $"Fout bij op non-actief zetten: {ex.Message}";
                 return RedirectToAction("Index");
             }
         }
