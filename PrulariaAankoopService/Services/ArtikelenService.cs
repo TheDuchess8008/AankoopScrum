@@ -30,7 +30,11 @@ public class ArtikelenService
         if (artikel == null)
             throw new ArgumentNullException(nameof(artikel), "Artikel kan niet null zijn");
 
-        _context.Artikelen.Update(artikel);
+        var existingArtikel = await _context.Artikelen.FindAsync(artikel.ArtikelId);
+        if (existingArtikel == null)
+            throw new KeyNotFoundException($"Artikel met ID {artikel.ArtikelId} niet gevonden.");
+
+        _context.Entry(existingArtikel).CurrentValues.SetValues(artikel);
         await _context.SaveChangesAsync();
     }
 
@@ -39,6 +43,8 @@ public class ArtikelenService
         var artikel = await GetArtikelByIdAsync(artikelId);
         if (artikel == null)
             throw new ArgumentNullException(nameof(artikel), "Artikel kan niet null zijn");
+
+        _context.Attach(artikel);
 
         //Velden op nul zetten
         artikel.MinimumVoorraad = 0;
