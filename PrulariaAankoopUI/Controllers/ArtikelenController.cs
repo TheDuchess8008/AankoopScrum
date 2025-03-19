@@ -35,7 +35,7 @@ namespace PrulariaAankoopUI.Controllers
             {
                 return NotFound();
             }
-            var artikel = await _artikelenService.DetailsService((int)id);
+            var artikel = await _artikelenService.MaakDetailsArtikel((int)id);
             if (artikel == null)
             {
                 return NotFound();
