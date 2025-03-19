@@ -23,5 +23,9 @@ namespace PrulariaAankoopService.Services
             }
             return artikel;
         }
+        public async Task UpdateArtikel (Artikel artikel)
+        {
+            await _artikelenRepository.UpdateArtikel(artikel);
+        }
     }
 }

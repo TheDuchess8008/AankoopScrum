@@ -9,4 +9,5 @@ namespace PrulariaAankoopData.Repositories;
 public interface IArtikelenRepository
 {
     Task<Artikel?> GetArtikelById(int artikelId);
+    Task UpdateArtikel(Artikel artikel);
 }
