@@ -21,9 +21,9 @@ public class ArtikelenService
         form.Artikelen = await _artikelenRepository.GetListArtikelen(form.CategorieId);
         foreach (var artikel in form.Artikelen)
         {
-            foreach (var categorie in artikel.Categorieën)
+            for (int i = 0; i < artikel.Categorieën.Count; i++)
             {
-                if (categorie.CategorieId == form.CategorieId || form.CategorieId == 0)
+                if (artikel.Categorieën[i].CategorieId == form.CategorieId || form.CategorieId == 0)
                 {
                     if (artikel.MaximumVoorraad > 0 && form.ActiefStatus == "Actief" ||
                         artikel.MaximumVoorraad == 0 && form.ActiefStatus == "NonActief" ||
