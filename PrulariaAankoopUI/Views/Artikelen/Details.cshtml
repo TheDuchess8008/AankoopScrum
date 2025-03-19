@@ -88,22 +88,6 @@
         <dd class="col-sm-9">
             @Html.DisplayFor(model => model.Artikel.Leverancier.Naam)
         </dd>
-        <dt class="col-sm-3">
-            Hoofdcategorie
-        </dt>
-        <dd class="col-sm-9">
-
-        </dd>
-        <dt class="col-sm-3">
-            Subcategorieën
-        </dt>
-        <dd class="col-sm-9">
-            @foreach (var categorie in Model.Artikel.Categorieën)
-            {
-                @categorie.Naam
-                <br />
-            }
-        </dd>
     </dl>
 </div>
 <div>
