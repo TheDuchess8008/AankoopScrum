@@ -12,8 +12,9 @@ using PrulariaAankoopData.Repositories;
 namespace PrulariaAankoopService.Services;
 public class ActiecodesService
 {
-    private readonly IActiecodesRepository _actiecodesRepository;
 
+
+    private IActiecodesRepository _actiecodesRepository;
     public ActiecodesService(IActiecodesRepository actiecodesRepository)
     {
         _actiecodesRepository = actiecodesRepository;
@@ -67,14 +68,10 @@ public class ActiecodesService
     }
 
 
-}
 
 
-    private IActiecodesRepository _actiecodesRepository;
-    public ActiecodesService(IActiecodesRepository actiecodesRepository)
-    {
-            _actiecodesRepository = actiecodesRepository;
-    }
+
+
 
     public bool IsActiCodeNieuw(string naam, DateTime geldigVanDatum, DateTime geldigTotDatum) 
     {

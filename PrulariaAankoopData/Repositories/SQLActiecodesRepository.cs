@@ -47,14 +47,9 @@ public class SQLActiecodesRepository : IActiecodesRepository
         return actiecode;
         
     }
-}
 
-    private readonly PrulariaComContext _context;
 
-    public SQLActiecodesRepository(PrulariaComContext context)
-    {
-        _context = context;
-    }
+
 
     // ASYNCHROON ===========================================================
 

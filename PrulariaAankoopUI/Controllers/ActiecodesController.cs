@@ -19,7 +19,7 @@ namespace PrulariaAankoopUI.Controllers
         private readonly PrulariaComContext _context;
         private readonly ActiecodesService _actiecodesService;
 
-        private readonly ActiecodesService _actiecodesService;
+        //private readonly ActiecodesService _actiecodesService;
 
         public ActiecodesController(ActiecodesService actiecodesService)
         {
