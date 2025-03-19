@@ -30,8 +30,8 @@
             <br />
             <input type="submit" value="Filteren" class="btn btn-primary" />
         </div>
-
     </div>
+    <br />
     <!--
     <label for="Alle">Alle</label>
     <input asp-for="@Model.ActiefStatus" type="radio" name="filter" value="Alle" id="Alle" checked/>
@@ -45,43 +45,16 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Naam)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Beschrijving)
-            </th>
-            <th>
                 @Html.DisplayNameFor(model => model.Ean)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Naam)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Prijs)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.GewichtInGram)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Bestelpeil)
-            </th>
-            <th>
                 @Html.DisplayNameFor(model => model.Voorraad)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.MinimumVoorraad)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.MaximumVoorraad)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Levertijd)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.AantalBesteldLeverancier)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.MaxAantalInMagazijnPlaats)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Leverancier)
             </th>
             <th></th>
         </tr>
@@ -91,43 +64,16 @@
         {
             <tr>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Naam)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Beschrijving)
-                </td>
-                <td>
                     @Html.DisplayFor(modelItem => item.Ean)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Naam)
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Prijs)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.GewichtInGram)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Bestelpeil)
-                </td>
-                <td>
                     @Html.DisplayFor(modelItem => item.Voorraad)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.MinimumVoorraad)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.MaximumVoorraad)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Levertijd)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.AantalBesteldLeverancier)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.MaxAantalInMagazijnPlaats)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Leverancier.Naam)
                 </td>
                 <td>
                     <a asp-action="Edit" asp-route-id="@item.ArtikelId">Edit</a> |
