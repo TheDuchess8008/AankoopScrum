@@ -1,4 +1,4 @@
-﻿@model PrulariaAankoopData.Models.Artikel
+﻿@model PrulariaAankoopData.Models.ArtikelViewModel
 
 @{
     ViewData["Title"] = "Details";
@@ -11,82 +11,98 @@
     <hr />
     <dl class="row">
         <dt class="col-sm-3">
-            @Html.DisplayNameFor(model => model.Ean)
+            @Html.DisplayNameFor(model => model.Artikel.Ean)
         </dt>
         <dd class="col-sm-9">
-            @Html.DisplayFor(model => model.Ean)
+            @Html.DisplayFor(model => model.Artikel.Ean)
         </dd>
         <dt class="col-sm-3">
-            @Html.DisplayNameFor(model => model.Naam)
+            @Html.DisplayNameFor(model => model.Artikel.Naam)
         </dt>
         <dd class="col-sm-9">
-            @Html.DisplayFor(model => model.Naam)
+            @Html.DisplayFor(model => model.Artikel.Naam)
         </dd>
         <dt class="col-sm-3">
-            @Html.DisplayNameFor(model => model.Beschrijving)
+            @Html.DisplayNameFor(model => model.Artikel.Beschrijving)
         </dt>
         <dd class="col-sm-9">
-            @Html.DisplayFor(model => model.Beschrijving)
+            @Html.DisplayFor(model => model.Artikel.Beschrijving)
         </dd>
         <dt class="col-sm-3">
-            @Html.DisplayNameFor(model => model.Prijs)
+            @Html.DisplayNameFor(model => model.Artikel.Prijs)
         </dt>
         <dd class="col-sm-9">
-            @Html.DisplayFor(model => model.Prijs)
+            @Html.DisplayFor(model => model.Artikel.Prijs)
         </dd>
         <dt class="col-sm-3">
-            @Html.DisplayNameFor(model => model.GewichtInGram)
+            @Html.DisplayNameFor(model => model.Artikel.GewichtInGram)
         </dt>
         <dd class="col-sm-9">
-            @Html.DisplayFor(model => model.GewichtInGram)
+            @Html.DisplayFor(model => model.Artikel.GewichtInGram)
         </dd>
         <dt class="col-sm-3">
-            @Html.DisplayNameFor(model => model.Bestelpeil)
+            @Html.DisplayNameFor(model => model.Artikel.Bestelpeil)
         </dt>
         <dd class="col-sm-9">
-            @Html.DisplayFor(model => model.Bestelpeil)
+            @Html.DisplayFor(model => model.Artikel.Bestelpeil)
         </dd>
         <dt class="col-sm-3">
-            @Html.DisplayNameFor(model => model.Voorraad)
+            @Html.DisplayNameFor(model => model.Artikel.Voorraad)
         </dt>
         <dd class="col-sm-9">
-            @Html.DisplayFor(model => model.Voorraad)
+            @Html.DisplayFor(model => model.Artikel.Voorraad)
         </dd>
         <dt class="col-sm-3">
-            @Html.DisplayNameFor(model => model.MinimumVoorraad)
+            @Html.DisplayNameFor(model => model.Artikel.MinimumVoorraad)
         </dt>
         <dd class="col-sm-9">
-            @Html.DisplayFor(model => model.MinimumVoorraad)
+            @Html.DisplayFor(model => model.Artikel.MinimumVoorraad)
         </dd>
         <dt class="col-sm-3">
-            @Html.DisplayNameFor(model => model.MaximumVoorraad)
+            @Html.DisplayNameFor(model => model.Artikel.MaximumVoorraad)
         </dt>
         <dd class="col-sm-9">
-            @Html.DisplayFor(model => model.MaximumVoorraad)
+            @Html.DisplayFor(model => model.Artikel.MaximumVoorraad)
         </dd>
         <dt class="col-sm-3">
-            @Html.DisplayNameFor(model => model.Levertijd)
+            @Html.DisplayNameFor(model => model.Artikel.Levertijd)
         </dt>
         <dd class="col-sm-9">
-            @Html.DisplayFor(model => model.Levertijd)
+            @Html.DisplayFor(model => model.Artikel.Levertijd)
         </dd>
         <dt class="col-sm-3">
-            @Html.DisplayNameFor(model => model.AantalBesteldLeverancier)
+            @Html.DisplayNameFor(model => model.Artikel.AantalBesteldLeverancier)
         </dt>
         <dd class="col-sm-9">
-            @Html.DisplayFor(model => model.AantalBesteldLeverancier)
+            @Html.DisplayFor(model => model.Artikel.AantalBesteldLeverancier)
         </dd>
         <dt class="col-sm-3">
-            @Html.DisplayNameFor(model => model.MaxAantalInMagazijnPlaats)
+            @Html.DisplayNameFor(model => model.Artikel.MaxAantalInMagazijnPlaats)
         </dt>
         <dd class="col-sm-9">
-            @Html.DisplayFor(model => model.MaxAantalInMagazijnPlaats)
+            @Html.DisplayFor(model => model.Artikel.MaxAantalInMagazijnPlaats)
         </dd>
         <dt class="col-sm-3">
-            @Html.DisplayNameFor(model => model.Leverancier)
+            @Html.DisplayNameFor(model => model.Artikel.Leverancier)
         </dt>
         <dd class="col-sm-9">
-            @Html.DisplayFor(model => model.Leverancier.Naam)
+            @Html.DisplayFor(model => model.Artikel.Leverancier.Naam)
+        </dd>
+        <dt class="col-sm-3">
+            Hoofdcategorie
+        </dt>
+        <dd class="col-sm-9">
+
+        </dd>
+        <dt class="col-sm-3">
+            Subcategorieën
+        </dt>
+        <dd class="col-sm-9">
+            @foreach (var categorie in Model.Artikel.Categorieën)
+            {
+                @categorie.Naam
+                <br />
+            }
         </dd>
         <dt class="col-sm-3">
             @Html.DisplayNameFor(model => model.Categorieën)

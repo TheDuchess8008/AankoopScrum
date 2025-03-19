@@ -25,7 +25,6 @@ namespace PrulariaAankoopUI.Controllers
         // GET: Artikelen
         public async Task<IActionResult> Index(ArtikelViewModel form)
         {
-            ViewData["Categorie"] = new SelectList(_context.Categorieen, "CategorieId", "Naam");
             return View(await _artikelenService.MaakGefilterdeLijstArtikelen(form));
         }
 
@@ -36,10 +35,7 @@ namespace PrulariaAankoopUI.Controllers
             {
                 return NotFound();
             }
-            var artikel = await _context.Artikelen
-                .Include(a => a.Leverancier)
-                .Include(c  => c.Categorieën)
-                .FirstOrDefaultAsync(m => m.ArtikelId == id);
+            var artikel = await _artikelenService.DetailsService((int)id);
             if (artikel == null)
             {
                 return NotFound();

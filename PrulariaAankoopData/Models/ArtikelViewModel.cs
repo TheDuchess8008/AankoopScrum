@@ -35,21 +35,11 @@ public class ArtikelViewModel
 
     public int LeveranciersId { get; set; }
 
-    public virtual ICollection<ArtikelLeveranciersInfolijn> Artikelleveranciersinfolijnen { get; set; } = new List<ArtikelLeveranciersInfolijn>();
-
-    public virtual ICollection<Bestellijn> Bestellijnen { get; set; } = new List<Bestellijn>();
-
-    public virtual ICollection<InkomendeLeveringslijn> Inkomendeleveringslijnen { get; set; } = new List<InkomendeLeveringslijn>();
+    public Artikel Artikel { get; set; }
 
     public virtual Leverancier Leverancier { get; set; } = null!;
 
-    public virtual ICollection<Magazijnplaats> Magazijnplaatsen { get; set; } = new List<Magazijnplaats>();
-
-    public virtual ICollection<Veelgesteldevragenartikel> Veelgesteldevragenartikel { get; set; } = new List<Veelgesteldevragenartikel>();
-
-    public virtual ICollection<Wishlistitem> Wishlistitems { get; set; } = new List<Wishlistitem>();
-
-    public virtual ICollection<Categorie> Categorieën { get; set; } = new List<Categorie>();
+    public virtual List<Categorie> Categorieën { get; set; } = new List<Categorie>();
     public List<Artikel> Artikelen { get; set; } = new List<Artikel>();
     public string ActiefStatus { get; set; }
     public int CategorieId {  get; set; }
