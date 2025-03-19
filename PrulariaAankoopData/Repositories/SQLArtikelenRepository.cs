@@ -1,10 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
-using PrulariaAankoopData.Models;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+using PrulariaAankoopData.Models;
 
 namespace PrulariaAankoopData.Repositories;
 public class SQLArtikelenRepository : IArtikelenRepository
