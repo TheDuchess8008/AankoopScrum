@@ -18,11 +18,9 @@ namespace PrulariaAankoopUI.Controllers
     {
         private readonly PrulariaComContext _context;
         private readonly ActiecodesService _actiecodesService;
-
-        //private readonly ActiecodesService _actiecodesService;
-
-        public ActiecodesController(ActiecodesService actiecodesService)
+        public ActiecodesController(PrulariaComContext context, ActiecodesService actiecodesService)
         {
+            _context = context;
             _actiecodesService = actiecodesService;
         }
 
@@ -47,6 +45,28 @@ namespace PrulariaAankoopUI.Controllers
 
         // NIEUWE CODE ------------------------------------------------------------------------
 
+            return View(await _context.Actiecodes.ToListAsync());
+        }
+       
+            [HttpGet]
+        public async Task<IActionResult> ActiecodeWijzigen(int id)
+        {
+            var model = await _actiecodesService.GetActiecodeVoorWijzigingAsync(id);
+            if (model == null) return NotFound();
+            return View(model);
+        }
+
+        [HttpPost]
+       
+        public async Task<IActionResult> ActiecodeWijzigen(ActiecodeWijzigenViewModel model)
+        {
+            if (!ModelState.IsValid) return View(model);
+
+            bool success = await _actiecodesService.WijzigActiecodeAsync(model);
+            if (!success) return BadRequest("Ongeldige gegevens of data niet wijzigbaar");
+
+            return RedirectToAction("Index");
+        }
         // GET: Actiecodes/Details/5
         public async Task<IActionResult> Details(int? id)
         {
