@@ -16,10 +16,10 @@ namespace PrulariaAankoopUI.Controllers
         private readonly PrulariaComContext _context;
         private readonly ArtikelenService _artikelenService;
 
-        public ArtikelenController(PrulariaComContext context, ArtikelenService artikelService)
+        public ArtikelenController(PrulariaComContext context, ArtikelenService artikelenService)
         {
             _context = context;
-            _artikelenService = artikelService;
+            _artikelenService = artikelenService;
         }
 
         // GET: Artikelen
