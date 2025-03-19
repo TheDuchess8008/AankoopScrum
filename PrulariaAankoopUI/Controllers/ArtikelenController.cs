@@ -36,10 +36,7 @@ namespace PrulariaAankoopUI.Controllers
             {
                 return NotFound();
             }
-
-            var artikel = await _context.Artikelen
-                .Include(a => a.Leverancier)
-                .FirstOrDefaultAsync(m => m.ArtikelId == id);
+            var artikel = await _artikelenService.DetailsService((int)id);
             if (artikel == null)
             {
                 return NotFound();

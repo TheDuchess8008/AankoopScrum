@@ -14,11 +14,33 @@ public class SQLArtikelenRepository : IArtikelenRepository
     {
         this._context = context;
     }
-    public async Task<List<Artikel>> GetAlleArtikelen()
+    public async Task<Artikel> GetArtikelById(int id)
     {
-        return await (_context.Artikelen
+        return await _context.Artikelen
+                .Include(a => a.Leverancier)
+                .Include(c => c.Categorieën)
+                .FirstOrDefaultAsync(m => m.ArtikelId == id);
+    }
+    public async Task<List<Artikel>> GetListArtikelen(int categorieId)
+    {
+        if (categorieId == 0)
+        {
+            return await (_context.Artikelen
             .Include(c => c.Categorieën)
             .Include(l => l.Leverancier)
             .OrderBy(a => a.Naam)).ToListAsync();
+        }
+        else
+        {
+            return await (_context.Artikelen
+            .Include(c => c.Categorieën)
+            .Include(l => l.Leverancier)
+            
+            .OrderBy(a => a.Naam)).ToListAsync();
+        }
+    }
+    public async Task<List<Categorie>> GetAlleCategorieen()
+    {
+        return await (_context.Categorieen).ToListAsync();
     }
 }

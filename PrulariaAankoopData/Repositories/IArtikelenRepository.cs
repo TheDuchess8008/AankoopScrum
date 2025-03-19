@@ -8,5 +8,7 @@ using System.Threading.Tasks;
 namespace PrulariaAankoopData.Repositories;
 public interface IArtikelenRepository
 {
-    Task<List<Artikel>> GetAlleArtikelen();
+    Task<List<Artikel>> GetListArtikelen(int categorieId);
+    Task<Artikel> GetArtikelById(int id);
+    Task<List<Categorie>> GetAlleCategorieen();
 }
