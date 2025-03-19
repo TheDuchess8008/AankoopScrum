@@ -39,9 +39,4 @@ public class SQLArtikelenRepository : IArtikelenRepository
     {
         return await (_context.Categorieen).ToListAsync();
     }
-    public async Task<Categorie> GetHoofdCategorie(int categorieId)
-    {
-        return await (_context.Categorieen
-            .Where(c => c.CategorieId == categorieId)).FirstOrDefaultAsync();
-    }
 }
