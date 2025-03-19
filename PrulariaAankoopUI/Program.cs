@@ -8,6 +8,7 @@ using System.Globalization;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+// Add services to the container.
 builder.Services.AddDbContext<PrulariaComContext>(
         options => options.UseMySQL(
          builder.Configuration.GetConnectionString("PrulariaComConnection"),
@@ -15,6 +16,17 @@ builder.Services.AddDbContext<PrulariaComContext>(
 
 builder.Services.AddScoped<ArtikelenService>();
 builder.Services.AddControllersWithViews();
+
+builder.Services.AddTransient<ActiecodesService>();
+builder.Services.AddTransient<IActiecodesRepository, SQLActiecodesRepository>();
+builder.Services.AddTransient<ArtikelenService>();
+builder.Services.AddTransient<IArtikelenRepository, SQLArtikelenRepository>();
+builder.Services.AddTransient<CategorieenService>();
+builder.Services.AddTransient<ICategorieenRepository, SQLCategorieenRepository>();
+builder.Services.AddTransient<LeveranciersService>();
+builder.Services.AddTransient<ILeveranciersRepository, SQLLeveranciersRepository>();
+builder.Services.AddTransient<SecurityService>();
+builder.Services.AddTransient<ISecurityRepository, SQLSecurityRepository>();
 
 builder.Services.Configure<RequestLocalizationOptions>(options =>
 {
