@@ -13,15 +13,5 @@ namespace PrulariaAankoopService.Services
             _artikelenRepository = artikelenRepository ?? throw new ArgumentNullException(nameof(artikelenRepository));
         }
 
-        public async Task<Artikel> DetailsService(int artikelId)
-        {
-
-            var artikel = await _artikelenRepository.GetArtikelById(artikelId);
-            if (artikel == null)
-            {
-                throw new Exception($"Artikel met ID {artikelId} werd niet gevonden.");
-            }
-            return artikel;
-        }
     }
 }

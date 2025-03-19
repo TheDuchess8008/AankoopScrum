@@ -13,13 +13,6 @@ namespace PrulariaAankoopData.Repositories
         {
             _context = context ?? throw new ArgumentNullException(nameof(context));
         }
-
-        public async Task<Artikel?> GetArtikelById(int artikelId)
-        {
-            return await _context.Artikelen
-               .Include(a => a.Leverancier) // Zorgt ervoor dat Leverancier is ingeladen
-               .FirstOrDefaultAsync(a => a.ArtikelId == artikelId);
-           
-        }
+                
     }
 }

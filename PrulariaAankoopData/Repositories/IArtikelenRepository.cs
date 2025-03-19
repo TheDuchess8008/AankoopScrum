@@ -8,5 +8,4 @@ using System.Threading.Tasks;
 namespace PrulariaAankoopData.Repositories;
 public interface IArtikelenRepository
 {
-    Task<Artikel?> GetArtikelById(int artikelId);
 }
