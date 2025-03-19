@@ -14,13 +14,13 @@ namespace PrulariaAankoopUI.Controllers
     public class ArtikelenController : Controller
     {
         private readonly PrulariaComContext _context;
-        private ArtikelenService _artikelenService;
+        private readonly ArtikelenService _artikelenService;
 
         
         // GET: Artikelen
         public async Task<IActionResult> Index()
         {
-            var prulariaComContext = _context.Artikelen.Include(a => a.Leveranciers);
+            var prulariaComContext = _context.Artikelen.Include(a => a.Leverancier);
             return View(await prulariaComContext.ToListAsync());
         }
 
@@ -33,14 +33,15 @@ namespace PrulariaAankoopUI.Controllers
             }
 
             var artikel = await _context.Artikelen
-                .Include(a => a.Leveranciers)
+                .Include(a => a.Leverancier)
                 .FirstOrDefaultAsync(m => m.ArtikelId == id);
             if (artikel == null)
             {
-                return NotFound();
+                throw new Exception($"Artikel met ID {id} werd niet gevonden.");
             }
 
             return View(artikel);
+            
         }
 
         // GET: Artikelen/Create
@@ -129,7 +130,7 @@ namespace PrulariaAankoopUI.Controllers
             }
 
             var artikel = await _context.Artikelen
-                .Include(a => a.Leveranciers)
+                .Include(a => a.Leverancier)
                 .FirstOrDefaultAsync(m => m.ArtikelId == id);
             if (artikel == null)
             {
@@ -163,30 +164,7 @@ namespace PrulariaAankoopUI.Controllers
             _context = context;
         }
 
-        public ArtikelenController(ArtikelenService artikelenService)
-        {
-            _artikelenService = artikelenService;
-        }
-        public IActionResult GetArtikelByIdIfNotExists(int id)
-        {
-            try
-            {
-                // Roep de servicemethode aan om het artikel op te halen
-                var artikel = _artikelenService.GetArtikelByIdIfNotExists(id);
-
-                // Retourneer het artikel als antwoord
-                return Ok(artikel);
-            }
-            catch (ArgumentException ex)
-            {
-                // Handel ongeldige invoer af
-                return BadRequest(ex.Message);
-            }
-            catch (Exception ex)
-            {
-                // Handel andere uitzonderingen af
-                return StatusCode(500, "Er is een fout opgetreden bij het ophalen van het artikel.");
-            }
-        }
+       
+        
     }
 }
