@@ -14,7 +14,7 @@ public interface IActiecodesRepository
     // ASYNCHROON ===========================================================
     Task<Actiecode?> FirstOrDefaultAsync(Expression<Func<Actiecode, bool>> predicate);
     Task<Actiecode?> FindAsync(int id);
-    Task<int> SaveChangesAsync();
+    //Task<int> SaveChangesAsync();
     Task<List<Actiecode>> ToListAsync();
 
     // SYNCHROON ===========================================================

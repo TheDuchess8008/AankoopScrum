@@ -18,6 +18,8 @@ public class SQLActiecodesRepository : IActiecodesRepository
             _context = context;
     }
 
+
+
     // controleren of de Actiecode al bestaat
     public bool IsActiCodeNieuw(string naam, DateTime geldigVanDatum, DateTime geldigTotDatum)
     {
@@ -65,11 +67,11 @@ public class SQLActiecodesRepository : IActiecodesRepository
         return await _context.Actiecodes.FirstOrDefaultAsync(predicate);
     }
 
-    // SaveChangesAsync
-    public async Task<int> SaveChangesAsync()
-    {
-        return await _context.SaveChangesAsync();
-    }
+    //// SaveChangesAsync
+    //public async Task<int> SaveChangesAsync()
+    //{
+    //    return await _context.SaveChangesAsync();
+    //}
 
     // ToListAsync
     public async Task<List<Actiecode>> ToListAsync()
@@ -98,13 +100,9 @@ public class SQLActiecodesRepository : IActiecodesRepository
         _context.Actiecodes.Remove(actiecode);
     }
 
-}
 
-    private readonly PrulariaComContext _context;
-    public SQLActiecodesRepository(PrulariaComContext context)
-    {
-        _context = context;
-    }
+
+
 
     public async Task<Actiecode?> GetActiecodeByIdAsync(int id)
     {

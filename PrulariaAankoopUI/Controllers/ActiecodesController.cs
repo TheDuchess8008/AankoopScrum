@@ -45,8 +45,6 @@ namespace PrulariaAankoopUI.Controllers
 
         // NIEUWE CODE ------------------------------------------------------------------------
 
-            return View(await _context.Actiecodes.ToListAsync());
-        }
        
             [HttpGet]
         public async Task<IActionResult> ActiecodeWijzigen(int id)

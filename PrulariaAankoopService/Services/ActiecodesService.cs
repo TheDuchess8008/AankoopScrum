@@ -36,7 +36,7 @@ public class ActiecodesService
     }
 
     // SaveChangesAsync
-    public async Task<int> SaveChangesAsync()
+    public async Task<bool> SaveChangesAsync()
     {
         return await _actiecodesRepository.SaveChangesAsync();
     }
@@ -82,11 +82,7 @@ public class ActiecodesService
     {
         await _actiecodesRepository.ToevoegActiecodeAsync(actiecode);
     }
-    private readonly IActiecodesRepository _actiecodesRepository;
-    public ActiecodesService(IActiecodesRepository actiecodesRepository)
-    {
-        _actiecodesRepository = actiecodesRepository;
-    }
+
 
     public async Task<ActiecodeWijzigenViewModel?> GetActiecodeVoorWijzigingAsync(int id)
     {
