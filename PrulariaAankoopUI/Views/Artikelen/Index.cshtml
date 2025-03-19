@@ -49,7 +49,7 @@
                 @Html.DisplayNameFor(model => model.MaxAantalInMagazijnPlaats)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Leveranciers)
+                @Html.DisplayNameFor(model => model.Leverancier)
             </th>
             <th></th>
         </tr>
@@ -94,7 +94,7 @@
                 @Html.DisplayFor(modelItem => item.MaxAantalInMagazijnPlaats)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Leveranciers.BtwNummer)
+                @Html.DisplayFor(modelItem => item.Leverancier.BtwNummer)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.ArtikelId">Edit</a> |

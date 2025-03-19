@@ -162,7 +162,7 @@ public class PrulariaComContext : DbContext
             entity.Property(e => e.Prijs).HasColumnName("prijs");
             entity.Property(e => e.Voorraad).HasColumnName("voorraad");
 
-            entity.HasOne(d => d.Leveranciers).WithMany(p => p.Artikelen)
+            entity.HasOne(d => d.Leverancier).WithMany(p => p.Artikelen)
                 .HasForeignKey(d => d.LeveranciersId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("fk_Artikelen_Leveranciers");
