@@ -7,23 +7,41 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using PrulariaAankoopData.Models;
 using PrulariaAankoopData.Repositories;
+using PrulariaAankoopService.Services;
+using PrulariaAankoopUI.Models;
 
 namespace PrulariaAankoopUI.Controllers
 {
     public class ActiecodesController : Controller
     {
-        private readonly PrulariaComContext _context;
 
-        public ActiecodesController(PrulariaComContext context)
+        private readonly ActiecodesService _actiecodesService;
+
+        public ActiecodesController(ActiecodesService actiecodesService)
         {
-            _context = context;
+            _actiecodesService = actiecodesService;
         }
 
-        // GET: Actiecodes
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Actiecodes.ToListAsync());
+            try
+            {
+                var actiecodes = await _actiecodesService.ToListAsync();
+                return View(actiecodes);
+            }
+
+            catch (DbUpdateConcurrencyException ex)
+            {
+                return NotFound();
+
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
         }
+
+        // NIEUWE CODE ------------------------------------------------------------------------
 
         // GET: Actiecodes/Details/5
         public async Task<IActionResult> Details(int? id)
@@ -33,7 +51,7 @@ namespace PrulariaAankoopUI.Controllers
                 return NotFound();
             }
 
-            var actiecode = await _context.Actiecodes
+            var actiecode = await _actiecodesService
                 .FirstOrDefaultAsync(m => m.ActiecodeId == id);
             if (actiecode == null)
             {
@@ -42,6 +60,7 @@ namespace PrulariaAankoopUI.Controllers
 
             return View(actiecode);
         }
+
 
         // GET: Actiecodes/Create
         public IActionResult Create()
@@ -58,8 +77,8 @@ namespace PrulariaAankoopUI.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Add(actiecode);
-                await _context.SaveChangesAsync();
+                _actiecodesService.Add(actiecode);
+                await _actiecodesService.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
             return View(actiecode);
@@ -73,7 +92,7 @@ namespace PrulariaAankoopUI.Controllers
                 return NotFound();
             }
 
-            var actiecode = await _context.Actiecodes.FindAsync(id);
+            var actiecode = await _actiecodesService.FindAsync(id);
             if (actiecode == null)
             {
                 return NotFound();
@@ -97,8 +116,24 @@ namespace PrulariaAankoopUI.Controllers
             {
                 try
                 {
-                    _context.Update(actiecode);
-                    await _context.SaveChangesAsync();
+
+                    var teWijzigenActiecode = await _actiecodesService.FindAsync(id);
+                    if (teWijzigenActiecode == null)
+                    {
+                        return NotFound();
+                    }
+
+                    // Pas de velden van de bestaande Actiecode aan
+                    teWijzigenActiecode.Naam = actiecode.Naam;
+                    teWijzigenActiecode.GeldigVanDatum = actiecode.GeldigVanDatum;
+                    teWijzigenActiecode.GeldigTotDatum = actiecode.GeldigTotDatum;
+                    teWijzigenActiecode.IsEenmalig = actiecode.IsEenmalig;
+
+
+
+
+
+                    await _actiecodesService.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -124,7 +159,7 @@ namespace PrulariaAankoopUI.Controllers
                 return NotFound();
             }
 
-            var actiecode = await _context.Actiecodes
+            var actiecode = await _actiecodesService
                 .FirstOrDefaultAsync(m => m.ActiecodeId == id);
             if (actiecode == null)
             {
@@ -139,19 +174,21 @@ namespace PrulariaAankoopUI.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var actiecode = await _context.Actiecodes.FindAsync(id);
+            var actiecode = await _actiecodesService.FindAsync(id);
             if (actiecode != null)
             {
-                _context.Actiecodes.Remove(actiecode);
+                _actiecodesService.Remove(actiecode);
             }
 
-            await _context.SaveChangesAsync();
+            await _actiecodesService.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool ActiecodeExists(int id)
         {
-            return _context.Actiecodes.Any(e => e.ActiecodeId == id);
+            return _actiecodesService.Any(e => e.ActiecodeId == id);
         }
+
+
     }
 }
