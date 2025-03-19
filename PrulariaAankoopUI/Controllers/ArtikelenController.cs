@@ -38,10 +38,11 @@ namespace PrulariaAankoopUI.Controllers
             var artikel = await _artikelenService.MaakDetailsArtikel((int)id);
             if (artikel == null)
             {
-                return NotFound();
+                throw new Exception($"Artikel met ID {id} werd niet gevonden.");
             }
 
             return View(artikel);
+            
         }
 
         // GET: Artikelen/Create
