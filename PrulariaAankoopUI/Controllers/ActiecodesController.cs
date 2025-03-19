@@ -7,24 +7,45 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using PrulariaAankoopData.Models;
 using PrulariaAankoopData.Repositories;
+using PrulariaAankoopService.Services;
 
 namespace PrulariaAankoopUI.Controllers
 {
     public class ActiecodesController : Controller
     {
         private readonly PrulariaComContext _context;
-
-        public ActiecodesController(PrulariaComContext context)
+        private readonly ActiecodesService _actiecodesService;
+        public ActiecodesController(PrulariaComContext context, ActiecodesService actiecodesService)
         {
             _context = context;
+            _actiecodesService = actiecodesService;
         }
 
         // GET: Actiecodes
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Actiecodes.ToListAsync());
+            var actiecodes = await _actiecodesService.GetAllActiecodesAsync();
+            return View(actiecodes);
+        }
+        [HttpGet]
+        public async Task<IActionResult> ActiecodeWijzigen(int id)
+        {
+            var model = await _actiecodesService.GetActiecodeVoorWijzigingAsync(id);
+            if (model == null) return NotFound();
+            return View(model);
         }
 
+        [HttpPost]
+       
+        public async Task<IActionResult> ActiecodeWijzigen(ActiecodeWijzigenViewModel model)
+        {
+            if (!ModelState.IsValid) return View(model);
+
+            bool success = await _actiecodesService.WijzigActiecodeAsync(model);
+            if (!success) return BadRequest("Ongeldige gegevens of data niet wijzigbaar");
+
+            return RedirectToAction("Index");
+        }
         // GET: Actiecodes/Details/5
         public async Task<IActionResult> Details(int? id)
         {
