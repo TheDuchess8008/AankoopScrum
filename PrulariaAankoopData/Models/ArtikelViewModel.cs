@@ -40,7 +40,6 @@ public class ArtikelViewModel
     public virtual Leverancier Leverancier { get; set; } = null!;
 
     public virtual List<Categorie> Categorieën { get; set; } = new List<Categorie>();
-    public List<Categorie> Hoofdcategorieën { get; set; } = new List<Categorie>();
     public List<Artikel> Artikelen { get; set; } = new List<Artikel>();
     public string ActiefStatus { get; set; }
     public int CategorieId {  get; set; }
