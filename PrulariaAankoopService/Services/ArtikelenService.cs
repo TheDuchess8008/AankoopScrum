@@ -25,11 +25,18 @@ public class ArtikelenService
         var artikelLijst = new ArtikelViewModel();
         artikelLijst.Artikel = await _artikelenRepository.GetArtikelById(id);
         var alleCategorieen = await _artikelenRepository.GetAlleCategorieen();
-        foreach (var categorie in artikelLijst.Artikel.Categorieën)
+        foreach (var artikelCategorie in artikelLijst.Artikel.Categorieën)
         {
-            if (!artikelLijst.Categorieën.Contains(alleCategorieen[(int)categorie.HoofdCategorieId - 1]))
-                artikelLijst.Categorieën.Add(alleCategorieen[(int)categorie.HoofdCategorieId - 1]);
-            artikelLijst.Categorieën.Add(categorie);
+            foreach (var categorie in alleCategorieen)
+            {
+                if (artikelCategorie.HoofdCategorieId == categorie.CategorieId)
+                {
+                    if (!artikelLijst.Categorieën.Contains(categorie))
+                        artikelLijst.Categorieën.Add(categorie);
+                    break;
+                }
+            }
+            artikelLijst.Categorieën.Add(artikelCategorie);
         }
         return (artikelLijst);
     }
