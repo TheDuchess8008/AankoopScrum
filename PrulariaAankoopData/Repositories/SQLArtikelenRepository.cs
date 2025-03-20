@@ -41,4 +41,11 @@ public class SQLArtikelenRepository : IArtikelenRepository
     {
         return await (_context.Categorieen).ToListAsync();
     }
+
+    public Artikel Add(Artikel artikel)
+    {
+        _context.Artikelen.Add(artikel);
+        _context.SaveChangesAsync();
+        return artikel;
+    }
 }

@@ -46,22 +46,28 @@ namespace PrulariaAankoopUI.Controllers
         // GET: Artikelen/Create
         public IActionResult Create()
         {
-            ViewData["LeveranciersId"] = new SelectList(_context.Leveranciers, "LeveranciersId", "BtwNummer");
+            ViewData["LeveranciersId"] = new SelectList(_context.Leveranciers, "LeveranciersId", "Naam");
             return View();
         }
 
         // POST: Artikelen/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ArtikelId,Ean,Naam,Beschrijving,Prijs,GewichtInGram,Bestelpeil,Voorraad,MinimumVoorraad,MaximumVoorraad,Levertijd,AantalBesteldLeverancier,MaxAantalInMagazijnPlaats,LeveranciersId")] Artikel artikel)
+        public async Task<IActionResult> Create(Artikel artikel)
         {
-            if (ModelState.IsValid)
+            // Uiteindelijk vervangen met methode van Leveranciersrepository/service
+            artikel.Leverancier = await _context.Leveranciers.FindAsync(artikel.LeveranciersId);
+
+            if(_artikelenService.CheckOfArtikelBestaat(artikel)) 
+                ModelState.AddModelError("Naam", "Een artikel met deze naam en beschrijving bestaat al.");
+
+            if (this.ModelState.IsValid)
             {
-                _context.Add(artikel);
-                await _context.SaveChangesAsync();
+                _artikelenService.AddArtikel(artikel);
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["LeveranciersId"] = new SelectList(_context.Leveranciers, "LeveranciersId", "BtwNummer", artikel.LeveranciersId);
+            // Uiteindelijk vervangen met methode van Leveranciersrepository/service
+            ViewBag.LeveranciersId = new SelectList(_context.Leveranciers, "LeveranciersId", "Naam", artikel.LeveranciersId);
             return View(artikel);
         }
 

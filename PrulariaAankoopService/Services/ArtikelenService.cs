@@ -33,4 +33,20 @@ public class ArtikelenService
         }
         return (artikelLijst);
     }
+
+    public Artikel AddArtikel(Artikel artikel)
+    {
+        return artikelenRepository.Add(artikel);
+    }
+    public bool CheckOfArtikelBestaat(Artikel artikel)
+    {
+        
+        var bestaandArtikel = _context.Artikelen.Where(a => a.Naam == artikel.Naam && a.Beschrijving == artikel.Beschrijving)
+            .FirstOrDefault();
+        if (bestaandArtikel is not null)
+        {
+            return true;
+        }
+        return false;
+    }
 }
