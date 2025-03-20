@@ -104,9 +104,9 @@
     </dl>
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model?.ArtikelId">Edit</a> |
-    <a asp-action="BevestigSetNonActief" asp-route-artikelId="@Model?.ArtikelId">
+    <a asp-action="BevestigSetNonActief" asp-route-artikelId="@Model?.ArtikelId" class="btn huiskleur">
         Set Non-Actief
-    </a> |
+    </a> <br />
+    <a asp-action="Edit" asp-route-id="@Model?.ArtikelId">Edit</a> |
     <a asp-action="Index">Back to List</a>
 </div>
