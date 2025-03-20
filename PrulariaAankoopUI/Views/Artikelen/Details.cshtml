@@ -89,28 +89,30 @@
             @Html.DisplayFor(model => model.Artikel.Leverancier.Naam)
         </dd>
         <dt class="col-sm-3">
-            Hoofdcategorie(ën)
+            Categorie(ën)
         </dt>
         <dd class="col-sm-9">
-            @foreach (var categorie in Model.Hoofdcategorieën)
-            {
-                @categorie.Naam
-                <br />
-            }
-        </dd>
-        <dt class="col-sm-3">
-            Subcategorie(ën)
-        </dt>
-        <dd class="col-sm-9">
-            @foreach (var categorie in Model.Artikel.Categorieën)
-            {
-                @categorie.Naam
-                <br />
+            @{
+                for (int i = 0; i < Model.Categorieën.Count; i++)
+                {
+                    if (Model.Categorieën[i].HoofdCategorieId == null)
+                    {
+                        @Model.Categorieën[i].Naam
+                        <br />
+                    }
+                    else
+                    {
+                        <div>
+                            --@Model.Categorieën[i].Naam @Model.Categorieën[i].HoofdCategorieId
+                            <br />
+                        </div>
+                    }
+                }
             }
         </dd>
     </dl>
 </div>
 <div>
     <a asp-action="Edit" asp-route-id="@Model?.ArtikelId">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Index">Overzichtspagina</a>
 </div>
