@@ -9,4 +9,5 @@ namespace PrulariaAankoopData.Repositories;
 public interface IArtikelenRepository
 {
     Task<Artikel> GetByIdAsync(int artikelId);
+    Task UpdateAsync(Artikel artikel);
 }

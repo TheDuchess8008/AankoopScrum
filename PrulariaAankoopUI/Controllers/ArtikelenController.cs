@@ -182,19 +182,19 @@ namespace PrulariaAankoopUI.Controllers
             try
             {
                 await _artikelenService.SetArtikelNonActiefAsync(artikelId);
-                TempData["SuccessMessage"] = "Artikel is succesvol op non-actief gezet."; 
-                return RedirectToAction("Index");
+                TempData["SuccessMessage"] = "Artikel is succesvol op non-actief gezet.";
+                return RedirectToAction("Details", new { id = artikelId });
             }
             catch (DbUpdateConcurrencyException)
             {
                 TempData["ErrorMessage"] = "Het artikel is al gewijzigd door een andere gebruiker." +
                     " Probeer het opnieuw.";
-                return RedirectToAction("Index");
+                return RedirectToAction("Details", new { id = artikelId });
             }
             catch (Exception ex)
             {
                 TempData["ErrorMessage"] = $"Fout bij op non-actief zetten: {ex.Message}";
-                return RedirectToAction("Index");
+                return RedirectToAction("Details", new { id = artikelId });
             }
         }
     }

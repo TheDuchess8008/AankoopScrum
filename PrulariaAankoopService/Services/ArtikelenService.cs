@@ -27,15 +27,7 @@ public class ArtikelenService
 
     public async Task UpdateArtikelAsync(Artikel artikel)
     {
-        if (artikel == null)
-            throw new ArgumentNullException(nameof(artikel), "Artikel kan niet null zijn");
-
-        var existingArtikel = await _context.Artikelen.FindAsync(artikel.ArtikelId);
-        if (existingArtikel == null)
-            throw new KeyNotFoundException($"Artikel met ID {artikel.ArtikelId} niet gevonden.");
-
-        _context.Entry(existingArtikel).CurrentValues.SetValues(artikel);
-        await _context.SaveChangesAsync();
+        await _repository.UpdateAsync(artikel);
     }
 
     public async Task SetArtikelNonActiefAsync(int artikelId)
