@@ -27,7 +27,7 @@ public class ArtikelenService
 
     public async Task<Artikel> GetByIdAsync(int artikelId)
     {
-        return await _repository.GetByIdAsync(artikelId);
+        return await _repository.GetArtikelById(artikelId);
     }
 
     public async Task SetArtikelNonActiefAsync(int artikelId)

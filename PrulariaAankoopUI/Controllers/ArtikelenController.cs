@@ -25,7 +25,7 @@ namespace PrulariaAankoopUI.Controllers
         // GET: Artikelen
         public async Task<IActionResult> Index()
         {
-            var prulariaComContext = _context.Artikelen.Include(a => a.Leveranciers);
+            var prulariaComContext = _context.Artikelen.Include(a => a.Leverancier);
             return View(await prulariaComContext.ToListAsync());
         }
 
@@ -38,7 +38,7 @@ namespace PrulariaAankoopUI.Controllers
             }
 
             var artikel = await _context.Artikelen
-                .Include(a => a.Leveranciers)
+                .Include(a => a.Leverancier)
                 .FirstOrDefaultAsync(m => m.ArtikelId == id);
             if (artikel == null)
             {
@@ -134,7 +134,7 @@ namespace PrulariaAankoopUI.Controllers
             }
 
             var artikel = await _context.Artikelen
-                .Include(a => a.Leveranciers)
+                .Include(a => a.Leverancier)
                 .FirstOrDefaultAsync(m => m.ArtikelId == id);
             if (artikel == null)
             {

@@ -8,6 +8,6 @@ using System.Threading.Tasks;
 namespace PrulariaAankoopData.Repositories;
 public interface IArtikelenRepository
 {
-    Task<Artikel> GetByIdAsync(int artikelId);
+    Task<Artikel> GetArtikelById(int id);
     Task UpdateAsync(Artikel artikel);
 }
