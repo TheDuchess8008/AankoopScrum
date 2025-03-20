@@ -95,7 +95,7 @@
             @{
                 for (int i = 0; i < Model.Categorieën.Count; i++)
                 {
-                    if (Model.Categorieën[i].HoofdCategorieId == null)
+                    if (Model.Categorieën[i].HoofdCategorieId == null || i == 0)
                     {
                         @Model.Categorieën[i].Naam
                         <br />
@@ -103,7 +103,7 @@
                     else
                     {
                         <div>
-                            --@Model.Categorieën[i].Naam @Model.Categorieën[i].HoofdCategorieId
+                            --@Model.Categorieën[i].Naam
                             <br />
                         </div>
                     }
