@@ -21,11 +21,7 @@ namespace PrulariaAankoopData.Repositories
                 .FirstOrDefaultAsync(a => a.ArtikelId == artikelId);
         }
 
-        public async Task UpdateArtikel(Artikel artikel)
-        {
-            _context.Artikelen.Update(artikel);
-            await _context.SaveChangesAsync();
-        }
+       
         public async Task UpdateArtikel(Artikel? artikel)
         {
             var bestaandArtikel = await _context.Artikelen.FindAsync(artikel.ArtikelId);
