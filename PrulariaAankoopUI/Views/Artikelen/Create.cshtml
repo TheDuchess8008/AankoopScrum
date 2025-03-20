@@ -4,7 +4,7 @@
     ViewData["Title"] = "Create";
 }
 
-<h1>Create</h1>
+<h1>Toevoegen</h1>
 
 <h4>Artikel</h4>
 <hr />
@@ -13,8 +13,8 @@
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="Ean" class="control-label"></label>
-                <input asp-for="Ean" class="form-control" />
+                <label asp-for="Ean" class="control-label">Ean (wordt automatisch gegenereerd, waarde kan niet veranderd worden)</label>
+                <input asp-for="Ean" class="form-control" value="1" readonly/>
                 <span asp-validation-for="Ean" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -33,7 +33,7 @@
                 <span asp-validation-for="Prijs" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="GewichtInGram" class="control-label"></label>
+                <label asp-for="GewichtInGram" class="control-label">Gewicht in gram</label>
                 <input asp-for="GewichtInGram" class="form-control" />
                 <span asp-validation-for="GewichtInGram" class="text-danger"></span>
             </div>
@@ -48,27 +48,27 @@
                 <span asp-validation-for="Voorraad" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="MinimumVoorraad" class="control-label"></label>
+                <label asp-for="MinimumVoorraad" class="control-label">Minimumvoorraad</label>
                 <input asp-for="MinimumVoorraad" class="form-control" />
                 <span asp-validation-for="MinimumVoorraad" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="MaximumVoorraad" class="control-label"></label>
+                <label asp-for="MaximumVoorraad" class="control-label">Maximumvoorraad</label>
                 <input asp-for="MaximumVoorraad" class="form-control" />
                 <span asp-validation-for="MaximumVoorraad" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="AantalBesteldLeverancier" class="control-label"></label>
+                <label asp-for="AantalBesteldLeverancier" class="control-label">Aantal besteld leverancier</label>
                 <input asp-for="AantalBesteldLeverancier" class="form-control" />
                 <span asp-validation-for="AantalBesteldLeverancier" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="MaxAantalInMagazijnPlaats" class="control-label"></label>
+                <label asp-for="MaxAantalInMagazijnPlaats" class="control-label">Maximum aantal in magazijn</label>
                 <input asp-for="MaxAantalInMagazijnPlaats" class="form-control" />
                 <span asp-validation-for="MaxAantalInMagazijnPlaats" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="LeveranciersId" class="control-label"></label>
+                <label asp-for="LeveranciersId" class="control-label">Leverancier</label>
                 <select asp-for="LeveranciersId" class ="form-control" asp-items="ViewBag.LeveranciersId"></select>
             </div>
             <div class="form-group">

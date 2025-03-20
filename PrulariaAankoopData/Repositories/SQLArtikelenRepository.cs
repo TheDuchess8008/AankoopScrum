@@ -2,8 +2,7 @@
 using PrulariaAankoopData.Models;
 using System;
 using System.Linq;
-using Microsoft.EntityFrameworkCore;
-using PrulariaAankoopData.Models;
+
 
 namespace PrulariaAankoopData.Repositories;
 public class SQLArtikelenRepository : IArtikelenRepository
@@ -41,4 +40,25 @@ public class SQLArtikelenRepository : IArtikelenRepository
     {
         return await (_context.Categorieen).ToListAsync();
     }
+    public async Task UpdateAsync(Artikel artikel)
+    {
+        if (artikel == null)
+            throw new ArgumentNullException(nameof(artikel), "Artikel kan niet null zijn");
+
+        var existingArtikel = await GetArtikelById(artikel.ArtikelId);
+        if (existingArtikel == null)
+            throw new KeyNotFoundException($"Artikel met ID {artikel.ArtikelId} niet gevonden.");
+
+        _context.Entry(existingArtikel).CurrentValues.SetValues(artikel);
+
+        await _context.SaveChangesAsync();
+    }
+
+    public async Task AddArtikel(Artikel artikel)
+    {
+        await _context.Artikelen.AddAsync(artikel);
+        await _context.SaveChangesAsync();
+    }
 }
+
+
