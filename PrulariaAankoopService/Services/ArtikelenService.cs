@@ -94,8 +94,8 @@ public class ArtikelenService
             // Sla de wijzigingen op in de database
             await _artikelenRepository.UpdateArtikel(bestaandArtikel);
         }
-    }
-}
+    
+
 
     public async Task AddArtikel(Artikel artikel)
     {
