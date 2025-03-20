@@ -25,9 +25,14 @@ public class ArtikelenService
         await _repository.UpdateAsync(artikel);
     }
 
+    public async Task<Artikel> GetByIdAsync(int artikelId)
+    {
+        return await _repository.GetByIdAsync(artikelId);
+    }
+
     public async Task SetArtikelNonActiefAsync(int artikelId)
     {
-        var artikel = await _repository.GetByIdAsync(artikelId);
+        var artikel = await GetByIdAsync(artikelId);
         if (artikel == null)
             throw new ArgumentNullException(nameof(artikel), "Artikel kan niet null zijn");
 

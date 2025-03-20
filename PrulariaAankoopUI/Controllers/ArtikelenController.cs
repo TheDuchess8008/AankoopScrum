@@ -167,7 +167,7 @@ namespace PrulariaAankoopUI.Controllers
         [HttpGet]
         public async Task<IActionResult> BevestigSetNonActief(int artikelId)
         {
-            var artikel = await _artikelenService.GetArtikelByIdAsync(artikelId);
+            var artikel = await _artikelenService.GetByIdAsync(artikelId);
             if (artikel == null)
             {
                 return NotFound();
