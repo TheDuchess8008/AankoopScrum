@@ -1,16 +1,16 @@
 ﻿using PrulariaAankoopData.Models;
 using PrulariaAankoopData.Repositories;
 using System;
-using PrulariaAankoopData.Models;
-using PrulariaAankoopData.Repositories;
 
 namespace PrulariaAankoopService.Services;
 public class ArtikelenService
 {
     private readonly IArtikelenRepository _artikelenRepository;
-    public ArtikelenService(IArtikelenRepository artikelenRepository)
+    private readonly PrulariaComContext _context;
+    public ArtikelenService(IArtikelenRepository artikelenRepository, PrulariaComContext context)
     {
-        this._artikelenRepository = artikelenRepository;
+        _artikelenRepository = artikelenRepository;
+        _context = context;
     }
 
     public async Task<ArtikelViewModel> MaakGefilterdeLijstArtikelen(ArtikelViewModel form)
@@ -34,9 +34,9 @@ public class ArtikelenService
         return (artikelLijst);
     }
 
-    public Artikel AddArtikel(Artikel artikel)
+    public async Task AddArtikel(Artikel artikel)
     {
-        return artikelenRepository.Add(artikel);
+        await _artikelenRepository.AddArtikel(artikel);
     }
     public bool CheckOfArtikelBestaat(Artikel artikel)
     {

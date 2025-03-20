@@ -63,7 +63,7 @@ namespace PrulariaAankoopUI.Controllers
 
             if (this.ModelState.IsValid)
             {
-                _artikelenService.AddArtikel(artikel);
+                await _artikelenService.AddArtikel(artikel);
                 return RedirectToAction(nameof(Index));
             }
             // Uiteindelijk vervangen met methode van Leveranciersrepository/service

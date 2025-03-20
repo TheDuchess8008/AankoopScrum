@@ -14,7 +14,7 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="Ean" class="control-label">Ean (wordt automatisch gegenereerd, waarde kan niet veranderd worden)</label>
-                <input asp-for="Ean" class="form-control" value = 1 disabled/>
+                <input asp-for="Ean" class="form-control" value="1" readonly/>
                 <span asp-validation-for="Ean" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -33,9 +33,9 @@
                 <span asp-validation-for="Prijs" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="GewichtInGram" class="control-label"></label>
+                <label asp-for="GewichtInGram" class="control-label">Gewicht in gram</label>
                 <input asp-for="GewichtInGram" class="form-control" />
-                <span asp-validation-for="GewichtInGram" class="text-danger">Gewicht in gram</span>
+                <span asp-validation-for="GewichtInGram" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Bestelpeil" class="control-label"></label>

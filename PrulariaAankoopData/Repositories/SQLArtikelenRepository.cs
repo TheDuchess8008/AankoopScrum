@@ -2,8 +2,7 @@
 using PrulariaAankoopData.Models;
 using System;
 using System.Linq;
-using Microsoft.EntityFrameworkCore;
-using PrulariaAankoopData.Models;
+
 
 namespace PrulariaAankoopData.Repositories;
 public class SQLArtikelenRepository : IArtikelenRepository
@@ -42,10 +41,9 @@ public class SQLArtikelenRepository : IArtikelenRepository
         return await (_context.Categorieen).ToListAsync();
     }
 
-    public Artikel Add(Artikel artikel)
+    public async Task AddArtikel(Artikel artikel)
     {
-        _context.Artikelen.Add(artikel);
-        _context.SaveChangesAsync();
-        return artikel;
+        await _context.Artikelen.AddAsync(artikel);
+        await _context.SaveChangesAsync();
     }
 }
