@@ -39,7 +39,7 @@ public class Artikel
 
     public virtual ICollection<InkomendeLeveringslijn> Inkomendeleveringslijnen { get; set; } = new List<InkomendeLeveringslijn>();
 
-    public virtual Leverancier Leverancier { get; set; } = null!;
+    public virtual Leverancier? Leverancier { get; set; } = null!;
 
     public virtual ICollection<Magazijnplaats> Magazijnplaatsen { get; set; } = new List<Magazijnplaats>();
 
@@ -47,5 +47,5 @@ public class Artikel
 
     public virtual ICollection<Wishlistitem> Wishlistitems { get; set; } = new List<Wishlistitem>();
 
-    public virtual ICollection<Categorie> Categorieën { get; set; } = new List<Categorie>();
+    public virtual List<Categorie> Categorieën { get; set; } = new List<Categorie>();
 }

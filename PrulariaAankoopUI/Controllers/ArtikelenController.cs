@@ -24,10 +24,9 @@ namespace PrulariaAankoopUI.Controllers
         }
 
         // GET: Artikelen
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(ArtikelViewModel form)
         {
-            var prulariaComContext = _context.Artikelen.Include(a => a.Leverancier);
-            return View(await prulariaComContext.ToListAsync());
+            return View(await _artikelenService.MaakGefilterdeLijstArtikelen(form));
         }
 
         // GET: Artikelen/Details/5
@@ -39,6 +38,8 @@ namespace PrulariaAankoopUI.Controllers
             }
 
             try
+            var artikel = await _artikelenService.MaakDetailsArtikel((int)id);
+            if (artikel == null)
             {
                 var artikel = await _artikelenService.GetArtikelById(id.Value);
                 return View(artikel);
@@ -48,29 +49,34 @@ namespace PrulariaAankoopUI.Controllers
                 return NotFound(ex.Message);
             }
 
+            return View(artikel);
         }
 
         // GET: Artikelen/Create
         public IActionResult Create()
         {
-            ViewData["LeveranciersId"] = new SelectList(_context.Leveranciers, "LeveranciersId", "BtwNummer");
+            ViewData["LeveranciersId"] = new SelectList(_context.Leveranciers, "LeveranciersId", "Naam");
             return View();
         }
 
         // POST: Artikelen/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ArtikelId,Ean,Naam,Beschrijving,Prijs,GewichtInGram,Bestelpeil,Voorraad,MinimumVoorraad,MaximumVoorraad,Levertijd,AantalBesteldLeverancier,MaxAantalInMagazijnPlaats,LeveranciersId")] Artikel artikel)
+        public async Task<IActionResult> Create(Artikel artikel)
         {
-            if (ModelState.IsValid)
+            // Uiteindelijk vervangen met methode van Leveranciersrepository/service
+            artikel.Leverancier = await _context.Leveranciers.FindAsync(artikel.LeveranciersId);
+
+            if(_artikelenService.CheckOfArtikelBestaat(artikel)) 
+                ModelState.AddModelError("Naam", "Een artikel met deze naam en beschrijving bestaat al.");
+
+            if (this.ModelState.IsValid)
             {
-                _context.Add(artikel);
-                await _context.SaveChangesAsync();
+                await _artikelenService.AddArtikel(artikel);
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["LeveranciersId"] = new SelectList(_context.Leveranciers, "LeveranciersId", "BtwNummer", artikel.LeveranciersId);
+            // Uiteindelijk vervangen met methode van Leveranciersrepository/service
+            ViewBag.LeveranciersId = new SelectList(_context.Leveranciers, "LeveranciersId", "Naam", artikel.LeveranciersId);
             return View(artikel);
         }
 
@@ -110,8 +116,6 @@ namespace PrulariaAankoopUI.Controllers
         }
 
         // POST: Artikelen/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("ArtikelId,Ean,Naam,Beschrijving,Prijs,GewichtInGram,Bestelpeil,Voorraad,MinimumVoorraad,MaximumVoorraad,Levertijd,AantalBesteldLeverancier,MaxAantalInMagazijnPlaats,LeveranciersId")] ArtikelViewModel artikelViewModel)
@@ -236,5 +240,9 @@ namespace PrulariaAankoopUI.Controllers
             return View("Edit", artikelViewModel);
         }
 
+        public IActionResult Filter(ArtikelViewModel form)
+        {
+            return RedirectToAction("Index", form);
+        }
     }
 }

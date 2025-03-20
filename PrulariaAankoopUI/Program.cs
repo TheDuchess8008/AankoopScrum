@@ -8,12 +8,10 @@ using System.Globalization;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-// Add services to the container.
 builder.Services.AddDbContext<PrulariaComContext>(
         options => options.UseMySQL(
          builder.Configuration.GetConnectionString("PrulariaComConnection"),
                            x => x.MigrationsAssembly("PrulariaAankoopData")));
-
 builder.Services.AddControllersWithViews();
 
 builder.Services.AddTransient<ActiecodesService>();
