@@ -42,7 +42,6 @@ namespace PrulariaAankoopUI.Controllers
             }
 
             return View(artikel);
-            
         }
 
         // GET: Artikelen/Create
