@@ -12,8 +12,6 @@ builder.Services.AddDbContext<PrulariaComContext>(
         options => options.UseMySQL(
          builder.Configuration.GetConnectionString("PrulariaComConnection"),
                            x => x.MigrationsAssembly("PrulariaAankoopData")));
-
-builder.Services.AddScoped<ArtikelenService>();
 builder.Services.AddControllersWithViews();
 
 builder.Services.AddTransient<ActiecodesService>();

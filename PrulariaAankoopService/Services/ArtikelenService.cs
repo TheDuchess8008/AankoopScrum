@@ -3,10 +3,6 @@ using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using PrulariaAankoopData.Models;
 using PrulariaAankoopData.Repositories;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PrulariaAankoopService.Services;
 public class ArtikelenService
@@ -15,7 +11,7 @@ public class ArtikelenService
     private readonly PrulariaComContext _context;
     public ArtikelenService(IArtikelenRepository artikelenRepository, PrulariaComContext context)
     {
-        this._artikelenRepository = artikelenRepository;
+        _artikelenRepository = artikelenRepository;
         _context = context;
     }
 
@@ -75,5 +71,21 @@ public class ArtikelenService
             artikelLijst.Categorieën.Add(artikelCategorie);
         }
         return (artikelLijst);
+    }
+
+    public async Task AddArtikel(Artikel artikel)
+    {
+        await _artikelenRepository.AddArtikel(artikel);
+    }
+    public bool CheckOfArtikelBestaat(Artikel artikel)
+    {
+        
+        var bestaandArtikel = _context.Artikelen.Where(a => a.Naam == artikel.Naam && a.Beschrijving == artikel.Beschrijving)
+            .FirstOrDefault();
+        if (bestaandArtikel is not null)
+        {
+            return true;
+        }
+        return false;
     }
 }
