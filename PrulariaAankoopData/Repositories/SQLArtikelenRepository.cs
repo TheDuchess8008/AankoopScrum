@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using PrulariaAankoopData.Models;
 
@@ -13,6 +13,18 @@ namespace PrulariaAankoopData.Repositories
         {
             _context = context ?? throw new ArgumentNullException(nameof(context));
         }
-                
+
+        public async Task<Artikel?> GetArtikelById(int artikelId)
+        {
+            return await _context.Artikelen
+                .Include(a => a.Leverancier) // Inclusief gerelateerde leverancier
+                .FirstOrDefaultAsync(a => a.ArtikelId == artikelId);
+        }
+
+        public async Task UpdateArtikel(Artikel artikel)
+        {
+            _context.Artikelen.Update(artikel);
+            await _context.SaveChangesAsync();
+        }
     }
 }

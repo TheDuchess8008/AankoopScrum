@@ -37,15 +37,15 @@ namespace PrulariaAankoopUI.Controllers
                 return NotFound();
             }
 
-            var artikel = await _context.Artikelen
-                .Include(a => a.Leverancier)
-                .FirstOrDefaultAsync(m => m.ArtikelId == id);
-            if (artikel == null)
+            try
             {
-                throw new Exception($"Artikel met ID {id} werd niet gevonden.");
+                var artikel = await _artikelenService.GetArtikelById(id.Value);
+                return View(artikel);
             }
-
-            return View(artikel);
+            catch (Exception ex)
+            {
+                return NotFound(ex.Message);
+            }
 
         }
 
@@ -81,12 +81,17 @@ namespace PrulariaAankoopUI.Controllers
                 return NotFound();
             }
 
-            var artikel = await _context.Artikelen.FindAsync(id);
+            var artikel = await _artikelenService.GetArtikelById(id.Value);
             if (artikel == null)
             {
                 return NotFound();
             }
-            ViewData["LeveranciersId"] = new SelectList(_context.Leveranciers, "LeveranciersId", "BtwNummer", artikel.LeveranciersId);
+
+            // Populate dropdown with leveranciers
+            ViewData["LeveranciersId"] = new SelectList(
+                _context.Leveranciers, "LeveranciersId", "BtwNummer", artikel.LeveranciersId
+            );
+
             return View(artikel);
         }
 
@@ -99,31 +104,30 @@ namespace PrulariaAankoopUI.Controllers
         {
             if (id != artikel.ArtikelId)
             {
-                return NotFound();
+                return BadRequest("Artikel ID komt niet overeen.");
             }
 
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                try
-                {
-                    _context.Update(artikel);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!ArtikelExists(artikel.ArtikelId))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
+                ViewData["LeveranciersId"] = new SelectList(
+                    _context.Leveranciers, "LeveranciersId", "BtwNummer", artikel.LeveranciersId
+                );
+                return View(artikel);
             }
-            ViewData["LeveranciersId"] = new SelectList(_context.Leveranciers, "LeveranciersId", "BtwNummer", artikel.LeveranciersId);
-            return View(artikel);
+
+            try
+            {
+                await _artikelenService.UpdateArtikel(artikel);
+                return RedirectToAction(nameof(Details), new { id = artikel.ArtikelId });
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError("", ex.Message);
+                ViewData["LeveranciersId"] = new SelectList(
+                    _context.Leveranciers, "LeveranciersId", "BtwNummer", artikel.LeveranciersId
+                );
+                return View(artikel);
+            }
         }
 
         // GET: Artikelen/Delete/5
