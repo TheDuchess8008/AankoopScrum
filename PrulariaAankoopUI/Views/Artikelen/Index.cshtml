@@ -13,22 +13,19 @@
 <form asp-action="Filter">
     <div class="row">
         <div class="col-md-3">
-            <label class="control-label">Categorie</label>
             <select asp-for="@Model.CategorieId" class="form-control" asp-items="@(new SelectList(Model.Categorieën, "CategorieId", "Naam"))" style="width:auto">
                 <option value="">--Alle Categorieën--</option>
             </select>
         </div>
         <div class="col-md-3">
-            <label class="control-label">Actief/Non-Actief</label>
-            <select asp-for="@Model.ActiefStatus" class="form-control" style="width:155px">
+            <select asp-for="@Model.ActiefStatus" class="form-control" style="width:auto">
                 <option value=>--Actief/Non-Actief--</option>
                 <option value="Actief">Actief</option>
                 <option value="NonActief">Non-Actief</option>
             </select>
         </div>
         <div class="col-md-2">
-            <br />
-            <input type="submit" value="Filteren" class="btn btn-primary" />
+            <input type="submit" value="Filteren" class="btn btn-primary huiskleur" />
         </div>
     </div>
     <br />
@@ -78,9 +75,9 @@
                         @Html.DisplayFor(modelItem => item.Voorraad)
                     </td>
                     <td>
-                        <a asp-action="Edit" asp-route-id="@item.ArtikelId">Edit</a> |
-                        <a asp-action="Details" asp-route-id="@item.ArtikelId">Details</a> |
-                        <a asp-action="Delete" asp-route-id="@item.ArtikelId">Delete</a>
+                        <a asp-action="Edit" asp-route-id="@item.ArtikelId" class="btn btn-secondary huiskleur">Edit</a> |
+                        <a asp-action="Details" asp-route-id="@item.ArtikelId" class="btn btn-secondary huiskleur">Details</a> |
+                        <a asp-action="Delete" asp-route-id="@item.ArtikelId" class="btn btn-secondary huiskleur">Delete</a>
                     </td>
                 </tr>
             }

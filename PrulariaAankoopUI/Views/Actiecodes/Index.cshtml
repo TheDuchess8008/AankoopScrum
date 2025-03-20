@@ -43,9 +43,10 @@
                 @Html.DisplayFor(modelItem => item.IsEenmalig)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.ActiecodeId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.ActiecodeId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.ActiecodeId">Delete</a>
+                    <a asp-action="Edit" asp-route-id="@item.ActiecodeId" class="btn btn-secondary huiskleur">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.ActiecodeId" class="btn btn-secondary huiskleur">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.ActiecodeId" class="btn btn-secondary huiskleur">Delete</a>
+               
             </td>
         </tr>
 }

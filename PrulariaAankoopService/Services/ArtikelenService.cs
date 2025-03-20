@@ -7,7 +7,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using ZstdSharp.Unsafe;
 
 namespace PrulariaAankoopService.Services;
 public class ArtikelenService
@@ -61,7 +60,13 @@ public class ArtikelenService
     {
         var artikelLijst = new ArtikelViewModel();
         artikelLijst.Artikel = await _artikelenRepository.GetArtikelById(id);
-        artikelLijst.Categorieën = await _artikelenRepository.GetAlleCategorieen();
+        var alleCategorieen = await _artikelenRepository.GetAlleCategorieen();
+        foreach (var categorie in artikelLijst.Artikel.Categorieën)
+        {
+            if (!artikelLijst.Categorieën.Contains(alleCategorieen[(int)categorie.HoofdCategorieId - 1]))
+                artikelLijst.Categorieën.Add(alleCategorieen[(int)categorie.HoofdCategorieId - 1]);
+            artikelLijst.Categorieën.Add(categorie);
+        }
         return (artikelLijst);
     }
 }
