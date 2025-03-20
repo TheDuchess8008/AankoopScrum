@@ -40,16 +40,16 @@ public class SQLArtikelenRepository : IArtikelenRepository
     public async Task<List<Categorie>> GetAlleCategorieen()
     {
         return await (_context.Categorieen).ToListAsync();
-namespace PrulariaAankoopData.Repositories
-{
-    public class SQLArtikelenRepository : IArtikelenRepository
-    {
-        private readonly PrulariaComContext _context;
+    }
 
-        public SQLArtikelenRepository(PrulariaComContext context)
-        {
-            _context = context ?? throw new ArgumentNullException(nameof(context));
-        }
+
+
+
+
+        //public SQLArtikelenRepository(PrulariaComContext context)
+        //{
+        //    _context = context ?? throw new ArgumentNullException(nameof(context));
+        //}
 
         // SaveChangesAsync
         public async Task SaveChangesAsync()
@@ -75,4 +75,4 @@ namespace PrulariaAankoopData.Repositories
 
 
     }
-}
+
