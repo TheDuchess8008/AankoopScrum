@@ -26,5 +26,17 @@ namespace PrulariaAankoopData.Repositories
             _context.Artikelen.Update(artikel);
             await _context.SaveChangesAsync();
         }
+        public async Task UpdateArtikel(Artikel? artikel)
+        {
+            var bestaandArtikel = await _context.Artikelen.FindAsync(artikel.ArtikelId);
+
+            if (bestaandArtikel == null)
+            {
+                throw new Exception($"Artikel met ID {artikel.ArtikelId} werd niet gevonden.");
+            }
+
+            _context.Entry(bestaandArtikel).CurrentValues.SetValues(artikel);
+            await _context.SaveChangesAsync();
+        }
     }
 }
