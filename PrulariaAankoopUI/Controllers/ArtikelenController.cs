@@ -9,6 +9,7 @@ using PrulariaAankoopData.Models;
 using PrulariaAankoopData.Repositories;
 using PrulariaAankoopService.Services;
 
+
 namespace PrulariaAankoopUI.Controllers
 {
     public class ArtikelenController : Controller
@@ -86,13 +87,26 @@ namespace PrulariaAankoopUI.Controllers
             {
                 return NotFound();
             }
+            var artikelViewModel = new ArtikelViewModel
+            {
+                ArtikelId = artikel.ArtikelId,
+                Ean = artikel.Ean,
+                Naam = artikel.Naam,
+                Beschrijving = artikel.Beschrijving,
+                Prijs = artikel.Prijs,
+                GewichtInGram = artikel.GewichtInGram,
+                Bestelpeil = artikel.Bestelpeil,
+                Voorraad = artikel.Voorraad,
+                MinimumVoorraad = artikel.MinimumVoorraad,
+                MaximumVoorraad = artikel.MaximumVoorraad,
+                Levertijd = artikel.Levertijd,
+                AantalBesteldLeverancier = artikel.AantalBesteldLeverancier,
+                MaxAantalInMagazijnPlaats = artikel.MaxAantalInMagazijnPlaats,
+                LeveranciersId = artikel.LeveranciersId,
+                LeverancierNaam = artikel.Leverancier.Naam // Assuming you want to show the supplier's name
+            };
 
-            // Populate dropdown with leveranciers
-            ViewData["LeveranciersId"] = new SelectList(
-                _context.Leveranciers, "LeveranciersId", "BtwNummer", artikel.LeveranciersId
-            );
-
-            return View(artikel);
+            return View(artikelViewModel);
         }
 
         // POST: Artikelen/Edit/5
@@ -100,35 +114,47 @@ namespace PrulariaAankoopUI.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ArtikelId,Ean,Naam,Beschrijving,Prijs,GewichtInGram,Bestelpeil,Voorraad,MinimumVoorraad,MaximumVoorraad,Levertijd,AantalBesteldLeverancier,MaxAantalInMagazijnPlaats,LeveranciersId")] Artikel artikel)
+        public async Task<IActionResult> Edit(int id, [Bind("ArtikelId,Ean,Naam,Beschrijving,Prijs,GewichtInGram,Bestelpeil,Voorraad,MinimumVoorraad,MaximumVoorraad,Levertijd,AantalBesteldLeverancier,MaxAantalInMagazijnPlaats,LeveranciersId")] ArtikelViewModel artikelViewModel)
         {
-            if (id != artikel.ArtikelId)
+            if (id != artikelViewModel.ArtikelId)
             {
-                return BadRequest("Artikel ID komt niet overeen.");
+                return NotFound();
             }
 
-            if (!ModelState.IsValid)
+            if (ModelState.IsValid)
             {
-                ViewData["LeveranciersId"] = new SelectList(
-                    _context.Leveranciers, "LeveranciersId", "BtwNummer", artikel.LeveranciersId
-                );
-                return View(artikel);
+                var artikel = await _context.Artikelen.FindAsync(id);
+                if (artikel == null)
+                {
+                    return NotFound();
+                }
+
+                artikel.Ean = artikelViewModel.Ean;
+                artikel.Naam = artikelViewModel.Naam;
+                artikel.Beschrijving = artikelViewModel.Beschrijving;
+                artikel.Prijs = artikelViewModel.Prijs;
+                artikel.GewichtInGram = artikelViewModel.GewichtInGram;
+                artikel.Bestelpeil = artikelViewModel.Bestelpeil;
+                artikel.Voorraad = artikelViewModel.Voorraad;
+                artikel.MinimumVoorraad = artikelViewModel.MinimumVoorraad;
+                artikel.MaximumVoorraad = artikelViewModel.MaximumVoorraad;
+                artikel.Levertijd = artikelViewModel.Levertijd;
+                artikel.AantalBesteldLeverancier = artikelViewModel.AantalBesteldLeverancier;
+                artikel.MaxAantalInMagazijnPlaats = artikelViewModel.MaxAantalInMagazijnPlaats;
+                artikel.LeveranciersId = artikelViewModel.LeveranciersId;
+
+                _context.Update(artikel);
+                await _context.SaveChangesAsync();
+
+                ViewBag.Message = "Artikel succesvol gewijzigd.";
+                return View(artikelViewModel);
             }
 
-            try
-            {
-                await _artikelenService.UpdateArtikel(artikel);
-                return RedirectToAction(nameof(Details), new { id = artikel.ArtikelId });
-            }
-            catch (Exception ex)
-            {
-                ModelState.AddModelError("", ex.Message);
-                ViewData["LeveranciersId"] = new SelectList(
-                    _context.Leveranciers, "LeveranciersId", "BtwNummer", artikel.LeveranciersId
-                );
-                return View(artikel);
-            }
+            ViewData["LeveranciersId"] = new SelectList(_context.Leveranciers, "LeveranciersId", "BtwNummer", artikelViewModel.LeveranciersId);
+            return View(artikelViewModel);
         }
+    
+
 
         // GET: Artikelen/Delete/5
         public async Task<IActionResult> Delete(int? id)
@@ -168,7 +194,47 @@ namespace PrulariaAankoopUI.Controllers
         {
             return _context.Artikelen.Any(e => e.ArtikelId == id);
         }
+        // GET: Artikelen/Search
+        public IActionResult Search()
+        {
+            return View();
+        }
 
+        // POST: Artikelen/Search
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Search(string ean)
+        {
+            var artikel = await _context.Artikelen
+                .Include(a => a.Leverancier)
+                .FirstOrDefaultAsync(a => a.Ean == ean);
+
+            if (artikel == null)
+            {
+                ViewBag.Message = "Artikel niet gevonden.";
+                return View();
+            }
+
+            var artikelViewModel = new ArtikelViewModel
+            {
+                ArtikelId = artikel.ArtikelId,
+                Ean = artikel.Ean,
+                Naam = artikel.Naam,
+                Beschrijving = artikel.Beschrijving,
+                Prijs = artikel.Prijs,
+                GewichtInGram = artikel.GewichtInGram,
+                Bestelpeil = artikel.Bestelpeil,
+                Voorraad = artikel.Voorraad,
+                MinimumVoorraad = artikel.MinimumVoorraad,
+                MaximumVoorraad = artikel.MaximumVoorraad,
+                Levertijd = artikel.Levertijd,
+                AantalBesteldLeverancier = artikel.AantalBesteldLeverancier,
+                MaxAantalInMagazijnPlaats = artikel.MaxAantalInMagazijnPlaats,
+                LeveranciersId = artikel.LeveranciersId
+            };
+
+            return View("Edit", artikelViewModel);
+        }
 
     }
 }

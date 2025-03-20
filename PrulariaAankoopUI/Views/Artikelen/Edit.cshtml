@@ -1,9 +1,14 @@
-﻿@model PrulariaAankoopData.Models.Artikel
+﻿@model PrulariaAankoopData.Models.ArtikelViewModel
 
 @{
     ViewData["Title"] = "Edit";
 }
-
+@if (ViewBag.Message != null)
+{
+    <div class="alert alert-success">
+        @ViewBag.Message
+    </div>
+}
 <h1>Edit</h1>
 
 <h4>Artikel</h4>
