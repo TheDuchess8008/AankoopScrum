@@ -41,7 +41,6 @@ namespace PrulariaAankoopUI.Controllers
                 throw new Exception($"Artikel met ID {id} werd niet gevonden.");
             }
             return View(artikel);
-
         }
 
         // GET: Artikelen/Create
