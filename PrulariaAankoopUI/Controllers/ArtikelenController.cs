@@ -168,8 +168,17 @@ namespace PrulariaAankoopUI.Controllers
             {
                 return NotFound();
             }
-            return View(artikel);
+
+            var artikelViewModel = new ArtikelViewModel
+            {
+                ArtikelId = artikel.ArtikelId,
+                Naam = artikel.Naam,
+                Beschrijving = artikel.Beschrijving
+            };
+
+            return View(artikelViewModel);
         }
+
 
         [HttpPost]
         [ValidateAntiForgeryToken]
