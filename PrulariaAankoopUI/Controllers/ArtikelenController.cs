@@ -23,10 +23,9 @@ namespace PrulariaAankoopUI.Controllers
         }
 
         // GET: Artikelen
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(ArtikelViewModel form)
         {
-            var prulariaComContext = _context.Artikelen.Include(a => a.Leverancier);
-            return View(await prulariaComContext.ToListAsync());
+            return View(await _artikelenService.MaakGefilterdeLijstArtikelen(form));
         }
 
         // GET: Artikelen/Details/5
@@ -36,17 +35,12 @@ namespace PrulariaAankoopUI.Controllers
             {
                 return NotFound();
             }
-
-            var artikel = await _context.Artikelen
-                .Include(a => a.Leverancier)
-                .FirstOrDefaultAsync(m => m.ArtikelId == id);
+            var artikel = await _artikelenService.MaakDetailsArtikel((int)id);
             if (artikel == null)
             {
                 throw new Exception($"Artikel met ID {id} werd niet gevonden.");
             }
-
             return View(artikel);
-
         }
 
         // GET: Artikelen/Create
@@ -57,8 +51,6 @@ namespace PrulariaAankoopUI.Controllers
         }
 
         // POST: Artikelen/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("ArtikelId,Ean,Naam,Beschrijving,Prijs,GewichtInGram,Bestelpeil,Voorraad,MinimumVoorraad,MaximumVoorraad,Levertijd,AantalBesteldLeverancier,MaxAantalInMagazijnPlaats,LeveranciersId")] Artikel artikel)
@@ -91,8 +83,6 @@ namespace PrulariaAankoopUI.Controllers
         }
 
         // POST: Artikelen/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("ArtikelId,Ean,Naam,Beschrijving,Prijs,GewichtInGram,Bestelpeil,Voorraad,MinimumVoorraad,MaximumVoorraad,Levertijd,AantalBesteldLeverancier,MaxAantalInMagazijnPlaats,LeveranciersId")] Artikel artikel)
@@ -165,11 +155,9 @@ namespace PrulariaAankoopUI.Controllers
             return _context.Artikelen.Any(e => e.ArtikelId == id);
         }
 
-
-
-
-
-
-
+        public IActionResult Filter(ArtikelViewModel form)
+        {
+            return RedirectToAction("Index", form);
+        }
     }
 }
