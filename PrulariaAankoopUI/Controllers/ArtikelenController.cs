@@ -16,10 +16,10 @@ namespace PrulariaAankoopUI.Controllers
         private readonly PrulariaComContext _context;
         private readonly ArtikelenService _artikelenService;
 
-        public ArtikelenController(PrulariaComContext context, ArtikelenService artikelService)
+        public ArtikelenController(PrulariaComContext context, ArtikelenService artikelenService)
         {
             _context = context;
-            _artikelenService = artikelService;
+            _artikelenService = artikelenService;
         }
 
         // GET: Artikelen
@@ -38,7 +38,7 @@ namespace PrulariaAankoopUI.Controllers
             var artikel = await _artikelenService.MaakDetailsArtikel((int)id);
             if (artikel == null)
             {
-                return NotFound();
+                throw new Exception($"Artikel met ID {id} werd niet gevonden.");
             }
 
             return View(artikel);

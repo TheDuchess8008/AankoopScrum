@@ -1,18 +1,16 @@
 ﻿using PrulariaAankoopData.Models;
 using PrulariaAankoopData.Repositories;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using PrulariaAankoopData.Models;
+using PrulariaAankoopData.Repositories;
 
 namespace PrulariaAankoopService.Services;
 public class ArtikelenService
 {
     private readonly IArtikelenRepository _artikelenRepository;
-    public ArtikelenService(IArtikelenRepository sqlArtikelenRepository)
+    public ArtikelenService(IArtikelenRepository artikelenRepository)
     {
-        this._artikelenRepository = sqlArtikelenRepository;
+        this._artikelenRepository = artikelenRepository;
     }
 
     public async Task<ArtikelViewModel> MaakGefilterdeLijstArtikelen(ArtikelViewModel form)

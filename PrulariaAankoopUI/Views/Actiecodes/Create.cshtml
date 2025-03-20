@@ -1,48 +1,59 @@
-﻿@model PrulariaAankoopData.Models.Actiecode
+﻿@model NieuweActiecodeViewModel;
 
 @{
     ViewData["Title"] = "Create";
 }
 
-<h1>Create</h1>
+<h1>Maak een nieuwe Actiecode</h1>
 
-<h4>Actiecode</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
             <div class="form-group">
                 <label asp-for="Naam" class="control-label"></label>
-                <input asp-for="Naam" class="form-control" />
+                <input asp-for="Naam" class="form-control huiskleur" />
                 <span asp-validation-for="Naam" class="text-danger"></span>
             </div>
+            <br />
             <div class="form-group">
                 <label asp-for="GeldigVanDatum" class="control-label"></label>
-                <input asp-for="GeldigVanDatum" class="form-control" />
+                <input asp-for="GeldigVanDatum" class="form-control huiskleur" /> 
                 <span asp-validation-for="GeldigVanDatum" class="text-danger"></span>
             </div>
+            <br />
             <div class="form-group">
                 <label asp-for="GeldigTotDatum" class="control-label"></label>
-                <input asp-for="GeldigTotDatum" class="form-control" />
+                <input asp-for="GeldigTotDatum" class="form-control huiskleur" /> 
                 <span asp-validation-for="GeldigTotDatum" class="text-danger"></span>
             </div>
+            <br />
             <div class="form-group form-check">
                 <label class="form-check-label">
                     <input class="form-check-input" asp-for="IsEenmalig" /> @Html.DisplayNameFor(model => model.IsEenmalig)
                 </label>
             </div>
+            <br />
             <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+                <input type="submit" value="Toevoegen" class="btn btn-primary huiskleur" />
             </div>
+
         </form>
+        <br />
+        <p class="text-danger">@ViewBag.bestaandeActiecode</p>
+
     </div>
 </div>
 
+<br />
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Index" class="btn btn-secondary huiskleur" >Terug naar alle Actiecodes</a>
+
 </div>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }
+
