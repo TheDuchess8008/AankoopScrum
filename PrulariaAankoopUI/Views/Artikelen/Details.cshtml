@@ -1,4 +1,4 @@
-﻿@model PrulariaAankoopData.Models.Artikel
+﻿@model PrulariaAankoopData.Models.ArtikelViewModel
 
 @{
     ViewData["Title"] = "Details";
@@ -23,83 +23,83 @@
     <h4>Artikel</h4>
     <hr />
     <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Ean)
+        <dt class="col-sm-3">
+            @Html.DisplayNameFor(model => model.Artikel.Ean)
         </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Ean)
+        <dd class="col-sm-9">
+            @Html.DisplayFor(model => model.Artikel.Ean)
         </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Naam)
+        <dt class="col-sm-3">
+            @Html.DisplayNameFor(model => model.Artikel.Naam)
         </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Naam)
+        <dd class="col-sm-9">
+            @Html.DisplayFor(model => model.Artikel.Naam)
         </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Beschrijving)
+        <dt class="col-sm-3">
+            @Html.DisplayNameFor(model => model.Artikel.Beschrijving)
         </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Beschrijving)
+        <dd class="col-sm-9">
+            @Html.DisplayFor(model => model.Artikel.Beschrijving)
         </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Prijs)
+        <dt class="col-sm-3">
+            @Html.DisplayNameFor(model => model.Artikel.Prijs)
         </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Prijs)
+        <dd class="col-sm-9">
+            @Html.DisplayFor(model => model.Artikel.Prijs)
         </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.GewichtInGram)
+        <dt class="col-sm-3">
+            @Html.DisplayNameFor(model => model.Artikel.GewichtInGram)
         </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.GewichtInGram)
+        <dd class="col-sm-9">
+            @Html.DisplayFor(model => model.Artikel.GewichtInGram)
         </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Bestelpeil)
+        <dt class="col-sm-3">
+            @Html.DisplayNameFor(model => model.Artikel.Bestelpeil)
         </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Bestelpeil)
+        <dd class="col-sm-9">
+            @Html.DisplayFor(model => model.Artikel.Bestelpeil)
         </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Voorraad)
+        <dt class="col-sm-3">
+            @Html.DisplayNameFor(model => model.Artikel.Voorraad)
         </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Voorraad)
+        <dd class="col-sm-9">
+            @Html.DisplayFor(model => model.Artikel.Voorraad)
         </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.MinimumVoorraad)
+        <dt class="col-sm-3">
+            @Html.DisplayNameFor(model => model.Artikel.MinimumVoorraad)
         </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.MinimumVoorraad)
+        <dd class="col-sm-9">
+            @Html.DisplayFor(model => model.Artikel.MinimumVoorraad)
         </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.MaximumVoorraad)
+        <dt class="col-sm-3">
+            @Html.DisplayNameFor(model => model.Artikel.MaximumVoorraad)
         </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.MaximumVoorraad)
+        <dd class="col-sm-9">
+            @Html.DisplayFor(model => model.Artikel.MaximumVoorraad)
         </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Levertijd)
+        <dt class="col-sm-3">
+            @Html.DisplayNameFor(model => model.Artikel.Levertijd)
         </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Levertijd)
+        <dd class="col-sm-9">
+            @Html.DisplayFor(model => model.Artikel.Levertijd)
         </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.AantalBesteldLeverancier)
+        <dt class="col-sm-3">
+            @Html.DisplayNameFor(model => model.Artikel.AantalBesteldLeverancier)
         </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.AantalBesteldLeverancier)
+        <dd class="col-sm-9">
+            @Html.DisplayFor(model => model.Artikel.AantalBesteldLeverancier)
         </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.MaxAantalInMagazijnPlaats)
+        <dt class="col-sm-3">
+            @Html.DisplayNameFor(model => model.Artikel.MaxAantalInMagazijnPlaats)
         </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.MaxAantalInMagazijnPlaats)
+        <dd class="col-sm-9">
+            @Html.DisplayFor(model => model.Artikel.MaxAantalInMagazijnPlaats)
         </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Leverancier)
+        <dt class="col-sm-3">
+            @Html.DisplayNameFor(model => model.Artikel.Leverancier)
         </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Leverancier.BtwNummer)
+        <dd class="col-sm-9">
+            @Html.DisplayFor(model => model.Artikel.Leverancier.Naam)
         </dd>
     </dl>
 </div>

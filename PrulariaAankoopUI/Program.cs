@@ -16,6 +16,17 @@ builder.Services.AddDbContext<PrulariaComContext>(
 builder.Services.AddScoped<ArtikelenService>();
 builder.Services.AddControllersWithViews();
 
+builder.Services.AddTransient<ActiecodesService>();
+builder.Services.AddTransient<IActiecodesRepository, SQLActiecodesRepository>();
+builder.Services.AddTransient<ArtikelenService>();
+builder.Services.AddTransient<IArtikelenRepository, SQLArtikelenRepository>();
+builder.Services.AddTransient<CategorieenService>();
+builder.Services.AddTransient<ICategorieenRepository, SQLCategorieenRepository>();
+builder.Services.AddTransient<LeveranciersService>();
+builder.Services.AddTransient<ILeveranciersRepository, SQLLeveranciersRepository>();
+builder.Services.AddTransient<SecurityService>();
+builder.Services.AddTransient<ISecurityRepository, SQLSecurityRepository>();
+
 builder.Services.Configure<RequestLocalizationOptions>(options =>
 {
     var supportedCultures = new List<CultureInfo> {
@@ -32,17 +43,6 @@ builder.Services.AddControllersWithViews((options) =>
 {
     options.ModelBinderProviders.Insert(0, new CustomBinderProvider());
 });
-
-builder.Services.AddTransient<ActiecodesService>();
-builder.Services.AddTransient<IActiecodesRepository, SQLActiecodesRepository>();
-builder.Services.AddTransient<ArtikelenService>();
-builder.Services.AddTransient<IArtikelenRepository, SQLArtikelenRepository>();
-builder.Services.AddTransient<CategorieenService>();
-builder.Services.AddTransient<ICategorieenRepository, SQLCategorieenRepository>();
-builder.Services.AddTransient<LeveranciersService>();
-builder.Services.AddTransient<ILeveranciersRepository, SQLLeveranciersRepository>();
-builder.Services.AddTransient<SecurityService>();
-builder.Services.AddTransient<ISecurityRepository, SQLSecurityRepository>();
 
 var app = builder.Build();
 

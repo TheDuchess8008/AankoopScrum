@@ -5,26 +5,66 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using MySqlX.XDevAPI.Common;
 using PrulariaAankoopData.Models;
 using PrulariaAankoopData.Repositories;
+using PrulariaAankoopService.Services;
+using PrulariaAankoopUI.Models;
+using PrulariaAankoopService.Services;
 
 namespace PrulariaAankoopUI.Controllers
 {
     public class ActiecodesController : Controller
     {
         private readonly PrulariaComContext _context;
-
-        public ActiecodesController(PrulariaComContext context)
+        private readonly ActiecodesService _actiecodesService;
+        public ActiecodesController(PrulariaComContext context, ActiecodesService actiecodesService)
         {
             _context = context;
+            _actiecodesService = actiecodesService;
         }
 
-        // GET: Actiecodes
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Actiecodes.ToListAsync());
+            try
+            {
+                var actiecodes = await _actiecodesService.ToListAsync();
+                return View(actiecodes);
+            }
+
+            catch (DbUpdateConcurrencyException ex)
+            {
+                return NotFound();
+
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
         }
 
+        // NIEUWE CODE ------------------------------------------------------------------------
+
+       
+            [HttpGet]
+        public async Task<IActionResult> ActiecodeWijzigen(int id)
+        {
+            var model = await _actiecodesService.GetActiecodeVoorWijzigingAsync(id);
+            if (model == null) return NotFound();
+            return View(model);
+        }
+
+        [HttpPost]
+       
+        public async Task<IActionResult> ActiecodeWijzigen(ActiecodeWijzigenViewModel model)
+        {
+            if (!ModelState.IsValid) return View(model);
+
+            bool success = await _actiecodesService.WijzigActiecodeAsync(model);
+            if (!success) return BadRequest("Ongeldige gegevens of data niet wijzigbaar");
+
+            return RedirectToAction("Index");
+        }
         // GET: Actiecodes/Details/5
         public async Task<IActionResult> Details(int? id)
         {
@@ -33,7 +73,7 @@ namespace PrulariaAankoopUI.Controllers
                 return NotFound();
             }
 
-            var actiecode = await _context.Actiecodes
+            var actiecode = await _actiecodesService
                 .FirstOrDefaultAsync(m => m.ActiecodeId == id);
             if (actiecode == null)
             {
@@ -43,6 +83,7 @@ namespace PrulariaAankoopUI.Controllers
             return View(actiecode);
         }
 
+
         // GET: Actiecodes/Create
         public IActionResult Create()
         {
@@ -50,19 +91,32 @@ namespace PrulariaAankoopUI.Controllers
         }
 
         // POST: Actiecodes/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ActiecodeId,Naam,GeldigVanDatum,GeldigTotDatum,IsEenmalig")] Actiecode actiecode)
+        public async Task<IActionResult> Create(NieuweActiecodeViewModel model)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(actiecode);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                // als de actiecode nog niet in de database bestaat:
+                if (_actiecodesService.IsActiCodeNieuw(model.Naam, model.GeldigVanDatum, model.GeldigTotDatum ))
+                {
+                    var actiecode = new Actiecode()
+                    {
+                        Naam = model.Naam,
+                        GeldigVanDatum = model.GeldigVanDatum,
+                        GeldigTotDatum = model.GeldigTotDatum,
+                        IsEenmalig = model.IsEenmalig,
+                    };
+                    await _actiecodesService.RegistrerenActiecodeAsync(actiecode);
+                    return RedirectToAction("Index");
+                }
+                // als de actiecode in de database WEL bestaat:
+                else
+                {
+                    ViewBag.bestaandeActiecode = "De Actiecode bestaat al in de database";
+                }
             }
-            return View(actiecode);
+            return View(model);
         }
 
         // GET: Actiecodes/Edit/5
@@ -73,7 +127,7 @@ namespace PrulariaAankoopUI.Controllers
                 return NotFound();
             }
 
-            var actiecode = await _context.Actiecodes.FindAsync(id);
+            var actiecode = await _actiecodesService.FindAsync(id);
             if (actiecode == null)
             {
                 return NotFound();
@@ -97,8 +151,24 @@ namespace PrulariaAankoopUI.Controllers
             {
                 try
                 {
-                    _context.Update(actiecode);
-                    await _context.SaveChangesAsync();
+
+                    var teWijzigenActiecode = await _actiecodesService.FindAsync(id);
+                    if (teWijzigenActiecode == null)
+                    {
+                        return NotFound();
+                    }
+
+                    // Pas de velden van de bestaande Actiecode aan
+                    teWijzigenActiecode.Naam = actiecode.Naam;
+                    teWijzigenActiecode.GeldigVanDatum = actiecode.GeldigVanDatum;
+                    teWijzigenActiecode.GeldigTotDatum = actiecode.GeldigTotDatum;
+                    teWijzigenActiecode.IsEenmalig = actiecode.IsEenmalig;
+
+
+
+
+
+                    await _actiecodesService.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -124,7 +194,7 @@ namespace PrulariaAankoopUI.Controllers
                 return NotFound();
             }
 
-            var actiecode = await _context.Actiecodes
+            var actiecode = await _actiecodesService
                 .FirstOrDefaultAsync(m => m.ActiecodeId == id);
             if (actiecode == null)
             {
@@ -139,19 +209,21 @@ namespace PrulariaAankoopUI.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var actiecode = await _context.Actiecodes.FindAsync(id);
+            var actiecode = await _actiecodesService.FindAsync(id);
             if (actiecode != null)
             {
-                _context.Actiecodes.Remove(actiecode);
+                _actiecodesService.Remove(actiecode);
             }
 
-            await _context.SaveChangesAsync();
+            await _actiecodesService.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool ActiecodeExists(int id)
         {
-            return _context.Actiecodes.Any(e => e.ActiecodeId == id);
+            return _actiecodesService.Any(e => e.ActiecodeId == id);
         }
+
+
     }
 }

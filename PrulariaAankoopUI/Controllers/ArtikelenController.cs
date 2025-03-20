@@ -23,10 +23,9 @@ namespace PrulariaAankoopUI.Controllers
         }
 
         // GET: Artikelen
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(ArtikelViewModel form)
         {
-            var prulariaComContext = _context.Artikelen.Include(a => a.Leverancier);
-            return View(await prulariaComContext.ToListAsync());
+            return View(await _artikelenService.MaakGefilterdeLijstArtikelen(form));
         }
 
         // GET: Artikelen/Details/5
@@ -36,13 +35,10 @@ namespace PrulariaAankoopUI.Controllers
             {
                 return NotFound();
             }
-
-            var artikel = await _context.Artikelen
-                .Include(a => a.Leverancier)
-                .FirstOrDefaultAsync(m => m.ArtikelId == id);
+            var artikel = await _artikelenService.MaakDetailsArtikel((int)id);
             if (artikel == null)
             {
-                return NotFound();
+                throw new Exception($"Artikel met ID {id} werd niet gevonden.");
             }
 
             return View(artikel);
@@ -162,6 +158,11 @@ namespace PrulariaAankoopUI.Controllers
         private bool ArtikelExists(int id)
         {
             return _context.Artikelen.Any(e => e.ArtikelId == id);
+        }
+
+        public IActionResult Filter(ArtikelViewModel form)
+        {
+            return RedirectToAction("Index", form);
         }
 
         [HttpGet]
