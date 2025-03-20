@@ -14,18 +14,18 @@ namespace PrulariaAankoopUI.Controllers
     public class ArtikelenController : Controller
     {
         private readonly PrulariaComContext _context;
-        private readonly ArtikelenService artikelenService;
+        private readonly ArtikelenService _artikelenService;
 
         public ArtikelenController(PrulariaComContext context, ArtikelenService artikelenService)
         {
             _context = context;
-            this.artikelenService = artikelenService;
+            _artikelenService = artikelenService;
         }
 
         // GET: Artikelen
         public async Task<IActionResult> Index()
         {
-            var prulariaComContext = _context.Artikelen.Include(a => a.Leveranciers);
+            var prulariaComContext = _context.Artikelen.Include(a => a.Leverancier);
             return View(await prulariaComContext.ToListAsync());
         }
 
@@ -38,7 +38,7 @@ namespace PrulariaAankoopUI.Controllers
             }
 
             var artikel = await _context.Artikelen
-                .Include(a => a.Leveranciers)
+                .Include(a => a.Leverancier)
                 .FirstOrDefaultAsync(m => m.ArtikelId == id);
             if (artikel == null)
             {
@@ -51,7 +51,7 @@ namespace PrulariaAankoopUI.Controllers
         // GET: Artikelen/Create
         public IActionResult Create()
         {
-            ViewData["LeveranciersId"] = new SelectList(_context.Leveranciers, "LeveranciersId", "BtwNummer");
+            ViewData["LeveranciersId"] = new SelectList(_context.Leveranciers, "LeveranciersId", "Naam");
             return View();
         }
 
@@ -62,17 +62,19 @@ namespace PrulariaAankoopUI.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Artikel artikel)
         {
-            artikel.Leveranciers = await _context.Leveranciers.FindAsync(artikel.LeveranciersId);
+            // Uiteindelijk vervangen met methode van Leveranciersrepository/service
+            artikel.Leverancier = await _context.Leveranciers.FindAsync(artikel.LeveranciersId);
 
-            if(artikelenService.CheckOfArtikelBestaat(artikel)) 
-                ModelState.AddModelError("Naam", "Een artikel met deze naam bestaat al.");
+            if(_artikelenService.CheckOfArtikelBestaat(artikel)) 
+                ModelState.AddModelError("Naam", "Een artikel met deze naam en beschrijving bestaat al.");
 
             if (this.ModelState.IsValid)
             {
-                artikelenService.AddArtikel(artikel);
+                _artikelenService.AddArtikel(artikel);
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["LeveranciersId"] = new SelectList(_context.Leveranciers, "LeveranciersId", "BtwNummer", artikel.LeveranciersId);
+            // Uiteindelijk vervangen met methode van Leveranciersrepository/service
+            ViewBag.LeveranciersId = new SelectList(_context.Leveranciers, "LeveranciersId", "Naam", artikel.LeveranciersId);
             return View(artikel);
         }
 
@@ -138,7 +140,7 @@ namespace PrulariaAankoopUI.Controllers
             }
 
             var artikel = await _context.Artikelen
-                .Include(a => a.Leveranciers)
+                .Include(a => a.Leverancier)
                 .FirstOrDefaultAsync(m => m.ArtikelId == id);
             if (artikel == null)
             {

@@ -26,7 +26,8 @@ public class ArtikelenService
     public bool CheckOfArtikelBestaat(Artikel artikel)
     {
         
-        var bestaandArtikel = _context.Artikelen.Where(a => a.Naam == artikel.Naam && a.Beschrijving == artikel.Beschrijving);
+        var bestaandArtikel = _context.Artikelen.Where(a => a.Naam == artikel.Naam && a.Beschrijving == artikel.Beschrijving)
+            .FirstOrDefault();
         if (bestaandArtikel is not null)
         {
             return true;
