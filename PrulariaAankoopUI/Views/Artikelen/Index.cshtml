@@ -28,7 +28,7 @@
         </div>
         <div class="col-md-2">
             <br />
-            <input type="submit" value="Filteren" class="btn btn-primary" />
+            <input type="submit" value="Filteren" class="btn btn-primary huiskleur" />
         </div>
     </div>
     <br />
@@ -78,9 +78,9 @@
                         @Html.DisplayFor(modelItem => item.Voorraad)
                     </td>
                     <td>
-                        <a asp-action="Edit" asp-route-id="@item.ArtikelId">Edit</a> |
-                        <a asp-action="Details" asp-route-id="@item.ArtikelId">Details</a> |
-                        <a asp-action="Delete" asp-route-id="@item.ArtikelId">Delete</a>
+                        <a asp-action="Edit" asp-route-id="@item.ArtikelId" class="btn btn-secondary huiskleur">Edit</a> |
+                        <a asp-action="Details" asp-route-id="@item.ArtikelId" class="btn btn-secondary huiskleur">Details</a> |
+                        <a asp-action="Delete" asp-route-id="@item.ArtikelId" class="btn btn-secondary huiskleur">Delete</a>
                     </td>
                 </tr>
             }
