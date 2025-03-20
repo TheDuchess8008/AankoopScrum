@@ -13,6 +13,29 @@ namespace PrulariaAankoopData.Repositories
         {
             _context = context ?? throw new ArgumentNullException(nameof(context));
         }
-                
+
+        // SaveChangesAsync
+        public async Task SaveChangesAsync()
+        {
+            await _context.SaveChangesAsync();
+        }
+
+        // GetArtikelMetCategorieenAsync
+        public async Task<Artikel> GetArtikelMetCategorieenAsync(int artikelId)
+        {
+            return await _context.Artikelen
+                .Include(a => a.Categorieën)
+                .FirstOrDefaultAsync(a => a.ArtikelId == artikelId);
+        }
+
+        // CategorieToevoegenAanArtikelAsync
+        public async Task<bool> CategorieToevoegenAanArtikelAsync(Artikel artikel, Categorie categorie)
+        {
+            artikel.Categorieën.Add(categorie);
+            await _context.SaveChangesAsync();
+            return true;
+        }
+
+
     }
 }
