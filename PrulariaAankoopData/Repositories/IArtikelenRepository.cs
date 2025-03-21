@@ -9,8 +9,10 @@ namespace PrulariaAankoopData.Repositories;
 public interface IArtikelenRepository
 {
     Task<List<Artikel>> GetArtikelenMetFilteren(int? categorieId, string? actiefStatus);
-    Task<Artikel> GetArtikelById(int id);
+   // Task<Artikel> GetArtikelById(int id);
     Task<List<Categorie>> GetAlleCategorieen();
     Task AddArtikel(Artikel artikel);
-    Task UpdateAsync(Artikel artikel);
+    Task<Artikel?> GetArtikelById(int artikelId);
+    Task<Artikel> GetByIdAsync(int artikelId);
+    Task UpdateArtikel(Artikel bestaandArtikel, Artikel artikel);
 }
