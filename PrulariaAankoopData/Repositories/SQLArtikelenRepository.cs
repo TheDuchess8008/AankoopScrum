@@ -19,6 +19,12 @@ public class SQLArtikelenRepository : IArtikelenRepository
                 .Include(c => c.Categorieën)
                 .FirstOrDefaultAsync(m => m.ArtikelId == id);
     }
+
+    public async Task<Artikel> GetByIdAsync(int artikelId)
+    {
+        return await _context.Artikelen.FindAsync(artikelId);
+    }
+
     public async Task<List<Artikel>> GetArtikelenMetFilteren(int? categorieId, string? actiefStatus)
     {
         IQueryable<Artikel> query = _context.Artikelen.Include(c => c.Categorieën)

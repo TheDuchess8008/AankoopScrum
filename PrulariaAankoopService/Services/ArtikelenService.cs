@@ -17,18 +17,18 @@ public class ArtikelenService
 
     public async Task UpdateArtikelNonActief(Artikel artikel)
     {
-        var bestaandArtikel = await _artikelenRepository.GetArtikelById(artikel.ArtikelId);
+        var bestaandArtikel = await _artikelenRepository.GetByIdAsync(artikel.ArtikelId);
         await _artikelenRepository.UpdateArtikel(bestaandArtikel, artikel);
     }
 
     public async Task<Artikel> GetByIdAsync(int artikelId)
     {
-        return await _artikelenRepository.GetArtikelById(artikelId);
+        return await _artikelenRepository.GetByIdAsync(artikelId);
     }
 
     public async Task SetArtikelNonActiefAsync(int artikelId)
     {
-        var artikel = await GetByIdAsync(artikelId);
+        var artikel = await _artikelenRepository.GetByIdAsync(artikelId);
         if (artikel == null)
             throw new ArgumentNullException(nameof(artikel), "Artikel kan niet null zijn");
 
@@ -76,10 +76,9 @@ public class ArtikelenService
 
     /// Haalt een artikel op basis van ID.
     /// </summary>
-    public async Task<ArtikelViewModel?> GetArtikelById(int artikelId)
+    public async Task<Artikel?> GetArtikelById(int artikelId)
     {
-        var artikel = new ArtikelViewModel();
-        artikel.Artikel = await _artikelenRepository.GetArtikelById(artikelId);
+        Artikel artikel = await _artikelenRepository.GetByIdAsync(artikelId);
         if (artikel == null)
         {
             throw new Exception($"Artikel met ID {artikelId} werd niet gevonden.");
@@ -108,7 +107,7 @@ public class ArtikelenService
         }
 
         // Controleer of het artikel al bestaat
-        var bestaandArtikel = await _artikelenRepository.GetArtikelById(artikel.ArtikelId);
+        var bestaandArtikel = await _artikelenRepository.GetByIdAsync(artikel.ArtikelId);
         if (bestaandArtikel == null)
         {
             throw new Exception($"Artikel met ID {artikel.ArtikelId} werd niet gevonden.");

@@ -13,5 +13,6 @@ public interface IArtikelenRepository
     Task<List<Categorie>> GetAlleCategorieen();
     Task AddArtikel(Artikel artikel);
     Task<Artikel?> GetArtikelById(int artikelId);
+    Task<Artikel> GetByIdAsync(int artikelId);
     Task UpdateArtikel(Artikel bestaandArtikel, Artikel artikel);
 }
