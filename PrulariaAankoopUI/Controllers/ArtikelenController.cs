@@ -109,7 +109,7 @@ namespace PrulariaAankoopUI.Controllers
             {
                 return NotFound();
             }
-            _artikelenService.UpdateArtikel(artikelViewModel);
+            await _artikelenService.UpdateArtikel(artikelViewModel);
             ViewBag.Message = "Artikel succesvol gewijzigd.";
             ViewData["LeveranciersId"] = new SelectList(_context.Leveranciers, "LeveranciersId", "Naam", artikelViewModel.Artikel.LeveranciersId);
             return View(artikelViewModel);
