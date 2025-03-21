@@ -245,5 +245,48 @@ namespace PrulariaAankoopUI.Controllers
         {
             return RedirectToAction("Index", form);
         }
+
+        [HttpGet]
+        public async Task<IActionResult> BevestigSetNonActief(int artikelId)
+        {
+            var artikel = await _artikelenService.GetByIdAsync(artikelId);
+            if (artikel == null)
+            {
+                return NotFound();
+            }
+
+            var artikelViewModel = new ArtikelViewModel
+            {
+                ArtikelId = artikel.ArtikelId,
+                Naam = artikel.Naam,
+                Beschrijving = artikel.Beschrijving
+            };
+
+            return View(artikelViewModel);
+        }
+
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> SetArtikelNonActief(int artikelId)
+        {
+            try
+            {
+                await _artikelenService.SetArtikelNonActiefAsync(artikelId);
+                TempData["SuccessMessage"] = "Artikel is succesvol op non-actief gezet.";
+                return RedirectToAction("Details", new { id = artikelId });
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                TempData["ErrorMessage"] = "Het artikel is al gewijzigd door een andere gebruiker." +
+                    " Probeer het opnieuw.";
+                return RedirectToAction("Details", new { id = artikelId });
+            }
+            catch (Exception ex)
+            {
+                TempData["ErrorMessage"] = $"Fout bij op non-actief zetten: {ex.Message}";
+                return RedirectToAction("Details", new { id = artikelId });
+            }
+        }
     }
 }

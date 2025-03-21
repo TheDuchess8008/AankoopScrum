@@ -1,4 +1,6 @@
-﻿using PrulariaAankoopData.Models;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using PrulariaAankoopData.Models;
 using PrulariaAankoopData.Repositories;
 using System;
 
@@ -11,6 +13,36 @@ public class ArtikelenService
     {
         _artikelenRepository = artikelenRepository;
         _context = context;
+    }
+
+    public async Task UpdateArtikelAsync(Artikel artikel)
+    {
+        await _artikelenRepository.UpdateAsync(artikel);
+    }
+
+    public async Task<Artikel> GetByIdAsync(int artikelId)
+    {
+        return await _artikelenRepository.GetArtikelById(artikelId);
+    }
+
+    public async Task SetArtikelNonActiefAsync(int artikelId)
+    {
+        var artikel = await GetByIdAsync(artikelId);
+        if (artikel == null)
+            throw new ArgumentNullException(nameof(artikel), "Artikel kan niet null zijn");
+
+        _context.Attach(artikel);
+
+        //Velden op nul zetten
+        artikel.MinimumVoorraad = 0;
+        artikel.MaximumVoorraad = 0;
+        artikel.Bestelpeil = 0;
+        artikel.AantalBesteldLeverancier = 0;
+
+        //ArtikelViewModel .ActiefStatus string op "NonActief"
+
+        //Database updaten via UpdateArtikelAsync methode
+        await UpdateArtikelAsync(artikel);
     }
 
     public async Task<ArtikelViewModel> MaakGefilterdeLijstArtikelen(ArtikelViewModel form)
