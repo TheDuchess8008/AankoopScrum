@@ -45,25 +45,7 @@ namespace PrulariaAankoopUI.Controllers
         // NIEUWE CODE ------------------------------------------------------------------------
 
        
-            [HttpGet]
-        public async Task<IActionResult> ActiecodeWijzigen(int id)
-        {
-            var model = await _actiecodesService.GetActiecodeVoorWijzigingAsync(id);
-            if (model == null) return NotFound();
-            return View(model);
-        }
 
-        [HttpPost]
-       
-        public async Task<IActionResult> ActiecodeWijzigen(ActiecodeWijzigenViewModel model)
-        {
-            if (!ModelState.IsValid) return View(model);
-
-            bool success = await _actiecodesService.WijzigActiecodeAsync(model);
-            if (!success) return BadRequest("Ongeldige gegevens of data niet wijzigbaar");
-
-            return RedirectToAction("Index");
-        }
         // GET: Actiecodes/Details/5
         public async Task<IActionResult> Details(int? id)
         {
@@ -119,70 +101,57 @@ namespace PrulariaAankoopUI.Controllers
         }
 
         // GET: Actiecodes/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        public async Task<IActionResult> Edit(int id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var actiecode = await _actiecodesService.FindAsync(id);
+            var actiecode = await _context.Actiecodes.FirstOrDefaultAsync(a => a.ActiecodeId == id);
             if (actiecode == null)
             {
                 return NotFound();
             }
-            return View(actiecode);
-        }
 
-        // POST: Actiecodes/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+            var model = new ActiecodeWijzigenViewModel
+            {
+                Id = actiecode.ActiecodeId,
+                Naam = actiecode.Naam,
+                GeldigVanDatum = actiecode.GeldigVanDatum,
+                GeldigTotDatum = actiecode.GeldigTotDatum,
+                IsEenmalig = actiecode.IsEenmalig
+            };
+            return View(model);
+        }
+                
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ActiecodeId,Naam,GeldigVanDatum,GeldigTotDatum,IsEenmalig")] Actiecode actiecode)
+        public async Task<IActionResult> Edit(ActiecodeWijzigenViewModel model)
         {
-            if (id != actiecode.ActiecodeId)
-            {
-                return NotFound();
-            }
-
             if (ModelState.IsValid)
             {
+                var actiecode =await _actiecodesService.FindAsync(model.Id);
+                if (actiecode == null)
+                {
+                    return NotFound();
+                }
+
+                actiecode.Naam = model.Naam;
+                actiecode.GeldigVanDatum = model.GeldigVanDatum;
+                actiecode.GeldigTotDatum = model.GeldigTotDatum;
+                actiecode.IsEenmalig = model.IsEenmalig;
+
                 try
                 {
-
-                    var teWijzigenActiecode = await _actiecodesService.FindAsync(id);
-                    if (teWijzigenActiecode == null)
-                    {
-                        return NotFound();
-                    }
-
-                    // Pas de velden van de bestaande Actiecode aan
-                    teWijzigenActiecode.Naam = actiecode.Naam;
-                    teWijzigenActiecode.GeldigVanDatum = actiecode.GeldigVanDatum;
-                    teWijzigenActiecode.GeldigTotDatum = actiecode.GeldigTotDatum;
-                    teWijzigenActiecode.IsEenmalig = actiecode.IsEenmalig;
-
-
-
-
-
-                    await _actiecodesService.SaveChangesAsync();
+                    await _actiecodesService.UpdateAsync(actiecode);
                 }
-                catch (DbUpdateConcurrencyException)
+                catch (Exception ex)
                 {
-                    if (!ActiecodeExists(actiecode.ActiecodeId))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
+                   ModelState.AddModelError("", "Er is een fout opgetreden tijdens het verwerken van uw aanvraag. Probeer het later nog eens.");
+                    return View(model);
                 }
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Index)); 
             }
-            return View(actiecode);
+
+            // Als de validatie mislukt:
+            return View(model);
+            
         }
 
         // GET: Actiecodes/Delete/5

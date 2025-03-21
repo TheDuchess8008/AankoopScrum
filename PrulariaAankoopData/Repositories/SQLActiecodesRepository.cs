@@ -54,7 +54,7 @@ public class SQLActiecodesRepository : IActiecodesRepository
     // ASYNCHROON ===========================================================
 
     // FindAsync
-    public async Task<Actiecode?> FindAsync(int id)
+    public async Task<Actiecode?> FindByIdAsync(int id)
     {
         return await _context.Actiecodes.FindAsync(id);
     }
@@ -117,4 +117,9 @@ public class SQLActiecodesRepository : IActiecodesRepository
         return await _context.SaveChangesAsync() > 0;
     }
 
+    public async Task UpdateAsync(Actiecode actiecode)
+    {
+        _context.Actiecodes.Update(actiecode);
+        await _context.SaveChangesAsync();
+    }
 }
