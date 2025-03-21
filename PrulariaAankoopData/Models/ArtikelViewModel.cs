@@ -6,6 +6,8 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace PrulariaAankoopData.Models;
+
+
 public class ArtikelViewModel
 {
     public int ArtikelId { get; set; }
@@ -42,12 +44,18 @@ public class ArtikelViewModel
 
     public int LeveranciersId { get; set; }
 
+    // Related data
+    public string LeverancierNaam { get; set; } = null!;
     public Artikel Artikel { get; set; }
 
     public virtual Leverancier Leverancier { get; set; } = null!;
 
+    // Confirmation message (if applicable)
+    public bool IsUpdateSuccessful { get; set; }
+    public string ConfirmationMessage { get; set; } = null!;
+
     public virtual List<Categorie> Categorieën { get; set; } = new List<Categorie>();
     public List<Artikel> Artikelen { get; set; } = new List<Artikel>();
     public string ActiefStatus { get; set; }
-    public int CategorieId {  get; set; }
+    public int CategorieId { get; set; }
 }

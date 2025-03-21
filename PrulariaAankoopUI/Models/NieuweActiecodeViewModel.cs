@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System;
 using System.ComponentModel.DataAnnotations;
+using PrulariaAankoopUI.Components;
 
 namespace PrulariaAankoopData.Models;
 
@@ -14,35 +15,17 @@ public class NieuweActiecodeViewModel
     public string Naam { get; set; } = null!;
 
     [Required(ErrorMessage = "De begindatum is verplicht.")]
-    [DataType(DataType.Date)]
     [Display(Name = "Geldig vanaf")]
-    [CustomValidation(typeof(NieuweActiecodeViewModel), nameof(ValidateGeldigVanDatum))]
+    [CustomValidation(typeof(VanTotDateValidatie), nameof(VanTotDateValidatie.ValidateGeldigVanDatum))]
+    [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
     public DateTime GeldigVanDatum { get; set; }
 
     [Required(ErrorMessage = "De einddatum is verplicht.")]
-    [DataType(DataType.Date)]
     [Display(Name = "Geldig tot")]
-    [CustomValidation(typeof(NieuweActiecodeViewModel), nameof(ValidateGeldigTotDatum))]
+    [CustomValidation(typeof(VanTotDateValidatie), nameof(VanTotDateValidatie.ValidateGeldigTotDatum))]
+    [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
     public DateTime GeldigTotDatum { get; set; }
 
     public bool IsEenmalig { get; set; }
 
-    public static ValidationResult ValidateGeldigVanDatum(DateTime geldigVanDatum, ValidationContext context)
-    {
-        if (geldigVanDatum < DateTime.Now.Date)
-        {
-            return new ValidationResult("De begindatum moet vandaag of in de toekomst liggen.");
-        }
-        return ValidationResult.Success;
-    }
-
-    public static ValidationResult ValidateGeldigTotDatum(DateTime geldigTotDatum, ValidationContext context)
-    {
-        var model = (NieuweActiecodeViewModel)context.ObjectInstance;
-        if (geldigTotDatum < model.GeldigVanDatum)
-        {
-            return new ValidationResult("De einddatum moet na de begindatum liggen.");
-        }
-        return ValidationResult.Success;
-    }
 }

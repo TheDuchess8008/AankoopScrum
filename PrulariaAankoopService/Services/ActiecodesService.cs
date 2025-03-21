@@ -24,7 +24,7 @@ public class ActiecodesService
     public async Task<Actiecode?> FindAsync(int? id)
     {
         if (id == null) return null;
-        return await _actiecodesRepository.FindAsync(id.Value);
+        return await _actiecodesRepository.FindByIdAsync(id.Value);
     }
 
     // FirstOrDefaultAsync
@@ -65,15 +65,9 @@ public class ActiecodesService
         _actiecodesRepository.Remove(actiecode);
     }
 
-
-
-
-
-
-
-    public bool IsActiCodeNieuw(string naam, DateTime geldigVanDatum, DateTime geldigTotDatum) 
+    public bool IsActieCodeNieuw(string naam, DateTime geldigVanDatum, DateTime geldigTotDatum) 
     {
-        return _actiecodesRepository.IsActiCodeNieuw(naam, geldigVanDatum, geldigTotDatum);
+        return _actiecodesRepository.IsActieCodeNieuw(naam, geldigVanDatum, geldigTotDatum);
     }
 
     public async Task RegistrerenActiecodeAsync(Actiecode actiecode) 
@@ -81,47 +75,8 @@ public class ActiecodesService
         await _actiecodesRepository.ToevoegActiecodeAsync(actiecode);
     }
 
-
-    public async Task<ActiecodeWijzigenViewModel?> GetActiecodeVoorWijzigingAsync(int id)
+    public async Task UpdateAsync(Actiecode actiecode) 
     {
-        var actiecode = await _actiecodesRepository.GetActiecodeByIdAsync(id);
-        if (actiecode == null) return null;
-
-        return new ActiecodeWijzigenViewModel
-        {
-            ActiecodeId = actiecode.ActiecodeId,
-            Naam = actiecode.Naam,
-            GeldigVanDatum = actiecode.GeldigVanDatum,
-            GeldigTotDatum = actiecode.GeldigTotDatum,
-            IsEenmalig = actiecode.IsEenmalig
-        };
-    }
-
-    public async Task<bool> WijzigActiecodeAsync(ActiecodeWijzigenViewModel model)
-    {
-        var actiecode = await _actiecodesRepository.GetActiecodeByIdAsync(model.ActiecodeId);
-        if (actiecode == null) return false;
-
-        if (actiecode.GeldigVanDatum < DateTime.Now) return false;
-        if (model.GeldigTotDatum < actiecode.GeldigVanDatum || model.GeldigTotDatum < DateTime.Now) return false;
-
-        actiecode.Naam = model.Naam;
-        actiecode.GeldigTotDatum = model.GeldigTotDatum;
-        actiecode.IsEenmalig = model.IsEenmalig;
-
-        return await _actiecodesRepository.SaveChangesAsync();
-    }
-
-    public async Task<List<ActiecodeWijzigenViewModel>> GetAllActiecodesAsync()
-    {
-        var actiecodes = await _actiecodesRepository.GetAllActiecodesAsync();
-        return actiecodes.Select(a => new ActiecodeWijzigenViewModel
-        {
-            ActiecodeId = a.ActiecodeId,
-            Naam = a.Naam,
-            GeldigVanDatum = a.GeldigVanDatum,
-            GeldigTotDatum = a.GeldigTotDatum,
-            IsEenmalig = a.IsEenmalig
-        }).ToList();
+        await _actiecodesRepository.UpdateAsync(actiecode);
     }
 }

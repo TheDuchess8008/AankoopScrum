@@ -1,18 +1,18 @@
-﻿@model PrulariaAankoopData.Models.Actiecode
+﻿@model ActiecodeWijzigenViewModel;
 
 @{
     ViewData["Title"] = "Edit Actiecode";
 }
 
 <div class="container mt-4">
-    <h1 class="mb-3">Edit Actiecode</h1>
+    <h1 class="mb-3">Wijzig de Actiecode</h1>
     <hr />
 
     <div class="row">
         <div class="col-md-6">
             <form asp-action="Edit">
                 <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
-                <input type="hidden" asp-for="ActiecodeId" />
+                <input type="hidden" asp-for="Id" />
 
                 <div class="mb-3">
                     <label asp-for="Naam" class="control-label"></label>

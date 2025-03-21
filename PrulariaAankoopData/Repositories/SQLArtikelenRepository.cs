@@ -19,6 +19,12 @@ public class SQLArtikelenRepository : IArtikelenRepository
                 .Include(c => c.Categorieën)
                 .FirstOrDefaultAsync(m => m.ArtikelId == id);
     }
+
+    public async Task<Artikel> GetByIdAsync(int artikelId)
+    {
+        return await _context.Artikelen.FindAsync(artikelId);
+    }
+
     public async Task<List<Artikel>> GetArtikelenMetFilteren(int? categorieId, string? actiefStatus)
     {
         IQueryable<Artikel> query = _context.Artikelen.Include(c => c.Categorieën)
@@ -40,10 +46,32 @@ public class SQLArtikelenRepository : IArtikelenRepository
     {
         return await (_context.Categorieen).ToListAsync();
     }
-
+    
     public async Task AddArtikel(Artikel artikel)
     {
         await _context.Artikelen.AddAsync(artikel);
         await _context.SaveChangesAsync();
     }
+    
+    public async Task UpdateArtikel(Artikel bestaandArtikel, Artikel artikel)
+    {
+        if (artikel == null)
+            throw new ArgumentNullException(nameof(artikel), "Artikel kan niet null zijn");
+        if (bestaandArtikel == null)
+        {
+            throw new Exception($"Artikel met ID {artikel.ArtikelId} werd niet gevonden.");
+        }
+        _context.Entry(bestaandArtikel).CurrentValues.SetValues(artikel);
+        await _context.SaveChangesAsync();
+    }
 }
+
+
+
+
+
+
+
+
+
+

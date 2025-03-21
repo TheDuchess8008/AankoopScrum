@@ -1,4 +1,4 @@
-﻿@model PrulariaAankoopData.Models.Artikel
+﻿@model PrulariaAankoopData.Models.ArtikelViewModel
 
 @{
     ViewData["Title"] = "Edit";
@@ -89,5 +89,7 @@
 
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }

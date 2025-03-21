@@ -5,9 +5,11 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Org.BouncyCastle.Math;
 using PrulariaAankoopData.Models;
 using PrulariaAankoopData.Repositories;
 using PrulariaAankoopService.Services;
+
 
 namespace PrulariaAankoopUI.Controllers
 {
@@ -36,10 +38,19 @@ namespace PrulariaAankoopUI.Controllers
                 return NotFound();
             }
             var artikel = await _artikelenService.MaakDetailsArtikel((int)id);
-            if (artikel == null)
+            try
             {
-                throw new Exception($"Artikel met ID {id} werd niet gevonden.");
+
+                if (artikel == null)
+                {
+                    return NotFound();
+                }
             }
+            catch (Exception ex)
+            {
+                return NotFound(ex.Message);
+            }
+
             return View(artikel);
         }
 
@@ -58,7 +69,7 @@ namespace PrulariaAankoopUI.Controllers
             // Uiteindelijk vervangen met methode van Leveranciersrepository/service
             artikel.Leverancier = await _context.Leveranciers.FindAsync(artikel.LeveranciersId);
 
-            if(_artikelenService.CheckOfArtikelBestaat(artikel)) 
+            if (_artikelenService.CheckOfArtikelBestaat(artikel))
                 ModelState.AddModelError("Naam", "Een artikel met deze naam en beschrijving bestaat al.");
 
             if (this.ModelState.IsValid)
@@ -78,49 +89,33 @@ namespace PrulariaAankoopUI.Controllers
             {
                 return NotFound();
             }
-
-            var artikel = await _context.Artikelen.FindAsync(id);
+            var artikel = await _artikelenService.GetArtikelById(id.Value);
+            var artikelViewModel = new ArtikelViewModel();
+            artikelViewModel.Artikel = artikel;
             if (artikel == null)
             {
                 return NotFound();
             }
-            ViewData["LeveranciersId"] = new SelectList(_context.Leveranciers, "LeveranciersId", "BtwNummer", artikel.LeveranciersId);
-            return View(artikel);
+            ViewData["LeveranciersId"] = new SelectList(_context.Leveranciers, "LeveranciersId", "Naam", artikelViewModel.Artikel.LeveranciersId);
+            return View(artikelViewModel);
         }
 
         // POST: Artikelen/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ArtikelId,Ean,Naam,Beschrijving,Prijs,GewichtInGram,Bestelpeil,Voorraad,MinimumVoorraad,MaximumVoorraad,Levertijd,AantalBesteldLeverancier,MaxAantalInMagazijnPlaats,LeveranciersId")] Artikel artikel)
+        public async Task<IActionResult> Edit(int id, ArtikelViewModel artikelViewModel)
         {
-            if (id != artikel.ArtikelId)
+            if (id != artikelViewModel.Artikel.ArtikelId)
             {
                 return NotFound();
             }
-
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _context.Update(artikel);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!ArtikelExists(artikel.ArtikelId))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
-            }
-            ViewData["LeveranciersId"] = new SelectList(_context.Leveranciers, "LeveranciersId", "BtwNummer", artikel.LeveranciersId);
-            return View(artikel);
+            await _artikelenService.UpdateArtikel(artikelViewModel);
+            ViewBag.Message = "Artikel succesvol gewijzigd.";
+            ViewData["LeveranciersId"] = new SelectList(_context.Leveranciers, "LeveranciersId", "Naam", artikelViewModel.Artikel.LeveranciersId);
+            return View(artikelViewModel);
         }
+
+
 
         // GET: Artikelen/Delete/5
         public async Task<IActionResult> Delete(int? id)
@@ -160,10 +155,94 @@ namespace PrulariaAankoopUI.Controllers
         {
             return _context.Artikelen.Any(e => e.ArtikelId == id);
         }
+        // GET: Artikelen/Search
+        public IActionResult Search()
+        {
+            return View();
+        }
+
+        // POST: Artikelen/Search
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Search(string ean)
+        {
+            var artikel = await _context.Artikelen
+                .Include(a => a.Leverancier)
+                .FirstOrDefaultAsync(a => a.Ean == ean);
+
+            if (artikel == null)
+            {
+                ViewBag.Message = "Artikel niet gevonden.";
+                return View();
+            }
+
+            var artikelViewModel = new ArtikelViewModel
+            {
+                ArtikelId = artikel.ArtikelId,
+                Ean = artikel.Ean,
+                Naam = artikel.Naam,
+                Beschrijving = artikel.Beschrijving,
+                Prijs = artikel.Prijs,
+                GewichtInGram = artikel.GewichtInGram,
+                Bestelpeil = artikel.Bestelpeil,
+                Voorraad = artikel.Voorraad,
+                MinimumVoorraad = artikel.MinimumVoorraad,
+                MaximumVoorraad = artikel.MaximumVoorraad,
+                Levertijd = artikel.Levertijd,
+                AantalBesteldLeverancier = artikel.AantalBesteldLeverancier,
+                MaxAantalInMagazijnPlaats = artikel.MaxAantalInMagazijnPlaats,
+                LeveranciersId = artikel.LeveranciersId
+            };
+
+            return View("Edit", artikelViewModel);
+        }
 
         public IActionResult Filter(ArtikelViewModel form)
         {
             return RedirectToAction("Index", form);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> BevestigSetNonActief(int artikelId)
+        {
+            var artikel = await _artikelenService.GetByIdAsync(artikelId);
+            if (artikel == null)
+            {
+                return NotFound();
+            }
+
+            var artikelViewModel = new ArtikelViewModel
+            {
+                ArtikelId = artikel.ArtikelId,
+                Naam = artikel.Naam,
+                Beschrijving = artikel.Beschrijving
+            };
+
+            return View(artikelViewModel);
+        }
+
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> SetArtikelNonActief(int artikelId)
+        {
+            try
+            {
+                await _artikelenService.SetArtikelNonActiefAsync(artikelId);
+                TempData["SuccessMessage"] = "Artikel is succesvol op non-actief gezet.";
+                return RedirectToAction("Details", new { id = artikelId });
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                TempData["ErrorMessage"] = "Het artikel is al gewijzigd door een andere gebruiker." +
+                    " Probeer het opnieuw.";
+                return RedirectToAction("Details", new { id = artikelId });
+            }
+            catch (Exception ex)
+            {
+                TempData["ErrorMessage"] = $"Fout bij op non-actief zetten: {ex.Message}";
+                return RedirectToAction("Details", new { id = artikelId });
+            }
         }
     }
 }
