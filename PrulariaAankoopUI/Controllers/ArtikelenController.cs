@@ -109,23 +109,6 @@ namespace PrulariaAankoopUI.Controllers
             {
                 return NotFound();
             }
-            /*
-            artikel.ArtikelId = artikelViewModel.Artikel.ArtikelId;
-            artikel.AantalBesteldLeverancier = artikelViewModel.Artikel.AantalBesteldLeverancier;
-            artikel.Ean = artikelViewModel.Artikel.Ean;
-            artikel.Naam = artikelViewModel.Artikel.Naam;
-            artikel.Beschrijving = artikelViewModel.Artikel.Beschrijving;
-            artikel.Prijs = artikelViewModel.Artikel.Prijs;
-            artikel.GewichtInGram = artikelViewModel.Artikel.GewichtInGram;
-            artikel.Bestelpeil = artikelViewModel.Artikel.Bestelpeil;
-            artikel.Voorraad = artikelViewModel.Artikel.Voorraad;
-            artikel.MinimumVoorraad = artikelViewModel.Artikel.MinimumVoorraad;
-            artikel.MaximumVoorraad = artikelViewModel.Artikel.MaximumVoorraad;
-            artikel.Levertijd = artikelViewModel.Artikel.Levertijd;
-            artikel.AantalBesteldLeverancier = artikelViewModel.Artikel.AantalBesteldLeverancier;
-            artikel.MaxAantalInMagazijnPlaats = artikelViewModel.Artikel.MaxAantalInMagazijnPlaats;
-            artikel.LeveranciersId = artikelViewModel.Artikel.LeveranciersId;
-            */
             _artikelenService.UpdateArtikel(artikelViewModel);
             ViewBag.Message = "Artikel succesvol gewijzigd.";
             ViewData["LeveranciersId"] = new SelectList(_context.Leveranciers, "LeveranciersId", "Naam", artikelViewModel.Artikel.LeveranciersId);

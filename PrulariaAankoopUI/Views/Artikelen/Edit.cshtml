@@ -20,7 +20,7 @@
             <input type="hidden" asp-for="Artikel.ArtikelId" />
             <div class="form-group">
                 <label asp-for="Artikel.Ean" class="control-label"></label>
-                <input asp-for="Artikel.Ean" class="form-control" readonly/>
+                <input asp-for="Artikel.Ean" class="form-control" readonly />
                 <span asp-validation-for="Artikel.Ean" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -50,7 +50,7 @@
             </div>
             <div class="form-group">
                 <label asp-for="Artikel.Voorraad" class="control-label"></label>
-                <input asp-for="Artikel.Voorraad" class="form-control" readonly/>
+                <input asp-for="Artikel.Voorraad" class="form-control" readonly />
                 <span asp-validation-for="Artikel.Voorraad" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -83,17 +83,18 @@
                 <select asp-for="Artikel.LeveranciersId" class="form-control" asp-items="ViewBag.LeveranciersId"></select>
                 <span asp-validation-for="Artikel.LeveranciersId" class="text-danger"></span>
             </div>
+            <p></p>
             <div class="form-group">
-                <input type="submit" value="Opslaan" class="btn btn-primary huiskleur" />
+                <button type="submit" class="btn btn-primary huiskleur">Opslaan</button>
+                <a asp-action="Index" class="btn btn-secondary huiskleur">Terug</a>
             </div>
         </form>
     </div>
 </div>
 
-<div>
-    <a asp-action="Index" class="btn btn-secondary huiskleur">Terug</a>
-</div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }

@@ -28,27 +28,26 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Naam)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.GeldigVanDatum)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.GeldigTotDatum)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.IsEenmalig)
-            </td>
-            <td>
-                    <a asp-action="Edit" asp-route-id="@item.ActiecodeId" class="btn btn-secondary huiskleur">Edit</a> |
-                    <a asp-action="Details" asp-route-id="@item.ActiecodeId" class="btn btn-secondary huiskleur">Details</a> |
-                    <a asp-action="Delete" asp-route-id="@item.ActiecodeId" class="btn btn-secondary huiskleur">Delete</a>
-               
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Naam)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.GeldigVanDatum)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.GeldigTotDatum)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.IsEenmalig)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.ActiecodeId" class="btn btn-secondary huiskleur">Wijzigen</a> |
+                    <a asp-action="Details" asp-route-id="@item.ActiecodeId" class="btn btn-secondary huiskleur">Details</a>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>
