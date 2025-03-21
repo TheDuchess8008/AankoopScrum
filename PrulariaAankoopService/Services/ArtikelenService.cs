@@ -17,7 +17,8 @@ public class ArtikelenService
 
     public async Task UpdateArtikelNonActief(Artikel artikel)
     {
-        await _artikelenRepository.UpdateArtikel(artikel);
+        var bestaandArtikel = await _artikelenRepository.GetArtikelById(artikel.ArtikelId);
+        await _artikelenRepository.UpdateArtikel(bestaandArtikel, artikel);
     }
 
     public async Task<Artikel> GetByIdAsync(int artikelId)
@@ -112,16 +113,8 @@ public class ArtikelenService
         {
             throw new Exception($"Artikel met ID {artikel.ArtikelId} werd niet gevonden.");
         }
-
-        // Update de waarden
-        bestaandArtikel.Naam = artikel.Naam;
-        bestaandArtikel.Beschrijving = artikel.Beschrijving;
-        bestaandArtikel.Prijs = artikel.Prijs;
-        bestaandArtikel.Voorraad = artikel.Voorraad;
-        bestaandArtikel.LeveranciersId = artikel.LeveranciersId;
-
         // Sla de wijzigingen op in de database
-        await _artikelenRepository.UpdateArtikel(bestaandArtikel);
+        await _artikelenRepository.UpdateArtikel(bestaandArtikel, artikel);
     }
 
     public async Task AddArtikel(Artikel artikel)

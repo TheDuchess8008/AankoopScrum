@@ -47,11 +47,10 @@ public class SQLArtikelenRepository : IArtikelenRepository
         await _context.SaveChangesAsync();
     }
     
-    public async Task UpdateArtikel(Artikel? artikel)
+    public async Task UpdateArtikel(Artikel bestaandArtikel, Artikel artikel)
     {
         if (artikel == null)
             throw new ArgumentNullException(nameof(artikel), "Artikel kan niet null zijn");
-        var bestaandArtikel = await _context.Artikelen.FindAsync(artikel.ArtikelId);
         if (bestaandArtikel == null)
         {
             throw new Exception($"Artikel met ID {artikel.ArtikelId} werd niet gevonden.");
