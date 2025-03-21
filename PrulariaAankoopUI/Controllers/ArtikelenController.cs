@@ -109,13 +109,8 @@ namespace PrulariaAankoopUI.Controllers
             {
                 return NotFound();
             }
-            var artikelCheck = await _artikelenService.GetArtikelById(id);
-            if (artikelCheck == null)
-            {
-                return NotFound();
-            }
-            Artikel artikel = artikelCheck;
-            
+            /*
+            artikel.ArtikelId = artikelViewModel.Artikel.ArtikelId;
             artikel.AantalBesteldLeverancier = artikelViewModel.Artikel.AantalBesteldLeverancier;
             artikel.Ean = artikelViewModel.Artikel.Ean;
             artikel.Naam = artikelViewModel.Artikel.Naam;
@@ -130,8 +125,8 @@ namespace PrulariaAankoopUI.Controllers
             artikel.AantalBesteldLeverancier = artikelViewModel.Artikel.AantalBesteldLeverancier;
             artikel.MaxAantalInMagazijnPlaats = artikelViewModel.Artikel.MaxAantalInMagazijnPlaats;
             artikel.LeveranciersId = artikelViewModel.Artikel.LeveranciersId;
-            
-            _artikelenService.UpdateArtikel(artikel);
+            */
+            _artikelenService.UpdateArtikel(artikelViewModel);
             ViewBag.Message = "Artikel succesvol gewijzigd.";
             ViewData["LeveranciersId"] = new SelectList(_context.Leveranciers, "LeveranciersId", "Naam", artikelViewModel.Artikel.LeveranciersId);
             return View(artikelViewModel);

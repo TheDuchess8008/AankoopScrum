@@ -17,13 +17,13 @@ public class ArtikelenService
 
     public async Task UpdateArtikelNonActief(Artikel artikel)
     {
-        var bestaandArtikel = await _artikelenRepository.GetByIdAsync(artikel.ArtikelId);
+        var bestaandArtikel = await _artikelenRepository.GetArtikelById(artikel.ArtikelId);
         await _artikelenRepository.UpdateArtikel(bestaandArtikel, artikel);
     }
 
     public async Task<Artikel> GetByIdAsync(int artikelId)
     {
-        return await _artikelenRepository.GetByIdAsync(artikelId);
+        return await _artikelenRepository.GetArtikelById(artikelId);
     }
 
     public async Task SetArtikelNonActiefAsync(int artikelId)
@@ -78,7 +78,7 @@ public class ArtikelenService
     /// </summary>
     public async Task<Artikel?> GetArtikelById(int artikelId)
     {
-        Artikel artikel = await _artikelenRepository.GetByIdAsync(artikelId);
+        Artikel artikel = await _artikelenRepository.GetArtikelById(artikelId);
         if (artikel == null)
         {
             throw new Exception($"Artikel met ID {artikelId} werd niet gevonden.");
@@ -89,29 +89,47 @@ public class ArtikelenService
     /// <summary>
     /// Valideert en wijzigt een artikel.
     /// </summary>
-    public async Task UpdateArtikel(Artikel artikel)
+    public async Task UpdateArtikel(ArtikelViewModel artikelViewModel)
     {
-        if (artikel == null)
+        if (artikelViewModel == null)
         {
-            throw new ArgumentNullException(nameof(artikel), "Artikel mag niet null zijn.");
+            throw new ArgumentNullException(nameof(artikelViewModel.Artikel), "Artikel mag niet null zijn.");
         }
 
-        if (string.IsNullOrWhiteSpace(artikel.Naam))
+        if (string.IsNullOrWhiteSpace(artikelViewModel.Artikel.Naam))
         {
             throw new Exception("De naam van het artikel mag niet leeg zijn.");
         }
 
-        if (artikel.Prijs <= 0)
+        if (artikelViewModel.Artikel.Prijs <= 0)
         {
             throw new Exception("De prijs moet een positief getal zijn.");
         }
 
         // Controleer of het artikel al bestaat
-        var bestaandArtikel = await _artikelenRepository.GetByIdAsync(artikel.ArtikelId);
+        var bestaandArtikel = await _artikelenRepository.GetArtikelById(artikelViewModel.Artikel.ArtikelId);
         if (bestaandArtikel == null)
         {
-            throw new Exception($"Artikel met ID {artikel.ArtikelId} werd niet gevonden.");
+            throw new Exception($"Artikel met ID {artikelViewModel.Artikel.ArtikelId} werd niet gevonden.");
         }
+        var artikel = new Artikel();
+        artikel = bestaandArtikel;
+        artikel.ArtikelId = artikelViewModel.Artikel.ArtikelId;
+        artikel.AantalBesteldLeverancier = artikelViewModel.Artikel.AantalBesteldLeverancier;
+        artikel.Ean = artikelViewModel.Artikel.Ean;
+        artikel.Naam = artikelViewModel.Artikel.Naam;
+        artikel.Beschrijving = artikelViewModel.Artikel.Beschrijving;
+        artikel.Prijs = artikelViewModel.Artikel.Prijs;
+        artikel.GewichtInGram = artikelViewModel.Artikel.GewichtInGram;
+        artikel.Bestelpeil = artikelViewModel.Artikel.Bestelpeil;
+        artikel.Voorraad = artikelViewModel.Artikel.Voorraad;
+        artikel.MinimumVoorraad = artikelViewModel.Artikel.MinimumVoorraad;
+        artikel.MaximumVoorraad = artikelViewModel.Artikel.MaximumVoorraad;
+        artikel.Levertijd = artikelViewModel.Artikel.Levertijd;
+        artikel.AantalBesteldLeverancier = artikelViewModel.Artikel.AantalBesteldLeverancier;
+        artikel.MaxAantalInMagazijnPlaats = artikelViewModel.Artikel.MaxAantalInMagazijnPlaats;
+        artikel.LeveranciersId = artikelViewModel.Artikel.LeveranciersId;
+        
         // Sla de wijzigingen op in de database
         await _artikelenRepository.UpdateArtikel(bestaandArtikel, artikel);
     }
