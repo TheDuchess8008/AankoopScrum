@@ -4,90 +4,89 @@
     ViewData["Title"] = "Edit";
 }
 
-<h1>Edit</h1>
+<h1 class="mb-3">Edit Artikel</h1>
 
-<h4>Artikel</h4>
 <hr />
 <div class="row">
-    <div class="col-md-4">
+    <div class="col-md-6">
         <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="ArtikelId" />
-            <div class="form-group">
+            <div class="mb-3">
                 <label asp-for="Ean" class="control-label"></label>
                 <input asp-for="Ean" class="form-control" />
                 <span asp-validation-for="Ean" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            <div class="mb-3">
                 <label asp-for="Naam" class="control-label"></label>
                 <input asp-for="Naam" class="form-control" />
                 <span asp-validation-for="Naam" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            <div class="mb-3">
                 <label asp-for="Beschrijving" class="control-label"></label>
                 <input asp-for="Beschrijving" class="form-control" />
                 <span asp-validation-for="Beschrijving" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            <div class="mb-3">
                 <label asp-for="Prijs" class="control-label"></label>
                 <input asp-for="Prijs" class="form-control" />
                 <span asp-validation-for="Prijs" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            <div class="mb-3">
                 <label asp-for="GewichtInGram" class="control-label"></label>
                 <input asp-for="GewichtInGram" class="form-control" />
                 <span asp-validation-for="GewichtInGram" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            <div class="mb-3">
                 <label asp-for="Bestelpeil" class="control-label"></label>
                 <input asp-for="Bestelpeil" class="form-control" />
                 <span asp-validation-for="Bestelpeil" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            <div class="mb-3">
                 <label asp-for="Voorraad" class="control-label"></label>
                 <input asp-for="Voorraad" class="form-control" />
                 <span asp-validation-for="Voorraad" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            <div class="mb-3">
                 <label asp-for="MinimumVoorraad" class="control-label"></label>
                 <input asp-for="MinimumVoorraad" class="form-control" />
                 <span asp-validation-for="MinimumVoorraad" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            <div class="mb-3">
                 <label asp-for="MaximumVoorraad" class="control-label"></label>
                 <input asp-for="MaximumVoorraad" class="form-control" />
                 <span asp-validation-for="MaximumVoorraad" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            <div class="mb-3">
                 <label asp-for="Levertijd" class="control-label"></label>
                 <input asp-for="Levertijd" class="form-control" />
                 <span asp-validation-for="Levertijd" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            <div class="mb-3">
                 <label asp-for="AantalBesteldLeverancier" class="control-label"></label>
                 <input asp-for="AantalBesteldLeverancier" class="form-control" />
                 <span asp-validation-for="AantalBesteldLeverancier" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            <div class="mb-3">
                 <label asp-for="MaxAantalInMagazijnPlaats" class="control-label"></label>
                 <input asp-for="MaxAantalInMagazijnPlaats" class="form-control" />
                 <span asp-validation-for="MaxAantalInMagazijnPlaats" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            <div class="mb-3">
                 <label asp-for="LeveranciersId" class="control-label"></label>
                 <select asp-for="LeveranciersId" class="form-control" asp-items="ViewBag.LeveranciersId"></select>
                 <span asp-validation-for="LeveranciersId" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary huiskleur" />
+            <div class="d-flex gap-2 mt-3">
+                <input type="submit" value="Opslaan" class="btn huiskleur" />
+                <a asp-action="Index" class="btn btn-terug">Terug</a>
             </div>
         </form>
+        <div style="height: 80px;"></div>
     </div>
 </div>
 
-<div>
-    <a asp-action="Index" class="btn btn-secondary huiskleur">Terug</a>
-</div>
+
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

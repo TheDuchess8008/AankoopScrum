@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -16,22 +17,28 @@ public class ArtikelViewModel
     public string Beschrijving { get; set; } = null!;
 
     public decimal Prijs { get; set; }
+    [Display(Name = "Gewicht In Gram")]
 
     public int GewichtInGram { get; set; }
 
     public int Bestelpeil { get; set; }
 
     public int Voorraad { get; set; }
+    [Display(Name = "Minimum Voorraad")]
 
     public int MinimumVoorraad { get; set; }
+    [Display(Name = "Maximum Voorraad")]
 
     public int MaximumVoorraad { get; set; }
 
     public int Levertijd { get; set; }
+    [Display(Name = "Aantal Besteld Leverancier")]
 
     public int AantalBesteldLeverancier { get; set; }
+    [Display(Name = "Max Aantal In Magazijn Plaats")]
 
     public int MaxAantalInMagazijnPlaats { get; set; }
+    [Display(Name = "Leveranciers Id")]
 
     public int LeveranciersId { get; set; }
 

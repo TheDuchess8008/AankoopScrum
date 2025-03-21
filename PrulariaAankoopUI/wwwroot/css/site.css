@@ -26,6 +26,35 @@ body {
   background-color: #ABD7A8 !important;
   color: white;
 }
+table, .table {
+  table-layout: fixed;
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 1.5rem;
+  font-size: 0.95rem;
+  background-color: #fff;
+}
+
+table th, .table th,
+table td, .table td {
+  padding: 0.75rem;
+  text-align: left;
+  vertical-align: middle;
+}
+
+table thead, .table thead {
+  background-color: #f4f4f4;
+  font-weight: 600;
+}
+
+table tbody tr:hover, .table tbody tr:hover {
+  background-color: #f9f9f9;
+}
+
+.table td.action-buttons {
+  text-align: right;
+  white-space: nowrap;
+}
 
 
 .header-items .navbar.huiskleur .nav-link {
@@ -129,4 +158,55 @@ footer.footer {
   display: flex;
   gap: 6px;
   align-items: center;
+}
+
+/* PRIMARY button in house color */
+.btn.huiskleur {
+  background-color: #ABD7A8;
+  color: white;
+  border: none;
+  transition: background-color 0.3s ease;
+  font-weight: 500;
+}
+
+.btn.huiskleur:hover,
+.btn.huiskleur:focus {
+  background-color: #98c594; /* slightly darker house color on hover */
+  color: white;
+}
+
+
+.btn.btn-terug {
+  background-color: #f0f0f0;
+  color: #333;
+  border: none;
+  transition: background-color 0.3s ease;
+}
+
+.btn.btn-terug:hover,
+.btn.btn-terug:focus {
+  background-color: #e0e0e0; 
+  color: #000;
+}
+
+label.control-label {
+  font-weight: bold;
+  color: black;
+}
+
+
+input.form-control.huiskleur::placeholder {
+  color: #aaa;
+}
+
+
+.btn {
+  z-index: 10;
+  position: relative;
+}
+
+
+
+.mb-3 {
+  margin-bottom: 1.5rem;
 }

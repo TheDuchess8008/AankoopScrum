@@ -28,11 +28,9 @@
                 @Html.DisplayNameFor(model => model.Bus)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.FamilienaamContactpersoon)
+              Naam en Voornaam Van Contactpersoon
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model.VoornaamContactpersoon)
-            </th>
+           
             <th>
                 @Html.DisplayNameFor(model => model.Plaats)
             </th>
@@ -58,11 +56,9 @@
                 @Html.DisplayFor(modelItem => item.Bus)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.FamilienaamContactpersoon)
+                @Html.DisplayFor(modelItem => item.FamilienaamContactpersoon) @Html.DisplayFor(modelItem => item.VoornaamContactpersoon)
             </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.VoornaamContactpersoon)
-            </td>
+           
             <td>
                 @Html.DisplayFor(modelItem => item.Plaats.Naam)
             </td>
