@@ -1,9 +1,14 @@
-﻿@model PrulariaAankoopData.Models.Artikel
+﻿@model PrulariaAankoopData.Models.ArtikelViewModel
 
 @{
     ViewData["Title"] = "Edit";
 }
-
+@if (ViewBag.Message != null)
+{
+    <div class="alert alert-success">
+        @ViewBag.Message
+    </div>
+}
 <h1>Edit</h1>
 
 <h4>Artikel</h4>
@@ -12,74 +17,74 @@
     <div class="col-md-4">
         <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="ArtikelId" />
+            <input type="hidden" asp-for="Artikel.ArtikelId" />
             <div class="form-group">
-                <label asp-for="Ean" class="control-label"></label>
-                <input asp-for="Ean" class="form-control" />
-                <span asp-validation-for="Ean" class="text-danger"></span>
+                <label asp-for="Artikel.Ean" class="control-label"></label>
+                <input asp-for="Artikel.Ean" class="form-control" readonly/>
+                <span asp-validation-for="Artikel.Ean" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Naam" class="control-label"></label>
-                <input asp-for="Naam" class="form-control" />
-                <span asp-validation-for="Naam" class="text-danger"></span>
+                <label asp-for="Artikel.Naam" class="control-label"></label>
+                <input asp-for="Artikel.Naam" class="form-control" />
+                <span asp-validation-for="Artikel.Naam" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Beschrijving" class="control-label"></label>
-                <input asp-for="Beschrijving" class="form-control" />
-                <span asp-validation-for="Beschrijving" class="text-danger"></span>
+                <label asp-for="Artikel.Beschrijving" class="control-label"></label>
+                <input asp-for="Artikel.Beschrijving" class="form-control" />
+                <span asp-validation-for="Artikel.Beschrijving" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Prijs" class="control-label"></label>
-                <input asp-for="Prijs" class="form-control" />
-                <span asp-validation-for="Prijs" class="text-danger"></span>
+                <label asp-for="Artikel.Prijs" class="control-label"></label>
+                <input asp-for="Artikel.Prijs" class="form-control" />
+                <span asp-validation-for="Artikel.Prijs" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="GewichtInGram" class="control-label"></label>
-                <input asp-for="GewichtInGram" class="form-control" />
-                <span asp-validation-for="GewichtInGram" class="text-danger"></span>
+                <label asp-for="Artikel.GewichtInGram" class="control-label"></label>
+                <input asp-for="Artikel.GewichtInGram" class="form-control" />
+                <span asp-validation-for="Artikel.GewichtInGram" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Bestelpeil" class="control-label"></label>
-                <input asp-for="Bestelpeil" class="form-control" />
-                <span asp-validation-for="Bestelpeil" class="text-danger"></span>
+                <label asp-for="Artikel.Bestelpeil" class="control-label"></label>
+                <input asp-for="Artikel.Bestelpeil" class="form-control" />
+                <span asp-validation-for="Artikel.Bestelpeil" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Voorraad" class="control-label"></label>
-                <input asp-for="Voorraad" class="form-control" />
-                <span asp-validation-for="Voorraad" class="text-danger"></span>
+                <label asp-for="Artikel.Voorraad" class="control-label"></label>
+                <input asp-for="Artikel.Voorraad" class="form-control" readonly/>
+                <span asp-validation-for="Artikel.Voorraad" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="MinimumVoorraad" class="control-label"></label>
-                <input asp-for="MinimumVoorraad" class="form-control" />
-                <span asp-validation-for="MinimumVoorraad" class="text-danger"></span>
+                <label asp-for="Artikel.MinimumVoorraad" class="control-label"></label>
+                <input asp-for="Artikel.MinimumVoorraad" class="form-control" />
+                <span asp-validation-for="Artikel.MinimumVoorraad" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="MaximumVoorraad" class="control-label"></label>
-                <input asp-for="MaximumVoorraad" class="form-control" />
-                <span asp-validation-for="MaximumVoorraad" class="text-danger"></span>
+                <label asp-for="Artikel.MaximumVoorraad" class="control-label"></label>
+                <input asp-for="Artikel.MaximumVoorraad" class="form-control" />
+                <span asp-validation-for="Artikel.MaximumVoorraad" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Levertijd" class="control-label"></label>
-                <input asp-for="Levertijd" class="form-control" />
-                <span asp-validation-for="Levertijd" class="text-danger"></span>
+                <label asp-for="Artikel.Levertijd" class="control-label"></label>
+                <input asp-for="Artikel.Levertijd" class="form-control" />
+                <span asp-validation-for="Artikel.Levertijd" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="AantalBesteldLeverancier" class="control-label"></label>
-                <input asp-for="AantalBesteldLeverancier" class="form-control" />
-                <span asp-validation-for="AantalBesteldLeverancier" class="text-danger"></span>
+                <label asp-for="Artikel.AantalBesteldLeverancier" class="control-label"></label>
+                <input asp-for="Artikel.AantalBesteldLeverancier" class="form-control" />
+                <span asp-validation-for="Artikel.AantalBesteldLeverancier" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="MaxAantalInMagazijnPlaats" class="control-label"></label>
-                <input asp-for="MaxAantalInMagazijnPlaats" class="form-control" />
-                <span asp-validation-for="MaxAantalInMagazijnPlaats" class="text-danger"></span>
+                <label asp-for="Artikel.MaxAantalInMagazijnPlaats" class="control-label"></label>
+                <input asp-for="Artikel.MaxAantalInMagazijnPlaats" class="form-control" />
+                <span asp-validation-for="Artikel.MaxAantalInMagazijnPlaats" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="LeveranciersId" class="control-label"></label>
-                <select asp-for="LeveranciersId" class="form-control" asp-items="ViewBag.LeveranciersId"></select>
-                <span asp-validation-for="LeveranciersId" class="text-danger"></span>
+                <label asp-for="Artikel.LeveranciersId" class="control-label"></label>
+                <select asp-for="Artikel.LeveranciersId" class="form-control" asp-items="ViewBag.LeveranciersId"></select>
+                <span asp-validation-for="Artikel.LeveranciersId" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary huiskleur" />
+                <input type="submit" value="Opslaan" class="btn btn-primary huiskleur" />
             </div>
         </form>
     </div>
