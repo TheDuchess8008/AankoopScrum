@@ -10,7 +10,6 @@ using PrulariaAankoopData.Models;
 using PrulariaAankoopData.Repositories;
 using PrulariaAankoopService.Services;
 using PrulariaAankoopUI.Models;
-using PrulariaAankoopService.Services;
 
 namespace PrulariaAankoopUI.Controllers
 {

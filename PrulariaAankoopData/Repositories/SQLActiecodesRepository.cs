@@ -6,8 +6,6 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
-using PrulariaAankoopData.Models;
 
 namespace PrulariaAankoopData.Repositories;
 public class SQLActiecodesRepository : IActiecodesRepository
