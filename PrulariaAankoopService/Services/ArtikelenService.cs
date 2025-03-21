@@ -112,8 +112,7 @@ public class ArtikelenService
         {
             throw new Exception($"Artikel met ID {artikelViewModel.Artikel.ArtikelId} werd niet gevonden.");
         }
-        var artikel = new Artikel();
-        artikel = bestaandArtikel;
+        Artikel artikel = bestaandArtikel;
         artikel.ArtikelId = artikelViewModel.Artikel.ArtikelId;
         artikel.AantalBesteldLeverancier = artikelViewModel.Artikel.AantalBesteldLeverancier;
         artikel.Ean = artikelViewModel.Artikel.Ean;
