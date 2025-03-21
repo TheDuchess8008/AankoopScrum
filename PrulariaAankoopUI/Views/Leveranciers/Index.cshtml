@@ -66,11 +66,18 @@
             <td>
                 @Html.DisplayFor(modelItem => item.Plaats.Naam)
             </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.LeveranciersId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.LeveranciersId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.LeveranciersId">Delete</a>
+            <td class="action-buttons">
+                <a asp-action="Edit" asp-route-id="@item.LeveranciersId" title="Bewerken">
+                    <button class="btn btn-icon btn-edit"><i class="bi bi-pencil"></i></button>
+                </a>
+                <a asp-action="Details" asp-route-id="@item.LeveranciersId" title="Details bekijken">
+                    <button class="btn btn-icon btn-details"><i class="bi bi-eye"></i></button>
+                </a>
+                <a asp-action="Delete" asp-route-id="@item.LeveranciersId" title="Verwijderen">
+                    <button class="btn btn-icon btn-delete"><i class="bi bi-trash"></i></button>
+                </a>
             </td>
+
         </tr>
 }
     </tbody>

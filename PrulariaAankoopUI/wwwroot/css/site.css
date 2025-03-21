@@ -18,7 +18,47 @@ html {
 }
 
 body {
-  margin-bottom: 60px;
+  background-color: #ffffff;
+  color: #000000;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+.header-items .navbar.huiskleur {
+  background-color: #ABD7A8 !important;
+  color: white;
+}
+
+
+.header-items .navbar.huiskleur .nav-link {
+  color: white !important;
+  font-weight: 500;
+}
+
+.header-items .navbar.huiskleur .nav-link:hover,
+.header-items .navbar.huiskleur .nav-link:focus {
+  color: #f8f9fa !important;
+  text-decoration: underline;
+}
+
+
+.navbar-brand img {
+  height: 40px;
+  vertical-align: middle;
+}
+
+
+.header-items .navbar.huiskleur .nav-link.active {
+  font-weight: bold;
+  text-decoration: underline;
+}
+
+
+footer.footer {
+  background-color: #f8f9fa;
+  padding: 1rem 0;
+  font-size: 0.9rem;
+  color: #6c757d;
+  text-align: center;
+  border-top: 1px solid #dee2e6;
 }
 
 .form-floating > .form-control-plaintext::placeholder, .form-floating > .form-control::placeholder {
@@ -33,4 +73,60 @@ body {
 .huiskleur {
     background-color: #ABD7A8;
     color: white;
+}
+
+.icon-edit {
+  color: #ABD7A8;
+  font-size: 1.2rem;
+}
+
+.icon-details {
+  color: #6c757d;
+  font-size: 1.2rem;
+}
+
+.icon-delete {
+  color: #e57474;
+  font-size: 1.2rem;
+}
+
+.btn-icon {
+  border: none;
+  background-color: transparent;
+  padding: 6px 10px;
+  border-radius: 6px;
+  transition: background-color 0.3s ease;
+  cursor: pointer;
+}
+
+
+.btn-edit i {
+  color: #ABD7A8;
+  font-size: 1.2rem;
+}
+.btn-edit:hover {
+  background-color: #e6f2e5; 
+}
+
+
+.btn-details i {
+  color: #6c757d;
+  font-size: 1.2rem;
+}
+.btn-details:hover {
+  background-color: #f0f0f0;
+}
+
+
+.btn-delete i {
+  color: #e57474;
+  font-size: 1.2rem;
+}
+.btn-delete:hover {
+  background-color: #ffe5e5;
+}
+.action-buttons {
+  display: flex;
+  gap: 6px;
+  align-items: center;
 }
