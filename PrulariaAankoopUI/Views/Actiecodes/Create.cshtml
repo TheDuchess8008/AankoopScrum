@@ -8,34 +8,34 @@
 <h1 class="mb-3">Maak een nieuwe Actiecode</h1>
 <hr />
 <div class="row">
-    <div class="col-md-6">
+    <div class="col-md-4">
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
-            <div class="mb-3">
+            <div class="form-group">
                 <label asp-for="Naam" class="control-label"></label>
-                <input asp-for="Naam" class="form-control" />
+                <input asp-for="Naam" class="form-control inputveldenhuiskleur" />
                 <span asp-validation-for="Naam" class="text-danger"></span>
             </div>
-         
-            <div class="mb-3">
-                <label asp-for="GeldigVanDatum" class="control-label"></label>
-                <input asp-for="GeldigVanDatum" class="form-control" /> 
+            <br />
+            <div class="form-group">
+                <label asp-for="GeldigVanDatum" class="control-label">Geldig van:</label>
+                <input asp-for="GeldigVanDatum" type="date" class="form-control inputveldenhuiskleur" />
                 <span asp-validation-for="GeldigVanDatum" class="text-danger"></span>
             </div>
-            
-            <div class="mb-3">
-                <label asp-for="GeldigTotDatum" class="control-label"></label>
-                <input asp-for="GeldigTotDatum" class="form-control" /> 
+            <br />
+            <div class="form-group">
+                <label asp-for="GeldigTotDatum" class="control-label">Geldig tot:</label>
+                <input asp-for="GeldigTotDatum" type="date" class="form-control inputveldenhuiskleur" />
                 <span asp-validation-for="GeldigTotDatum" class="text-danger"></span>
             </div>
-            
+            <br />
             <div class="form-group form-check">
                 <label class="form-check-label">
-                    <input class="form-check-input" asp-for="IsEenmalig" /> @Html.DisplayNameFor(model => model.IsEenmalig)
+                    <input class="form-check-input" asp-for="IsEenmalig" /> Is eenmalig
                 </label>
             </div>
-            
+            <br />
             <div class="d-flex gap-2 mt-3">
                 <input type="submit" value="Toevoegen" class="btn huiskleur" />
                 <a asp-action="Index" class="btn btn-terug">Terug</a>
@@ -53,7 +53,9 @@
 
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }
 
 
