@@ -194,6 +194,9 @@ label.control-label {
   color: black;
 }
 
+.inputveldenhuiskleur {
+    background-color: #edf2e9;
+}
 
 input.form-control.huiskleur::placeholder {
   color: #aaa;
