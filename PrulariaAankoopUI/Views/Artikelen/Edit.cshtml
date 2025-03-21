@@ -33,7 +33,7 @@
                 <span asp-validation-for="Artikel.Prijs" class="text-danger"></span>
             </div>
             <div class="mb-3">
-                <label asp-for="Artikel.GewichtInGram" class="control-label"></label>
+                <label asp-for="Artikel.GewichtInGram" class="control-label">Gewicht in gram</label>
                 <input asp-for="Artikel.GewichtInGram" class="form-control" />
                 <span asp-validation-for="Artikel.GewichtInGram" class="text-danger"></span>
             </div>
@@ -48,12 +48,12 @@
                 <span asp-validation-for="Artikel.Voorraad" class="text-danger"></span>
             </div>
             <div class="mb-3">
-                <label asp-for="Artikel.MinimumVoorraad" class="control-label"></label>
+                <label asp-for="Artikel.MinimumVoorraad" class="control-label">Minimum voorraad</label>
                 <input asp-for="Artikel.MinimumVoorraad" class="form-control" />
                 <span asp-validation-for="Artikel.MinimumVoorraad" class="text-danger"></span>
             </div>
             <div class="mb-3">
-                <label asp-for="Artikel.MaximumVoorraad" class="control-label"></label>
+                <label asp-for="Artikel.MaximumVoorraad" class="control-label">Maximum voorraad</label>
                 <input asp-for="Artikel.MaximumVoorraad" class="form-control" />
                 <span asp-validation-for="Artikel.MaximumVoorraad" class="text-danger"></span>
             </div>
@@ -63,17 +63,17 @@
                 <span asp-validation-for="Artikel.Levertijd" class="text-danger"></span>
             </div>
             <div class="mb-3">
-                <label asp-for="Artikel.AantalBesteldLeverancier" class="control-label"></label>
+                <label asp-for="Artikel.AantalBesteldLeverancier" class="control-label">Aantal besteld bij leverancier</label>
                 <input asp-for="Artikel.AantalBesteldLeverancier" class="form-control" />
                 <span asp-validation-for="Artikel.AantalBesteldLeverancier" class="text-danger"></span>
             </div>
             <div class="mb-3">
-                <label asp-for="Artikel.MaxAantalInMagazijnPlaats" class="control-label"></label>
+                <label asp-for="Artikel.MaxAantalInMagazijnPlaats" class="control-label">Max aantal in magazijn</label>
                 <input asp-for="Artikel.MaxAantalInMagazijnPlaats" class="form-control" />
                 <span asp-validation-for="Artikel.MaxAantalInMagazijnPlaats" class="text-danger"></span>
             </div>
             <div class="mb-3">
-                <label asp-for="Artikel.LeveranciersId" class="control-label"></label>
+                <label asp-for="Artikel.LeveranciersId" class="control-label">Leverancier</label>
                 <select asp-for="Artikel.LeveranciersId" class="form-control" asp-items="ViewBag.LeveranciersId"></select>
                 <span asp-validation-for="Artikel.LeveranciersId" class="text-danger"></span>
             </div>
