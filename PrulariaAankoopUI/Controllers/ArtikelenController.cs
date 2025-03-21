@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -8,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using PrulariaAankoopData.Models;
 using PrulariaAankoopData.Repositories;
 using PrulariaAankoopService.Services;
+using PrulariaAankoopUI.Models; 
 
 namespace PrulariaAankoopUI.Controllers
 {
@@ -15,11 +17,13 @@ namespace PrulariaAankoopUI.Controllers
     {
         private readonly PrulariaComContext _context;
         private readonly ArtikelenService _artikelenService;
+        private readonly CategorieenService _categorieenService;
 
-        public ArtikelenController(PrulariaComContext context, ArtikelenService artikelenService)
+        public ArtikelenController(PrulariaComContext context, ArtikelenService artikelenService, CategorieenService categorieenService)
         {
             _context = context;
             _artikelenService = artikelenService;
+            _categorieenService = categorieenService;
         }
 
         // GET: Artikelen
@@ -40,8 +44,18 @@ namespace PrulariaAankoopUI.Controllers
             {
                 throw new Exception($"Artikel met ID {id} werd niet gevonden.");
             }
+            ViewData["LeveranciersId"] = new SelectList(_context.Leveranciers, "LeveranciersId", "BtwNummer", artikel.LeveranciersId);
+            
+            var categorieen = await _categorieenService.GetAlleCategorieenAsync();
+
+            ViewData["CategorieId"] = new SelectList(categorieen, "CategorieId", "Naam"); // "Naam" moet overeenkomen met je model
+
+
             return View(artikel);
         }
+
+
+
 
         // GET: Artikelen/Create
         public IActionResult Create()
@@ -92,8 +106,16 @@ namespace PrulariaAankoopUI.Controllers
                 return NotFound();
             }
 
+            // Error boodschap zegt wat er mist om de modelstate.IsValid te doen slagen
+            if (!ModelState.IsValid)
+            {
+                var errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage);
+                return BadRequest(string.Join(", ", errors));
+            }
+
             if (ModelState.IsValid)
             {
+                
                 try
                 {
                     _context.Update(artikel);
@@ -159,5 +181,53 @@ namespace PrulariaAankoopUI.Controllers
         {
             return RedirectToAction("Index", form);
         }
+
+        //--------------------------------------------------------------------------------------------
+        // NIEUW
+
+
+
+        [HttpGet]
+        public async Task<IActionResult> BevestigCategorieToevoegen(int artikelId, int categorieId)
+        {
+            var artikel = await _context.Artikelen.FindAsync(artikelId);
+            var categorie = await _context.Categorieen.FindAsync(categorieId);
+
+            if (artikel == null || categorie == null) return NotFound();
+
+            var viewModel = new BevestigCategorieToevoegenViewModel
+            {
+                ArtikelId = artikelId,
+                ArtikelNaam = artikel.Naam,
+                CategorieId = categorieId,
+                CategorieNaam = categorie.Naam
+            };
+
+            return View(viewModel);
+        }
+
+
+        [HttpPost]
+        public async Task<IActionResult> CategorieToevoegenAanArtikel(BevestigCategorieToevoegenViewModel model)
+        {
+            // Error boodschap zegt wat er mist om de modelstate.IsValid te doen slagen
+            if (!ModelState.IsValid)
+            {
+                var errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage);
+                return BadRequest(string.Join(", ", errors));
+            }
+            var categorie = await _categorieenService.GetCategorieByIdAsync(model.CategorieId);
+
+            bool success = await _artikelenService.AddCategorieAanArtikelAsync(model.ArtikelId, categorie );
+
+            if (!success)
+                return BadRequest("Fout bij toevoegen van de categorie.");
+
+            return RedirectToAction("Details", new { id = model.ArtikelId });
+        }
+
+
+
+
     }
 }

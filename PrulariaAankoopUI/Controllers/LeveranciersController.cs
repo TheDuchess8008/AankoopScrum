@@ -98,6 +98,13 @@ namespace PrulariaAankoopUI.Controllers
                 return NotFound();
             }
 
+            // Error boodschap zegt wat er mist om de modelstate.IsValid te doen slagen
+            if (!ModelState.IsValid)
+            {
+                var errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage);
+                return BadRequest(string.Join(", ", errors));
+            }
+
             if (ModelState.IsValid)
             {
                 try

@@ -13,33 +13,10 @@ public class ArtikelenService
         this._artikelenRepository = artikelenRepository;
     }
 
-    //public ArtikelenService(IArtikelenRepository artikelenRepository)
-    //{
-    //    _artikelenRepository = artikelenRepository ?? throw new ArgumentNullException(nameof(artikelenRepository));
-    //}
+    //-----------------------------------------------------------
 
-    // GetArtikelMetCategorieenAsync
-    public async Task<Artikel> GetArtikelMetCategorieenAsync(int artikelId)
-    {
-        return await _artikelenRepository.GetArtikelMetCategorieenAsync(artikelId);
-    }
-
-    // CategorieToevoegenAanArtikelAsync
-    public async Task<bool> CategorieToevoegenAanArtikelAsync(int artikelId, Categorie categorie)
-    {
-        var artikel = await _artikelenRepository.GetArtikelMetCategorieenAsync(artikelId);
-        if (artikel == null)
-            throw new ArgumentException("Artikel niet gevonden.");
-
-        if (categorie == null)
-            throw new ArgumentException("Categorie is ongeldig.");
-
-        if (artikel.Categorieën.Any(c => c.CategorieId == categorie.CategorieId))
-            throw new InvalidOperationException("Categorie is al gekoppeld aan het artikel.");
-
-        return await _artikelenRepository.CategorieToevoegenAanArtikelAsync(artikel, categorie);
-    }
-
+    // KOEN
+    // MaakGefilterdeLijstArtikelen
     public async Task<ArtikelViewModel> MaakGefilterdeLijstArtikelen(ArtikelViewModel form)
     {
         ArtikelViewModel filterLijst = new();
@@ -47,12 +24,15 @@ public class ArtikelenService
         filterLijst.Categorieën = await _artikelenRepository.GetAlleCategorieen();
         return filterLijst;
     }
+
+    // KOEN
+    // MaakDetailsArtikel
     public async Task<ArtikelViewModel> MaakDetailsArtikel(int id)
     {
         var artikelLijst = new ArtikelViewModel();
         artikelLijst.Artikel = await _artikelenRepository.GetArtikelById(id);
-        var alleCategorieen = await _artikelenRepository.GetAlleCategorieen();
-        foreach (var artikelCategorie in artikelLijst.Artikel.Categorieën)
+        var alleCategorieen = await _artikelenRepository.GetAlleCategorieen(); // artikelLijst = ArtikelViewModel object
+        foreach (var artikelCategorie in artikelLijst.Artikel.Categorieën) // artikelLijst = ArtikelViewModel object
         {
             foreach (var categorie in alleCategorieen)
             {
@@ -67,4 +47,35 @@ public class ArtikelenService
         }
         return (artikelLijst);
     }
+
+
+    //-----------------------------------------------------------
+    // NIEUW
+
+
+    public async Task<bool> IsCategorieLinkedToArtikelAsync(int artikelId, int categorieId)
+    {
+        return await _artikelenRepository.IsCategorieLinkedToArtikelAsync(artikelId, categorieId);
+    }
+
+
+    public async Task<bool> AddCategorieAanArtikelAsync(int artikelId, Categorie categorie)
+    {
+        var artikel = await _artikelenRepository.GetArtikelMetCategorieenAsync(artikelId);
+        if (artikel == null)
+            throw new ArgumentException("Artikel niet gevonden.");
+
+        if (categorie == null)
+            throw new ArgumentException("Categorie is ongeldig.");
+
+        
+        var isLinked = await _artikelenRepository.IsCategorieLinkedToArtikelAsync(artikelId, categorie.CategorieId);
+        if (isLinked)
+            throw new InvalidOperationException("Categorie is al gekoppeld aan het artikel.");
+
+        return await _artikelenRepository.AddCategorieAanArtikelAsync(artikel, categorie);
+    }
+
+
+
 }

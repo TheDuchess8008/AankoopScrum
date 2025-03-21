@@ -117,3 +117,20 @@
     <a asp-action="Index" class="btn btn-secondary huiskleur">Terug</a>
 </div>
 
+
+
+
+
+
+<form asp-action="BevestigCategorieToevoegen" method="get">
+    <input type="hidden" name="artikelId" value="@Model.Artikel.ArtikelId" />
+    <div class="form-group">
+        <label asp-for="CategorieId" class="control-label">Categorie toevoegen:</label>
+        <select asp-for="CategorieId" class="form-control" asp-items="ViewBag.CategorieId"><option value="">-- Selecteer een categorie --</option></select>
+        <span asp-validation-for="CategorieId" class="text-danger"></span>
+    </div>
+    <button type="submit" class="btn btn-primary huiskleur">Categorie Toevoegen aan Artikel</button>
+</form>
+
+
+

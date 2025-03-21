@@ -9,14 +9,16 @@ using System.Threading.Tasks;
 namespace PrulariaAankoopData.Repositories;
 public interface IArtikelenRepository
 {
-    Task<List<Artikel>> GetArtikelenMetFilteren(int? categorieId, string? actiefStatus);
+    // KOEN
     Task<Artikel> GetArtikelById(int id);
+    Task<List<Artikel>> GetArtikelenMetFilteren(int? categorieId, string? actiefStatus);
     Task<List<Categorie>> GetAlleCategorieen();
-    Task SaveChangesAsync();
+
+    //-----------------------------------------------------------------------------------------------
+    // NIEUW
     Task<Artikel> GetArtikelMetCategorieenAsync(int artikelId);
-    Task<bool> CategorieToevoegenAanArtikelAsync(Artikel artikel, Categorie categorie);
-
-
+    Task<bool> IsCategorieLinkedToArtikelAsync(int artikelId, int categorieId);
+    Task<bool> AddCategorieAanArtikelAsync(Artikel artikel, Categorie categorie);
 
 
 }
