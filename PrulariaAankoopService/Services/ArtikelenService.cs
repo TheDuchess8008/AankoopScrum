@@ -15,9 +15,9 @@ public class ArtikelenService
         _context = context;
     }
 
-    public async Task UpdateArtikelAsync(Artikel artikel)
+    public async Task UpdateArtikelNonActief(Artikel artikel)
     {
-        await _artikelenRepository.UpdateAsync(artikel);
+        await _artikelenRepository.UpdateArtikel(artikel);
     }
 
     public async Task<Artikel> GetByIdAsync(int artikelId)
@@ -42,7 +42,7 @@ public class ArtikelenService
         //ArtikelViewModel .ActiefStatus string op "NonActief"
 
         //Database updaten via UpdateArtikelAsync methode
-        await UpdateArtikelAsync(artikel);
+        await UpdateArtikelNonActief(artikel);
     }
 
     public async Task<ArtikelViewModel> MaakGefilterdeLijstArtikelen(ArtikelViewModel form)
@@ -54,80 +54,75 @@ public class ArtikelenService
     }
     public async Task<ArtikelViewModel> MaakDetailsArtikel(int id)
     {
-        var artikelLijst = new ArtikelViewModel();
-        artikelLijst.Artikel = await _artikelenRepository.GetArtikelById(id);
+        var artikel = new ArtikelViewModel();
+        artikel.Artikel = await _artikelenRepository.GetArtikelById(id);
         var alleCategorieen = await _artikelenRepository.GetAlleCategorieen();
-        foreach (var artikelCategorie in artikelLijst.Artikel.Categorieën)
+        foreach (var artikelCategorie in artikel.Artikel.Categorieën)
         {
             foreach (var categorie in alleCategorieen)
             {
                 if (artikelCategorie.HoofdCategorieId == categorie.CategorieId)
                 {
-                    if (!artikelLijst.Categorieën.Contains(categorie))
-                        artikelLijst.Categorieën.Add(categorie);
+                    if (!artikel.Categorieën.Contains(categorie))
+                        artikel.Categorieën.Add(categorie);
                     break;
                 }
             }
-            artikelLijst.Categorieën.Add(artikelCategorie);
+            artikel.Categorieën.Add(artikelCategorie);
         }
-        return (artikelLijst);
+        return (artikel);
     }
 
-        public ArtikelenService(IArtikelenRepository artikelenRepository)
+    /// Haalt een artikel op basis van ID.
+    /// </summary>
+    public async Task<ArtikelViewModel?> GetArtikelById(int artikelId)
+    {
+        var artikel = new ArtikelViewModel();
+        artikel.Artikel = await _artikelenRepository.GetArtikelById(artikelId);
+        if (artikel == null)
         {
-            _artikelenRepository = artikelenRepository ?? throw new ArgumentNullException(nameof(artikelenRepository));
+            throw new Exception($"Artikel met ID {artikelId} werd niet gevonden.");
         }
-        /// Haalt een artikel op basis van ID.
-        /// </summary>
-        public async Task<Artikel?> GetArtikelById(int artikelId)
+        return artikel;
+    }
+
+    /// <summary>
+    /// Valideert en wijzigt een artikel.
+    /// </summary>
+    public async Task UpdateArtikel(Artikel artikel)
+    {
+        if (artikel == null)
         {
-            var artikel = await _artikelenRepository.GetArtikelById(artikelId);
-            if (artikel == null)
-            {
-                throw new Exception($"Artikel met ID {artikelId} werd niet gevonden.");
-            }
-            return artikel;
+            throw new ArgumentNullException(nameof(artikel), "Artikel mag niet null zijn.");
         }
 
-        /// <summary>
-        /// Valideert en wijzigt een artikel.
-        /// </summary>
-        public async Task UpdateArtikel(Artikel artikel)
+        if (string.IsNullOrWhiteSpace(artikel.Naam))
         {
-            if (artikel == null)
-            {
-                throw new ArgumentNullException(nameof(artikel), "Artikel mag niet null zijn.");
-            }
-
-            if (string.IsNullOrWhiteSpace(artikel.Naam))
-            {
-                throw new Exception("De naam van het artikel mag niet leeg zijn.");
-            }
-
-            if (artikel.Prijs <= 0)
-            {
-                throw new Exception("De prijs moet een positief getal zijn.");
-            }
-
-            // Controleer of het artikel al bestaat
-            var bestaandArtikel = await _artikelenRepository.GetArtikelById(artikel.ArtikelId);
-            if (bestaandArtikel == null)
-            {
-                throw new Exception($"Artikel met ID {artikel.ArtikelId} werd niet gevonden.");
-            }
-
-            // Update de waarden
-            bestaandArtikel.Naam = artikel.Naam;
-            bestaandArtikel.Beschrijving = artikel.Beschrijving;
-            bestaandArtikel.Prijs = artikel.Prijs;
-            bestaandArtikel.Voorraad = artikel.Voorraad;
-            bestaandArtikel.LeveranciersId = artikel.LeveranciersId;
-
-            // Sla de wijzigingen op in de database
-            await _artikelenRepository.UpdateArtikel(bestaandArtikel);
+            throw new Exception("De naam van het artikel mag niet leeg zijn.");
         }
-    
 
+        if (artikel.Prijs <= 0)
+        {
+            throw new Exception("De prijs moet een positief getal zijn.");
+        }
+
+        // Controleer of het artikel al bestaat
+        var bestaandArtikel = await _artikelenRepository.GetArtikelById(artikel.ArtikelId);
+        if (bestaandArtikel == null)
+        {
+            throw new Exception($"Artikel met ID {artikel.ArtikelId} werd niet gevonden.");
+        }
+
+        // Update de waarden
+        bestaandArtikel.Naam = artikel.Naam;
+        bestaandArtikel.Beschrijving = artikel.Beschrijving;
+        bestaandArtikel.Prijs = artikel.Prijs;
+        bestaandArtikel.Voorraad = artikel.Voorraad;
+        bestaandArtikel.LeveranciersId = artikel.LeveranciersId;
+
+        // Sla de wijzigingen op in de database
+        await _artikelenRepository.UpdateArtikel(bestaandArtikel);
+    }
 
     public async Task AddArtikel(Artikel artikel)
     {
@@ -135,7 +130,7 @@ public class ArtikelenService
     }
     public bool CheckOfArtikelBestaat(Artikel artikel)
     {
-        
+
         var bestaandArtikel = _context.Artikelen.Where(a => a.Naam == artikel.Naam && a.Beschrijving == artikel.Beschrijving)
             .FirstOrDefault();
         if (bestaandArtikel is not null)

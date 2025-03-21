@@ -88,32 +88,12 @@ namespace PrulariaAankoopUI.Controllers
             {
                 return NotFound();
             }
-
             var artikel = await _artikelenService.GetArtikelById(id.Value);
             if (artikel == null)
             {
                 return NotFound();
             }
-            var artikelViewModel = new ArtikelViewModel
-            {
-                ArtikelId = artikel.ArtikelId,
-                Ean = artikel.Ean,
-                Naam = artikel.Naam,
-                Beschrijving = artikel.Beschrijving,
-                Prijs = artikel.Prijs,
-                GewichtInGram = artikel.GewichtInGram,
-                Bestelpeil = artikel.Bestelpeil,
-                Voorraad = artikel.Voorraad,
-                MinimumVoorraad = artikel.MinimumVoorraad,
-                MaximumVoorraad = artikel.MaximumVoorraad,
-                Levertijd = artikel.Levertijd,
-                AantalBesteldLeverancier = artikel.AantalBesteldLeverancier,
-                MaxAantalInMagazijnPlaats = artikel.MaxAantalInMagazijnPlaats,
-                LeveranciersId = artikel.LeveranciersId,
-                LeverancierNaam = artikel.Leverancier.Naam // Assuming you want to show the supplier's name
-            };
-
-            return View(artikelViewModel);
+            return View(artikel);
         }
 
         // POST: Artikelen/Edit/5
@@ -155,7 +135,7 @@ namespace PrulariaAankoopUI.Controllers
                 return View(artikelViewModel);
             }
 
-            ViewData["LeveranciersId"] = new SelectList(_context.Leveranciers, "LeveranciersId", "BtwNummer", artikelViewModel.LeveranciersId);
+            ViewData["LeveranciersId"] = new SelectList(_context.Leveranciers, "LeveranciersId", "Naam", artikelViewModel.LeveranciersId);
             return View(artikelViewModel);
         }
     
