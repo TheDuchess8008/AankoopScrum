@@ -73,9 +73,9 @@ public class ActiecodesService
 
 
 
-    public bool IsActiCodeNieuw(string naam, DateTime geldigVanDatum, DateTime geldigTotDatum) 
+    public bool IsActieCodeNieuw(string naam, DateTime geldigVanDatum, DateTime geldigTotDatum) 
     {
-        return _actiecodesRepository.IsActiCodeNieuw(naam, geldigVanDatum, geldigTotDatum);
+        return _actiecodesRepository.IsActieCodeNieuw(naam, geldigVanDatum, geldigTotDatum);
     }
 
     public async Task RegistrerenActiecodeAsync(Actiecode actiecode) 

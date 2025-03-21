@@ -21,7 +21,7 @@ public class SQLActiecodesRepository : IActiecodesRepository
 
 
     // controleren of de Actiecode al bestaat
-    public bool IsActiCodeNieuw(string naam, DateTime geldigVanDatum, DateTime geldigTotDatum)
+    public bool IsActieCodeNieuw(string naam, DateTime geldigVanDatum, DateTime geldigTotDatum)
     {
         var actiecode = _context.Actiecodes.FirstOrDefault(c=>
                 c.Naam == naam &&

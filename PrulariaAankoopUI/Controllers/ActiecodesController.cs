@@ -98,7 +98,7 @@ namespace PrulariaAankoopUI.Controllers
             if (ModelState.IsValid)
             {
                 // als de actiecode nog niet in de database bestaat:
-                if (_actiecodesService.IsActiCodeNieuw(model.Naam, model.GeldigVanDatum, model.GeldigTotDatum ))
+                if (_actiecodesService.IsActieCodeNieuw(model.Naam, model.GeldigVanDatum, model.GeldigTotDatum ))
                 {
                     var actiecode = new Actiecode()
                     {

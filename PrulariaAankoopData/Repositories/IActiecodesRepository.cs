@@ -23,7 +23,7 @@ public interface IActiecodesRepository
     void Remove(Actiecode actiecode);
 
     Task<Actiecode> ToevoegActiecodeAsync(Actiecode actiecode);
-    bool IsActiCodeNieuw(string naam, DateTime geldigVanDatum, DateTime geldigTotDatum);
+    bool IsActieCodeNieuw(string naam, DateTime geldigVanDatum, DateTime geldigTotDatum);
     Task<Actiecode?> GetActiecodeByIdAsync(int id);
     Task<List<Actiecode>> GetAllActiecodesAsync();
     Task<bool> SaveChangesAsync();

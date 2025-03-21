@@ -14,19 +14,19 @@
 
             <div class="form-group">
                 <label asp-for="Naam" class="control-label"></label>
-                <input asp-for="Naam" class="form-control huiskleur" />
+                <input asp-for="Naam" class="form-control inputveldenhuiskleur" />
                 <span asp-validation-for="Naam" class="text-danger"></span>
             </div>
             <br />
             <div class="form-group">
-                <label asp-for="GeldigVanDatum" class="control-label"></label>
-                <input asp-for="GeldigVanDatum" class="form-control huiskleur" /> 
+                <label asp-for="GeldigVanDatum" class="control-label">Geldig van:</label>
+                <input asp-for="GeldigVanDatum" type="date" class="form-control inputveldenhuiskleur" />
                 <span asp-validation-for="GeldigVanDatum" class="text-danger"></span>
             </div>
             <br />
             <div class="form-group">
-                <label asp-for="GeldigTotDatum" class="control-label"></label>
-                <input asp-for="GeldigTotDatum" class="form-control huiskleur" /> 
+                <label asp-for="GeldigTotDatum" class="control-label">Geldig tot:</label>
+                <input asp-for="GeldigTotDatum" type="date" class="form-control inputveldenhuiskleur" />
                 <span asp-validation-for="GeldigTotDatum" class="text-danger"></span>
             </div>
             <br />
@@ -55,4 +55,6 @@
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }
+
+
 
