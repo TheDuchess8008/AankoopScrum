@@ -115,10 +115,25 @@
                     }
                     else
                     {
-                        <div>
-                            --@Model.Categorieën[i].Naam
-                            <br />
-                        </div>
+                        for (int j = 0; j < i; j++)
+                        {
+                            if (Model.Categorieën[i].HoofdCategorieId == Model.Categorieën[j].CategorieId && Model.Categorieën[j].HoofdCategorieId == null)
+                            {
+                                <div>
+                                    --@Model.Categorieën[i].Naam
+                                    <br />
+                                </div>
+                                break;
+                            }
+                            else
+                            {
+                                <div>
+                                    ----@Model.Categorieën[i].Naam
+                                    <br />
+                                </div>
+                                break;
+                            }
+                        }
                     }
                 }
             }
@@ -126,7 +141,7 @@
     </dl>
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model.Artikel.ArtikelId" class="btn huiskleur">Wijzigen</a> 
-    <a asp-action="Index"  class="btn btn-terug">Terug</a>
+    <a asp-action="Edit" asp-route-id="@Model.Artikel.ArtikelId" class="btn huiskleur">Wijzigen</a>
+    <a asp-action="Index" class="btn btn-terug">Terug</a>
 </div>
 
