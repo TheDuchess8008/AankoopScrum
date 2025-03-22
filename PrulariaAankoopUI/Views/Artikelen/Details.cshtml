@@ -106,34 +106,25 @@
         </dt>
         <dd class="col-sm-9">
             @{
-                for (int i = 0; i < Model.Categorieën.Count; i++)
+                for (int i = 0; i < Model.Artikel.Categorieën.Count; i++)
                 {
-                    if (Model.Categorieën[i].HoofdCategorieId == null || i == 0)
+                    if (Model.Artikel.Categorieën[i].HoofdCategorieId == null || i == 0)
                     {
-                        @Model.Categorieën[i].Naam
-                        <br />
+                        <div>
+                            @Model.Artikel.Categorieën[i].HoofdCategorie.Naam
+                            <br />
+                            --@Model.Artikel.Categorieën[i].Naam
+                            <br />
+                        </div>
                     }
                     else
                     {
-                        for (int j = 0; j < i; j++)
-                        {
-                            if (Model.Categorieën[i].HoofdCategorieId == Model.Categorieën[j].CategorieId && Model.Categorieën[j].HoofdCategorieId == null)
-                            {
-                                <div>
-                                    --@Model.Categorieën[i].Naam
-                                    <br />
-                                </div>
-                                break;
-                            }
-                            else
-                            {
-                                <div>
-                                    ----@Model.Categorieën[i].Naam
-                                    <br />
-                                </div>
-                                break;
-                            }
-                        }
+                        <div>
+                            --@Model.Artikel.Categorieën[i].HoofdCategorie.Naam
+                            <br />
+                            ----@Model.Artikel.Categorieën[i].Naam
+                            <br />
+                        </div>
                     }
                 }
             }
