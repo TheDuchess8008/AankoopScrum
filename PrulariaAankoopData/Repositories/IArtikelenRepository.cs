@@ -9,16 +9,21 @@ using System.Threading.Tasks;
 namespace PrulariaAankoopData.Repositories;
 public interface IArtikelenRepository
 {
-    // KOEN
+    // A.800 Koen
     Task<Artikel> GetArtikelById(int id);
-    Task<List<Artikel>> GetArtikelenMetFilteren(int? categorieId, string? actiefStatus);
+    //Task<List<Artikel>> GetArtikelenMetFilteren(int? categorieId, string? actiefStatus);
     Task<List<Categorie>> GetAlleCategorieen();
 
     //-----------------------------------------------------------------------------------------------
-    // NIEUW
+    // A.900 lesley
     Task<Artikel> GetArtikelMetCategorieenAsync(int artikelId);
     Task<bool> IsCategorieLinkedToArtikelAsync(int artikelId, int categorieId);
     Task<bool> AddCategorieAanArtikelAsync(Artikel artikel, Categorie categorie);
 
+    //-----------------------------------------------------------------------------------------------
+    // A.800 lesley (oplossing probleem , geen artikelen na filteren op hoofdcategorie)
+
+    Task<List<Artikel>> GetArtikelenMetFilteren(int? categorieId, string? actiefStatus);
+    Task<List<int>> GetLijstCategorieIds(int hoofdCategorieId);
 
 }
