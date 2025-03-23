@@ -30,5 +30,5 @@ public partial class Leverancier
 
     public virtual ICollection<InkomendeLevering> InkomendeLeveringen { get; set; } = new List<InkomendeLevering>();
 
-    public virtual Plaats Plaats { get; set; } = null!;
+    public virtual Plaats? Plaats { get; set; } = null!;
 }
