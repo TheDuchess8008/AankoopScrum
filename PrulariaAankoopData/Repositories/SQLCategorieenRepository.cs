@@ -25,4 +25,18 @@ public class SQLCategorieenRepository : ICategorieenRepository
     {
         return await _context.Categorieen.FindAsync(id);
     }
+
+    public async Task<List<Categorie>> GetOverigeCategorieenAsync(int artikelId)
+    {
+        var gekoppeldeCategorieen = await _context.Artikelen
+            .Where(a => a.ArtikelId == artikelId)
+            .SelectMany(a => a.Categorieën)
+            .Select(c => c.CategorieId)
+            .ToListAsync();
+
+        return await _context.Categorieen
+            .Where(c => !gekoppeldeCategorieen.Contains(c.CategorieId))
+            .ToListAsync();
+    }
+
 }

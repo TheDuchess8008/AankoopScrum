@@ -10,4 +10,5 @@ public interface ICategorieenRepository
 {
     Task<List<Categorie>> GetAlleCategorieenAsync();
     Task<Categorie> GetCategorieByIdAsync(int id);
+    Task<List<Categorie>> GetOverigeCategorieenAsync(int artikelId);
 }

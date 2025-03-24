@@ -25,4 +25,10 @@ public class CategorieenService
     {
         return await _categorieenRepository.GetCategorieByIdAsync(id);
     }
+
+    public async Task<List<Categorie>> GetOverigeCategorieenAsync(int artikelId)
+    {
+        return await _categorieenRepository.GetOverigeCategorieenAsync(artikelId);
+    }
+
 }

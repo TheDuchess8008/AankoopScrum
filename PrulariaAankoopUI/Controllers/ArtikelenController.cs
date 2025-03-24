@@ -56,7 +56,8 @@ namespace PrulariaAankoopUI.Controllers
                 }
                 ViewData["LeveranciersId"] = new SelectList(_context.Leveranciers, "LeveranciersId", "BtwNummer", artikel.LeveranciersId);
 
-                var categorieen = await _categorieenService.GetAlleCategorieenAsync();
+                //var categorieen = await _categorieenService.GetAlleCategorieenAsync();
+                var categorieen = await _categorieenService.GetOverigeCategorieenAsync((int)id);
 
                 ViewData["CategorieId"] = new SelectList(categorieen, "CategorieId", "Naam"); // "Naam" moet overeenkomen met je model
 
