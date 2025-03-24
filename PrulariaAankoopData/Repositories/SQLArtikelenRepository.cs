@@ -29,8 +29,11 @@ public class SQLArtikelenRepository : IArtikelenRepository
     {
         IQueryable<Artikel> query = _context.Artikelen.Include(c => c.Categorieën)
             .Include(l => l.Leverancier);
-        if (categorieId != 0)
-            query = query.Where(a => a.Categorieën.Any(c => c.CategorieId == categorieId));
+        if (categorieId == 1)
+            query = query.Where(a => a.Categorieën.Any(c => c.CategorieId == categorieId || c.HoofdCategorieId == categorieId || c.HoofdCategorieId == 3));
+        else if (categorieId != 0)
+            query = query.Where(a => a.Categorieën.Any(c => c.CategorieId == categorieId || c.HoofdCategorieId == categorieId));
+
         if (actiefStatus == "Actief")
         {
             query = query.Where(a => a.MaximumVoorraad > 0);
@@ -46,13 +49,13 @@ public class SQLArtikelenRepository : IArtikelenRepository
     {
         return await (_context.Categorieen).ToListAsync();
     }
-    
+
     public async Task AddArtikel(Artikel artikel)
     {
         await _context.Artikelen.AddAsync(artikel);
         await _context.SaveChangesAsync();
     }
-    
+
     public async Task UpdateArtikel(Artikel bestaandArtikel, Artikel artikel)
     {
         if (artikel == null)
