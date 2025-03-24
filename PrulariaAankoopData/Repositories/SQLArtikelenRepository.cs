@@ -2,8 +2,7 @@
 using PrulariaAankoopData.Models;
 using System;
 using System.Linq;
-using Microsoft.EntityFrameworkCore;
-using PrulariaAankoopData.Models;
+
 
 namespace PrulariaAankoopData.Repositories;
 public class SQLArtikelenRepository : IArtikelenRepository
@@ -89,6 +88,12 @@ public class SQLArtikelenRepository : IArtikelenRepository
     // A.800 lesley (oplossing probleem , geen artikelen na filteren op hoofdcategorie)
 
     // GetArtikelenMetFilteren
+
+    public async Task<Artikel> GetByIdAsync(int artikelId)
+    {
+        return await _context.Artikelen.FindAsync(artikelId);
+    }
+
     public async Task<List<Artikel>> GetArtikelenMetFilteren(int? categorieId, string? actiefStatus)
     {
         IQueryable<Artikel> query = _context.Artikelen
@@ -141,6 +146,32 @@ public class SQLArtikelenRepository : IArtikelenRepository
             }
         }
     }
-
+    
+    public async Task AddArtikel(Artikel artikel)
+    {
+        await _context.Artikelen.AddAsync(artikel);
+        await _context.SaveChangesAsync();
+    }
+    
+    public async Task UpdateArtikel(Artikel bestaandArtikel, Artikel artikel)
+    {
+        if (artikel == null)
+            throw new ArgumentNullException(nameof(artikel), "Artikel kan niet null zijn");
+        if (bestaandArtikel == null)
+        {
+            throw new Exception($"Artikel met ID {artikel.ArtikelId} werd niet gevonden.");
+        }
+        _context.Entry(bestaandArtikel).CurrentValues.SetValues(artikel);
+        await _context.SaveChangesAsync();
+    }
 }
+
+
+
+
+
+
+
+
+
 

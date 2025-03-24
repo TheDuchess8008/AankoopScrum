@@ -4,6 +4,19 @@
     ViewData["Title"] = "Details";
 }
 
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success">
+        @TempData["SuccessMessage"]
+    </div>
+}
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger">
+        @TempData["ErrorMessage"]
+    </div>
+}
+
 <h1>Details</h1>
 
 <div>
@@ -35,7 +48,7 @@
             @Html.DisplayFor(model => model.Artikel.Prijs)
         </dd>
         <dt class="col-sm-3">
-            @Html.DisplayNameFor(model => model.Artikel.GewichtInGram)
+            Gewicht in gram
         </dt>
         <dd class="col-sm-9">
             @Html.DisplayFor(model => model.Artikel.GewichtInGram)
@@ -53,13 +66,13 @@
             @Html.DisplayFor(model => model.Artikel.Voorraad)
         </dd>
         <dt class="col-sm-3">
-            @Html.DisplayNameFor(model => model.Artikel.MinimumVoorraad)
+            Minimum voorraad
         </dt>
         <dd class="col-sm-9">
             @Html.DisplayFor(model => model.Artikel.MinimumVoorraad)
         </dd>
         <dt class="col-sm-3">
-            @Html.DisplayNameFor(model => model.Artikel.MaximumVoorraad)
+            Maximum voorraad
         </dt>
         <dd class="col-sm-9">
             @Html.DisplayFor(model => model.Artikel.MaximumVoorraad)
@@ -71,13 +84,13 @@
             @Html.DisplayFor(model => model.Artikel.Levertijd)
         </dd>
         <dt class="col-sm-3">
-            @Html.DisplayNameFor(model => model.Artikel.AantalBesteldLeverancier)
+            Aantal besteld bij leverancier
         </dt>
         <dd class="col-sm-9">
             @Html.DisplayFor(model => model.Artikel.AantalBesteldLeverancier)
         </dd>
         <dt class="col-sm-3">
-            @Html.DisplayNameFor(model => model.Artikel.MaxAantalInMagazijnPlaats)
+            Max aantal in magazijn plaats
         </dt>
         <dd class="col-sm-9">
             @Html.DisplayFor(model => model.Artikel.MaxAantalInMagazijnPlaats)
@@ -93,17 +106,23 @@
         </dt>
         <dd class="col-sm-9">
             @{
-                for (int i = 0; i < Model.Categorieën.Count; i++)
+                for (int i = 0; i < Model.Artikel.Categorieën.Count; i++)
                 {
-                    if (Model.Categorieën[i].HoofdCategorieId == null || i == 0)
+                    if (Model.Artikel.Categorieën[i].HoofdCategorieId == null || i == 0)
                     {
-                        @Model.Categorieën[i].Naam
-                        <br />
+                        <div>
+                            @Model.Artikel.Categorieën[i].HoofdCategorie.Naam
+                            <br />
+                            --@Model.Artikel.Categorieën[i].Naam
+                            <br />
+                        </div>
                     }
                     else
                     {
                         <div>
-                            --@Model.Categorieën[i].Naam
+                            --@Model.Artikel.Categorieën[i].HoofdCategorie.Naam
+                            <br />
+                            ----@Model.Artikel.Categorieën[i].Naam
                             <br />
                         </div>
                     }
@@ -113,8 +132,8 @@
     </dl>
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model.Artikel.ArtikelId" class="btn btn-secondary huiskleur">Edit</a> |
-    <a asp-action="Index" class="btn btn-secondary huiskleur">Terug</a>
+    <a asp-action="Edit" asp-route-id="@Model.Artikel.ArtikelId" class="btn huiskleur">Wijzigen</a>
+    <a asp-action="Index" class="btn btn-terug">Terug</a>
 </div>
 
 

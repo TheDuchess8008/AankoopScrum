@@ -5,7 +5,6 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
-using PrulariaAankoopData.Models;
 
 namespace PrulariaAankoopData.Repositories;
 public interface IActiecodesRepository
@@ -13,7 +12,7 @@ public interface IActiecodesRepository
 
     // ASYNCHROON ===========================================================
     Task<Actiecode?> FirstOrDefaultAsync(Expression<Func<Actiecode, bool>> predicate);
-    Task<Actiecode?> FindAsync(int id);
+    Task<Actiecode?> FindByIdAsync(int id);
     //Task<int> SaveChangesAsync();
     Task<List<Actiecode>> ToListAsync();
 
@@ -23,8 +22,10 @@ public interface IActiecodesRepository
     void Remove(Actiecode actiecode);
 
     Task<Actiecode> ToevoegActiecodeAsync(Actiecode actiecode);
-    bool IsActiCodeNieuw(string naam, DateTime geldigVanDatum, DateTime geldigTotDatum);
+    bool IsActieCodeNieuw(string naam, DateTime geldigVanDatum, DateTime geldigTotDatum);
     Task<Actiecode?> GetActiecodeByIdAsync(int id);
     Task<List<Actiecode>> GetAllActiecodesAsync();
     Task<bool> SaveChangesAsync();
+
+    Task UpdateAsync(Actiecode actiecode);
 }

@@ -1,5 +1,6 @@
-﻿@using PrulariaAankoopData.Models
-@model ArtikelViewModel
+﻿@* @using PrulariaAankoopData.Models *@
+@model PrulariaAankoopData.Models.ArtikelViewModel
+@* @model ArtikelViewModel *@
 
 @{
     ViewData["Title"] = "Artikelen";
@@ -74,11 +75,15 @@
                     <td>
                         @Html.DisplayFor(modelItem => item.Voorraad)
                     </td>
-                    <td>
-                        <a asp-action="Edit" asp-route-id="@item.ArtikelId" class="btn btn-secondary huiskleur">Edit</a> |
-                        <a asp-action="Details" asp-route-id="@item.ArtikelId" class="btn btn-secondary huiskleur">Details</a> |
-                        <a asp-action="Delete" asp-route-id="@item.ArtikelId" class="btn btn-secondary huiskleur">Delete</a>
+                    <td class="action-buttons">
+                        <a asp-action="Edit" asp-route-id="@item.ArtikelId" title="Bewerken">
+                            <button class="btn btn-icon btn-edit"><i class="bi bi-pencil"></i></button>
+                        </a>
+                        <a asp-action="Details" asp-route-id="@item.ArtikelId" title="Details bekijken">
+                            <button class="btn btn-icon btn-details"><i class="bi bi-eye"></i></button>
+                        </a>
                     </td>
+
                 </tr>
             }
         </tbody>

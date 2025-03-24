@@ -1,33 +1,33 @@
-﻿@model PrulariaAankoopData.Models.Actiecode
+﻿@model ActiecodeWijzigenViewModel;
 
 @{
     ViewData["Title"] = "Edit Actiecode";
 }
 
 <div class="container mt-4">
-    <h1 class="mb-3">Edit Actiecode</h1>
+    <h1 class="mb-3">Wijzig de Actiecode</h1>
     <hr />
 
-    <div class="row justify-content-center">
+    <div class="row">
         <div class="col-md-6">
             <form asp-action="Edit">
                 <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
-                <input type="hidden" asp-for="ActiecodeId" />
+                <input type="hidden" asp-for="Id" />
 
                 <div class="mb-3">
-                    <label asp-for="Naam" class="form-label fw-bold"></label>
-                    <input asp-for="Naam" class="form-control" placeholder="Enter name" />
+                    <label asp-for="Naam" class="control-label"></label>
+                    <input asp-for="Naam" class="form-control" value="1" placeholder="Enter name"/>
                     <span asp-validation-for="Naam" class="text-danger"></span>
                 </div>
 
                 <div class="mb-3">
-                    <label asp-for="GeldigVanDatum" class="form-label fw-bold">Geldig Van</label>
+                    <label asp-for="GeldigVanDatum" class="control-label">Geldig Van</label>
                     <input asp-for="GeldigVanDatum" class="form-control" type="date" />
                     <span asp-validation-for="GeldigVanDatum" class="text-danger"></span>
                 </div>
 
                 <div class="mb-3">
-                    <label asp-for="GeldigTotDatum" class="form-label fw-bold">Geldig Tot</label>
+                    <label asp-for="GeldigTotDatum" class="control-label">Geldig Tot</label>
                     <input asp-for="GeldigTotDatum" class="form-control" type="date" />
                     <span asp-validation-for="GeldigTotDatum" class="text-danger"></span>
                 </div>
@@ -36,12 +36,12 @@
                     <input class="form-check-input" type="checkbox" asp-for="IsEenmalig" />
                     <label class="form-check-label fw-bold">Eenmalig</label>
                         @Html.DisplayNameFor(model => model.IsEenmalig)
-                    </label>
+                    
                 </div>
 
-                <div class="d-flex gap-2">
-                    <button type="submit" class="btn btn-primary huiskleur">Opslaan</button>
-                    <a asp-action="Index" class="btn btn-secondary huiskleur">Terug</a>
+                <div class="d-flex gap-2 mt-3">
+                    <button type="submit" class="btn huiskleur">Opslaan</button>
+                    <a asp-action="Index" class="btn btn-terug">Terug</a>
                 </div>
             </form>
         </div>

@@ -1,0 +1,22 @@
+﻿@model ArtikelViewModel
+
+@{
+    ViewData["Title"] = "Zoek Artikel";
+}
+
+<h1>Zoek Artikel</h1>
+
+@if (ViewBag.Message != null)
+{
+    <div class="alert alert-info">
+        @ViewBag.Message
+    </div>
+}
+
+<form asp-action="Search" method="post">
+    <div class="form-group">
+        <label for="ean">EAN:</label>
+        <input type="text" id="ean" name="ean" class="form-control" required />
+    </div>
+    <button type="submit" class="btn btn-primary">Zoek</button>
+</form>

@@ -12,7 +12,6 @@ builder.Services.AddDbContext<PrulariaComContext>(
         options => options.UseMySQL(
          builder.Configuration.GetConnectionString("PrulariaComConnection"),
                            x => x.MigrationsAssembly("PrulariaAankoopData")));
-
 builder.Services.AddControllersWithViews();
 
 builder.Services.AddTransient<ActiecodesService>();
@@ -49,6 +48,11 @@ var app = builder.Build();
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
+    app.UseHsts();
+}
+else 
+{
+    app.UseDeveloperExceptionPage();
 }
 app.UseRouting();
 

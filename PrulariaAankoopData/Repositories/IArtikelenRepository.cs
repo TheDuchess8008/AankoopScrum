@@ -26,4 +26,8 @@ public interface IArtikelenRepository
     Task<List<Artikel>> GetArtikelenMetFilteren(int? categorieId, string? actiefStatus);
     Task<List<int>> GetLijstCategorieIds(int hoofdCategorieId);
 
+    Task AddArtikel(Artikel artikel);
+    Task<Artikel?> GetArtikelById(int artikelId);
+    Task<Artikel> GetByIdAsync(int artikelId);
+    Task UpdateArtikel(Artikel bestaandArtikel, Artikel artikel);
 }
