@@ -109,6 +109,8 @@ namespace PrulariaAankoopUI.Controllers
             {
                 return NotFound();
             }
+            // Ensure the price is rounded to 2 decimal places before saving
+            artikelViewModel.Artikel.Prijs = Math.Round(artikelViewModel.Artikel.Prijs, 2);
             await _artikelenService.UpdateArtikel(artikelViewModel);
             ViewBag.Message = "Artikel succesvol gewijzigd.";
             ViewData["LeveranciersId"] = new SelectList(_context.Leveranciers, "LeveranciersId", "Naam", artikelViewModel.Artikel.LeveranciersId);

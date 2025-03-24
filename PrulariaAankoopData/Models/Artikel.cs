@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace PrulariaAankoopData.Models;
 
@@ -12,6 +13,7 @@ public class Artikel
     public string Naam { get; set; } = null!;
 
     public string Beschrijving { get; set; } = null!;
+    [DisplayFormat(DataFormatString = "{0:F2}", ApplyFormatInEditMode = true)]
 
     public decimal Prijs { get; set; }
 

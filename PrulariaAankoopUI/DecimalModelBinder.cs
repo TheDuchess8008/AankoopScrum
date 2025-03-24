@@ -1,27 +1,45 @@
 ﻿using Microsoft.AspNetCore.Mvc.ModelBinding;
+using System.Globalization;
+using System.Threading.Tasks;
 
-namespace PrulariaAankoopUI;
-
-public class DecimalModelBinder : IModelBinder
+namespace PrulariaAankoopUI
 {
-    public Task BindModelAsync(ModelBindingContext bindingContext)
+    public class DecimalModelBinder : IModelBinder
     {
-        var valueProviderResult = bindingContext.ValueProvider.GetValue(
-        bindingContext.ModelName);
-        var value = valueProviderResult.FirstValue;
-        if (string.IsNullOrEmpty(value))
-            return Task.CompletedTask;
-        decimal myValue = 0;
-        if (!decimal.TryParse(value, out myValue))
+        public Task BindModelAsync(ModelBindingContext bindingContext)
         {
-            bindingContext.ModelState.TryAddModelError(
-            bindingContext.ModelName,
+            if (bindingContext == null)
+            {
+                throw new ArgumentNullException(nameof(bindingContext));
+            }
 
-            "Incorrect value, please try again.");
+            var valueProviderResult = bindingContext.ValueProvider.GetValue(bindingContext.ModelName);
+            if (valueProviderResult == ValueProviderResult.None)
+            {
+                return Task.CompletedTask;
+            }
+
+            bindingContext.ModelState.SetModelValue(bindingContext.ModelName, valueProviderResult);
+
+            var value = valueProviderResult.FirstValue;
+            if (string.IsNullOrWhiteSpace(value))
+            {
+                return Task.CompletedTask;
+            }
+
+            // Convert commas to dots before parsing
+            value = value.Replace(',', '.');
+
+            if (decimal.TryParse(value, NumberStyles.Number, CultureInfo.InvariantCulture, out var decimalValue))
+            {
+                bindingContext.Result = ModelBindingResult.Success(decimalValue);
+            }
+            else
+            {
+                bindingContext.ModelState.TryAddModelError(bindingContext.ModelName, "Ongeldig decimaal getal.");
+            }
 
             return Task.CompletedTask;
         }
-        bindingContext.Result = ModelBindingResult.Success(myValue);
-        return Task.CompletedTask;
     }
 }
