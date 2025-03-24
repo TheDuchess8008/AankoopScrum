@@ -22,8 +22,11 @@ namespace PrulariaAankoopUI.Controllers
         // GET: Categorieen
         public async Task<IActionResult> Index()
         {
-            var prulariaComContext = _context.Categorieen.Include(c => c.HoofdCategorie);
-            return View(await prulariaComContext.ToListAsync());
+            var lijstCategorieen = await (_context.Categorieen
+                .Include(c => c.HoofdCategorie)
+                .Include(c => c.Subcategorieën)
+                .Include(a => a.Artikelen)).ToListAsync();
+            return View(lijstCategorieen);
         }
 
         // GET: Categorieen/Details/5
