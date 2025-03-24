@@ -9,10 +9,14 @@ using System.Threading.Tasks;
 namespace PrulariaAankoopData.Repositories;
 public interface IArtikelenRepository
 {
-    // A.800 Koen
-    Task<Artikel> GetArtikelById(int id);
+    
+    //Task<Artikel> GetArtikelById(int id);
     //Task<List<Artikel>> GetArtikelenMetFilteren(int? categorieId, string? actiefStatus);
     Task<List<Categorie>> GetAlleCategorieen();
+    Task AddArtikel(Artikel artikel);
+    Task<Artikel?> GetArtikelById(int artikelId);
+    Task<Artikel> GetByIdAsync(int artikelId);
+    Task UpdateArtikel(Artikel bestaandArtikel, Artikel artikel);
 
     //-----------------------------------------------------------------------------------------------
     // A.900 lesley
@@ -26,8 +30,4 @@ public interface IArtikelenRepository
     Task<List<Artikel>> GetArtikelenMetFilteren(int? categorieId, string? actiefStatus);
     Task<List<int>> GetLijstCategorieIds(int hoofdCategorieId);
 
-    Task AddArtikel(Artikel artikel);
-    Task<Artikel?> GetArtikelById(int artikelId);
-    Task<Artikel> GetByIdAsync(int artikelId);
-    Task UpdateArtikel(Artikel bestaandArtikel, Artikel artikel);
 }

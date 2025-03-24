@@ -42,29 +42,31 @@ namespace PrulariaAankoopUI.Controllers
                 return NotFound();
             }
             var artikel = await _artikelenService.MaakDetailsArtikel((int)id);
-            if (artikel == null)
-            {
-                throw new Exception($"Artikel met ID {id} werd niet gevonden.");
-            }
-            ViewData["LeveranciersId"] = new SelectList(_context.Leveranciers, "LeveranciersId", "BtwNummer", artikel.LeveranciersId);
             
-            var categorieen = await _categorieenService.GetAlleCategorieenAsync();
+            
 
-            ViewData["CategorieId"] = new SelectList(categorieen, "CategorieId", "Naam"); // "Naam" moet overeenkomen met je model
+
 
 
             try
             {
-
                 if (artikel == null)
                 {
-                    return NotFound();
+                    throw new Exception($"Artikel met ID {id} werd niet gevonden.");
                 }
+                ViewData["LeveranciersId"] = new SelectList(_context.Leveranciers, "LeveranciersId", "BtwNummer", artikel.LeveranciersId);
+
+                var categorieen = await _categorieenService.GetAlleCategorieenAsync();
+
+                ViewData["CategorieId"] = new SelectList(categorieen, "CategorieId", "Naam"); // "Naam" moet overeenkomen met je model
+
             }
             catch (Exception ex)
             {
                 return NotFound(ex.Message);
             }
+
+
 
             return View(artikel);
         }
@@ -118,46 +120,56 @@ namespace PrulariaAankoopUI.Controllers
             return View(artikelViewModel);
         }
 
+
+        //***********************************************************************************************
+
+        //// POST: Artikelen/Edit/5
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public async Task<IActionResult> Edit(int id, [Bind("ArtikelId,Ean,Naam,Beschrijving,Prijs,GewichtInGram,Bestelpeil,Voorraad,MinimumVoorraad,MaximumVoorraad,Levertijd,AantalBesteldLeverancier,MaxAantalInMagazijnPlaats,LeveranciersId")] Artikel artikel)
+        //{
+        //    if (id != artikel.ArtikelId)
+        //    {
+        //        return NotFound();
+        //    }
+
+        //    // Error boodschap zegt wat er mist om de modelstate.IsValid te doen slagen
+        //    if (!ModelState.IsValid)
+        //    {
+        //        var errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage);
+        //        return BadRequest(string.Join(", ", errors));
+        //    }
+
+        //    if (ModelState.IsValid)
+        //    {
+
+        //        try
+        //        {
+        //            _context.Update(artikel);
+        //            await _context.SaveChangesAsync();
+        //        }
+        //        catch (DbUpdateConcurrencyException)
+        //        {
+        //            if (!ArtikelExists(artikel.ArtikelId))
+        //            {
+        //                return NotFound();
+        //            }
+        //            else
+        //            {
+        //                throw;
+        //            }
+        //        }
+        //        return RedirectToAction(nameof(Index));
+        //    }
+        //    ViewData["LeveranciersId"] = new SelectList(_context.Leveranciers, "LeveranciersId", "BtwNummer", artikel.LeveranciersId);
+        //    return View(artikel);
+
+        //}
+
+
         // POST: Artikelen/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ArtikelId,Ean,Naam,Beschrijving,Prijs,GewichtInGram,Bestelpeil,Voorraad,MinimumVoorraad,MaximumVoorraad,Levertijd,AantalBesteldLeverancier,MaxAantalInMagazijnPlaats,LeveranciersId")] Artikel artikel)
-        {
-            if (id != artikel.ArtikelId)
-            {
-                return NotFound();
-            }
-
-            // Error boodschap zegt wat er mist om de modelstate.IsValid te doen slagen
-            if (!ModelState.IsValid)
-            {
-                var errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage);
-                return BadRequest(string.Join(", ", errors));
-            }
-
-            if (ModelState.IsValid)
-            {
-                
-                try
-                {
-                    _context.Update(artikel);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!ArtikelExists(artikel.ArtikelId))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
-            }
-            ViewData["LeveranciersId"] = new SelectList(_context.Leveranciers, "LeveranciersId", "BtwNummer", artikel.LeveranciersId);
-            return View(artikel);
         public async Task<IActionResult> Edit(int id, ArtikelViewModel artikelViewModel)
         {
             if (id != artikelViewModel.Artikel.ArtikelId)
@@ -170,6 +182,11 @@ namespace PrulariaAankoopUI.Controllers
             return View(artikelViewModel);
         }
 
+
+
+
+
+        //****************************************************************************************
 
 
         // GET: Artikelen/Delete/5
