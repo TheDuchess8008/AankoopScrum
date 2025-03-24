@@ -30,7 +30,7 @@ public class SQLArtikelenRepository : IArtikelenRepository
         IQueryable<Artikel> query = _context.Artikelen.Include(c => c.Categorieën)
             .Include(l => l.Leverancier);
         if (categorieId != 0)
-            query = query.Where(a => a.Categorieën.Any(c => c.CategorieId == categorieId));
+            query = query.Where(a => a.Categorieën.Any(c => c.CategorieId == categorieId || c.HoofdCategorieId == categorieId));
         if (actiefStatus == "Actief")
         {
             query = query.Where(a => a.MaximumVoorraad > 0);
