@@ -315,9 +315,10 @@ namespace PrulariaAankoopUI.Controllers
         [HttpGet]
         public async Task<IActionResult> BevestigCategorieToevoegen(int artikelId, int categorieId)
         {
+            try
+            {
 
-
-            var artikel = await _context.Artikelen.FindAsync(artikelId);
+                var artikel = await _context.Artikelen.FindAsync(artikelId);
             var categorie = await _context.Categorieen.FindAsync(categorieId);
 
             if (artikel == null || categorie == null) return NotFound();
@@ -332,14 +333,22 @@ namespace PrulariaAankoopUI.Controllers
 
             return View(viewModel);
         }
+            catch (Exception ex)
+            {
+                
+                return StatusCode(500, "Er is een interne fout opgetreden.");
+    }
+}
 
         // Lesley
         // CategorieToevoegenAanArtikel
         [HttpPost]
         public async Task<IActionResult> CategorieToevoegenAanArtikel(ArtikelCategorieViewModel model)
         {
-            // Error boodschap zegt wat er mist om de modelstate.IsValid te doen slagen
-            if (!ModelState.IsValid)
+        try
+        {
+        
+        if (!ModelState.IsValid)
             {
                 var errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage);
                 return BadRequest(string.Join(", ", errors));
@@ -353,13 +362,21 @@ namespace PrulariaAankoopUI.Controllers
 
             return RedirectToAction("Details", new { id = model.ArtikelId });
         }
+            catch (Exception ex)
+            {
+                
+                return StatusCode(500, "Er is een interne fout opgetreden.");
+    }
+}
 
         // Lesley
         // BevestigCategorieVerwijderen
         [HttpGet]
         public async Task<IActionResult> BevestigCategorieVerwijderen(int artikelId, int categorieId)
         {
-            var artikel = await _context.Artikelen.FindAsync(artikelId);
+            try
+            {
+                var artikel = await _context.Artikelen.FindAsync(artikelId);
             var categorie = await _context.Categorieen.FindAsync(categorieId);
 
             if (artikel == null || categorie == null) return NotFound();
@@ -373,6 +390,12 @@ namespace PrulariaAankoopUI.Controllers
             };
 
             return View(viewModel);
+            }
+            catch (Exception ex)
+            {
+
+                return StatusCode(500, "Er is een interne fout opgetreden.");
+            }
         }
 
         // Lesley
@@ -380,8 +403,9 @@ namespace PrulariaAankoopUI.Controllers
         [HttpPost]
         public async Task<IActionResult> CategorieVerwijderenVanArtikel(ArtikelCategorieViewModel model)
         {
-            // Error boodschap zegt wat er mist om de modelstate.IsValid te doen slagen
-            if (!ModelState.IsValid)
+            try
+            {
+                if (!ModelState.IsValid)
             {
                 var errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage);
                 return BadRequest(string.Join(", ", errors));
@@ -394,7 +418,15 @@ namespace PrulariaAankoopUI.Controllers
                 return BadRequest("Fout bij Verwijderen van de categorie.");
 
             return RedirectToAction("Details", new { id = model.ArtikelId });
-        }
+            }
+            catch (Exception ex)
+            {
+                
+                return StatusCode(500, "Er is een interne fout opgetreden.");
+            }
+
+
+}
 
 
 
