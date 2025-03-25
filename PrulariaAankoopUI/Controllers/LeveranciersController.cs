@@ -17,7 +17,7 @@ namespace PrulariaAankoopUI.Controllers
         private readonly ILeverancierRepository _leverancierRepository;
         private readonly LeveranciersService _leveranciersService;
         private readonly PrulariaComContext _context;
-
+        
         public LeveranciersController(PrulariaComContext context, ILeverancierRepository leverancierRepository, LeveranciersService leveranciersService)
         {
             _context = context;
