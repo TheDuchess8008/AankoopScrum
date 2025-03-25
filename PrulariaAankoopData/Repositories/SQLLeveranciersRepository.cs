@@ -22,6 +22,10 @@ public class SQLLeveranciersRepository : ILeverancierRepository
             .AsNoTracking()
             .ToListAsync();
     }
+    public async Task AddLeverancierAsync(Leverancier leverancier)
+    {
+        _context.Leveranciers.Add(leverancier);
+        await _context.SaveChangesAsync();
+    }
 }
 
-    

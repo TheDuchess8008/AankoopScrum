@@ -11,5 +11,6 @@ namespace PrulariaAankoopData.Repositories;
 public interface ILeverancierRepository
 {
     Task<List<Leverancier>> GetAllLeveranciersAsync();
+    Task AddLeverancierAsync(Leverancier leverancier);
 }
 
