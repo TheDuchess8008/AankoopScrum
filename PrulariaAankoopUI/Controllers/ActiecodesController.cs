@@ -120,38 +120,38 @@ namespace PrulariaAankoopUI.Controllers
             };
             return View(model);
         }
-                
+ 
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(ActiecodeWijzigenViewModel model)
         {
+            if (ModelState.IsValid)
+            {
+                var actiecode = await _actiecodesService.FindAsync(model.Id);
+                if (actiecode == null)
+                {
+                    return NotFound();
+                }
+
+                actiecode.Naam = model.Naam;
+                actiecode.GeldigVanDatum = model.GeldigVanDatum;
+                actiecode.GeldigTotDatum = model.GeldigTotDatum;
+                actiecode.IsEenmalig = model.IsEenmalig;
+
+                try
+                {
+                    await _actiecodesService.UpdateAsync(actiecode);
+                }
+                catch (Exception ex)
+                {
+                    ModelState.AddModelError("", "Er is een fout opgetreden tijdens het verwerken van uw aanvraag. Probeer het later nog eens.");
+                    return View(model);
+                }
+                return RedirectToAction(nameof(Index));
+            }
+
             // Als de validatie mislukt:
-            if (!ModelState.IsValid) 
-            {
-                return View(model);
-            }
-            
-            var actiecode =await _actiecodesService.FindAsync(model.Id);
-            if (actiecode == null)
-            {
-                return NotFound();
-            }
-
-            //actiecode.Naam = model.Naam;
-            actiecode.GeldigVanDatum = model.GeldigVanDatum;
-            actiecode.GeldigTotDatum = model.GeldigTotDatum;
-            actiecode.IsEenmalig = model.IsEenmalig;
-
-            try
-            {
-                await _actiecodesService.UpdateAsync(actiecode);
-            }
-            catch (Exception ex)
-            {
-                ModelState.AddModelError("", "Er is een fout opgetreden tijdens het verwerken van uw aanvraag. Probeer het later nog eens.");
-                return View(model);
-            }
-            return RedirectToAction("Index");
+            return View(model);
 
         }
 
