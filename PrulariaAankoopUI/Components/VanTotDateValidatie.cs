@@ -29,6 +29,10 @@ public class VanTotDateValidatie
             {
                 return new ValidationResult("De einddatum moet na de begindatum liggen.");
             }
+            if (geldigTotDatum < DateTime.Now.Date)
+            {
+                return new ValidationResult("De einddatum moet vandaag of in de toekomst liggen.");
+            }
         }
         else
         {

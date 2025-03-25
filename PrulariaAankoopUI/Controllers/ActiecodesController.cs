@@ -9,6 +9,7 @@ using MySqlX.XDevAPI.Common;
 using PrulariaAankoopData.Models;
 using PrulariaAankoopData.Repositories;
 using PrulariaAankoopService.Services;
+using PrulariaAankoopUI.Components;
 using PrulariaAankoopUI.Models;
 
 namespace PrulariaAankoopUI.Controllers
@@ -124,34 +125,34 @@ namespace PrulariaAankoopUI.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(ActiecodeWijzigenViewModel model)
         {
-            if (ModelState.IsValid)
+            // Als de validatie mislukt:
+            if (!ModelState.IsValid) 
             {
-                var actiecode =await _actiecodesService.FindAsync(model.Id);
-                if (actiecode == null)
-                {
-                    return NotFound();
-                }
-
-                actiecode.Naam = model.Naam;
-                actiecode.GeldigVanDatum = model.GeldigVanDatum;
-                actiecode.GeldigTotDatum = model.GeldigTotDatum;
-                actiecode.IsEenmalig = model.IsEenmalig;
-
-                try
-                {
-                    await _actiecodesService.UpdateAsync(actiecode);
-                }
-                catch (Exception ex)
-                {
-                   ModelState.AddModelError("", "Er is een fout opgetreden tijdens het verwerken van uw aanvraag. Probeer het later nog eens.");
-                    return View(model);
-                }
-                return RedirectToAction(nameof(Index)); 
+                return View(model);
+            }
+            
+            var actiecode =await _actiecodesService.FindAsync(model.Id);
+            if (actiecode == null)
+            {
+                return NotFound();
             }
 
-            // Als de validatie mislukt:
-            return View(model);
-            
+            //actiecode.Naam = model.Naam;
+            actiecode.GeldigVanDatum = model.GeldigVanDatum;
+            actiecode.GeldigTotDatum = model.GeldigTotDatum;
+            actiecode.IsEenmalig = model.IsEenmalig;
+
+            try
+            {
+                await _actiecodesService.UpdateAsync(actiecode);
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError("", "Er is een fout opgetreden tijdens het verwerken van uw aanvraag. Probeer het later nog eens.");
+                return View(model);
+            }
+            return RedirectToAction("Index");
+
         }
 
         // GET: Actiecodes/Delete/5
