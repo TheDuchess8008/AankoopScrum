@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace PrulariaAankoopData.Repositories;
-public class SQLLeveranciersRepository : ILeverancierRepository
+public class SQLLeveranciersRepository : ILeveranciersRepository
 {private readonly PrulariaComContext _context;
 
     public SQLLeveranciersRepository(PrulariaComContext context)

@@ -14,21 +14,21 @@ namespace PrulariaAankoopUI.Controllers
 {
     public class LeveranciersController : Controller
     {
-        private readonly ILeverancierRepository _leverancierRepository;
+        private readonly ILeveranciersRepository _leveranciersRepository;
         private readonly LeveranciersService _leveranciersService;
         private readonly PrulariaComContext _context;
         
-        public LeveranciersController(PrulariaComContext context, ILeverancierRepository leverancierRepository, LeveranciersService leveranciersService)
+        public LeveranciersController(PrulariaComContext context, ILeveranciersRepository leveranciersRepository, LeveranciersService leveranciersService)
         {
             _context = context;
-            _leverancierRepository = leverancierRepository;
+            _leveranciersRepository = leveranciersRepository;
             _leveranciersService = leveranciersService; 
         }
 
         // GET: Leveranciers
         public async Task<IActionResult> Index()
         {
-            var leveranciers = await _leverancierRepository.GetAllLeveranciersAsync();
+            var leveranciers = await _leveranciersRepository.GetAllLeveranciersAsync();
 
             var viewModel = leveranciers.Select(l => new LeverancierViewModel
             {

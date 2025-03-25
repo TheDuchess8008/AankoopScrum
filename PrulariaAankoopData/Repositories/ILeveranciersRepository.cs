@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace PrulariaAankoopData.Repositories;
 
-public interface ILeverancierRepository
+public interface ILeveranciersRepository
 {
     Task<List<Leverancier>> GetAllLeveranciersAsync();
     Task AddLeverancierAsync(Leverancier leverancier);

@@ -9,16 +9,16 @@ namespace PrulariaAankoopService.Services
 {
     public class LeveranciersService
     {
-        private readonly ILeverancierRepository _leverancierRepository;
+        private readonly ILeveranciersRepository _leveranciersRepository;
 
-        public LeveranciersService(ILeverancierRepository leverancierRepository)
+        public LeveranciersService(ILeveranciersRepository leveranciersRepository)
         {
-            _leverancierRepository = leverancierRepository;
+            _leveranciersRepository = leveranciersRepository;
         }
 
         public async Task AddLeverancierAsync(Leverancier leverancier)
         {
-            await _leverancierRepository.AddLeverancierAsync(leverancier);
+            await _leveranciersRepository.AddLeverancierAsync(leverancier);
         }
     }
 }
