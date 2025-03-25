@@ -23,28 +23,29 @@
             </dd>
         }
     </dl>
-
-    <dt class="col-sm-2">
-        Subcategorieën
-    </dt>
-    <dd class="col-sm-10">
-        @if (Model.Subcategorieën != null && Model.Subcategorieën.Any())
-        {
-            @foreach (var sub in Model.Subcategorieën.OrderBy(s => s.Naam))
+    <dl>
+        <dt class="col-sm-2">
+            Subcategorieën
+        </dt>
+        <dd class="col-sm-10">
+            @if (Model.Subcategorieën != null && Model.Subcategorieën.Any())
             {
-                <a asp-action="Details" asp-route-id="@sub.CategorieId" class="btn huiskleur">
-                    @sub.Naam
-                </a>
+                @foreach (var sub in Model.Subcategorieën.OrderBy(s => s.Naam))
+                {   
+                    <a asp-action="Details" asp-route-id="@sub.CategorieId" class="btn huiskleur">
+                        @sub.Naam
+                    </a>
+                }
             }
-        }
-        else
-        {
-            <span>Geen subcategorieën</span>
-        }
-    </dd>
-
+            else
+            {
+                <span>Geen subcategorieën</span>
+            }
+        </dd>
+    </dl>
+    @await Component.InvokeAsync("ArtikelsPerSubcategorie", new { categorieId = Model.CategorieId })
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model?.CategorieId" class="btn huiskleur">Wijzigen</a> 
+    <a asp-action="Edit" asp-route-id="@Model?.CategorieId" class="btn huiskleur">Bewerken</a> 
     <a asp-action="Index" class="btn btn-terug">Terug naar categorieën</a>
 </div>
