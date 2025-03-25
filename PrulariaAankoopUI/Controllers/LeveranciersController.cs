@@ -7,23 +7,41 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using PrulariaAankoopData.Models;
 using PrulariaAankoopData.Repositories;
+using PrulariaAankoopUI.Models;
 
 namespace PrulariaAankoopUI.Controllers
 {
     public class LeveranciersController : Controller
     {
+        private readonly ILeverancierRepository _leverancierRepository;
         private readonly PrulariaComContext _context;
 
-        public LeveranciersController(PrulariaComContext context)
+        public LeveranciersController(PrulariaComContext context, ILeverancierRepository leverancierRepository)
         {
             _context = context;
+            _leverancierRepository = leverancierRepository; 
         }
 
         // GET: Leveranciers
         public async Task<IActionResult> Index()
         {
-            var prulariaComContext = _context.Leveranciers.Include(l => l.Plaats);
-            return View(await prulariaComContext.ToListAsync());
+            var leveranciers = await _leverancierRepository.GetAllLeveranciersAsync();
+
+            var viewModel = leveranciers.Select(l => new LeverancierViewModel
+            {
+                LeveranciersId = l.LeveranciersId,
+                Naam = l.Naam,
+                BtwNummer = l.BtwNummer,
+                Straat = l.Straat,
+                HuisNummer = l.HuisNummer,
+                Bus = l.Bus,
+                PlaatsId = l.PlaatsId,
+                FamilienaamContactpersoon = l.FamilienaamContactpersoon,
+                VoornaamContactpersoon = l.VoornaamContactpersoon,
+                Plaats = l.Plaats
+            }).ToList();
+
+            return View(viewModel);
         }
 
         // GET: Leveranciers/Details/5

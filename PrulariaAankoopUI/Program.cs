@@ -21,7 +21,7 @@ builder.Services.AddTransient<IArtikelenRepository, SQLArtikelenRepository>();
 builder.Services.AddTransient<CategorieenService>();
 builder.Services.AddTransient<ICategorieenRepository, SQLCategorieenRepository>();
 builder.Services.AddTransient<LeveranciersService>();
-builder.Services.AddTransient<ILeveranciersRepository, SQLLeveranciersRepository>();
+builder.Services.AddTransient<ILeverancierRepository, SQLLeveranciersRepository>();
 builder.Services.AddTransient<SecurityService>();
 builder.Services.AddTransient<ISecurityRepository, SQLSecurityRepository>();
 
