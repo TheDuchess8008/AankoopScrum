@@ -157,17 +157,15 @@ public class ArtikelenService
     }
 
 
-    //-----------------------------------------------------------
-    // NIEUW
 
-    // Lesley
+    // A.900 Lesley
     // IsCategorieLinkedToArtikelAsync
     public async Task<bool> IsCategorieLinkedToArtikelAsync(int artikelId, int categorieId)
     {
         return await _artikelenRepository.IsCategorieLinkedToArtikelAsync(artikelId, categorieId);
     }
 
-    // Lesley
+    // A.900 Lesley
     // AddCategorieAanArtikelAsync
     public async Task<bool> AddCategorieAanArtikelAsync(int artikelId, Categorie categorie)
     {
@@ -186,7 +184,7 @@ public class ArtikelenService
         return await _artikelenRepository.AddCategorieAanArtikelAsync(artikel, categorie);
     }
 
-    // Lesley
+    // A.900 Lesley
     // RemoveCategorieVanArtikelAsync
     public async Task<bool> RemoveCategorieVanArtikelAsync(int artikelId, Categorie categorie)
     {
@@ -203,11 +201,6 @@ public class ArtikelenService
 
         return await _artikelenRepository.RemoveCategorieVanArtikelAsync(artikel, categorie);
     }
-
-    //public async Task<bool> VerwijderCategorieVanArtikelAsync(int artikelId, int categorieId)
-    //{
-    //    return await _artikelenRepository.VerwijderCategorieVanArtikelAsync(artikelId, categorieId);
-    //}
 
 
 

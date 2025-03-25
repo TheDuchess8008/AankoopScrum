@@ -28,9 +28,5 @@ public interface IArtikelenRepository
     // A.800 lesley (oplossing probleem , geen artikelen na filteren op hoofdcategorie)
 
     Task<List<Artikel>> GetArtikelenMetFilteren(int? categorieId, string? actiefStatus);
-    //Task<List<int>> GetLijstCategorieIds(int hoofdCategorieId);
-
-
-    //Task<bool> VerwijderCategorieVanArtikelAsync(int artikelId, int categorieId);
     Task<bool> RemoveCategorieVanArtikelAsync(Artikel artikel, Categorie categorie);
 }

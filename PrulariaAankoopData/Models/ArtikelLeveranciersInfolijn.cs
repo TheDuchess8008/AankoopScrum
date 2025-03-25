@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace PrulariaAankoopData.Models;
 
 public class ArtikelLeveranciersInfolijn
 {
     public int ArtikelLeveranciersInfoLijnId { get; set; }
-
     public int ArtikelId { get; set; }
 
     public string Vraag { get; set; } = null!;

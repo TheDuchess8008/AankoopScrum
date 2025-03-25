@@ -43,10 +43,6 @@ namespace PrulariaAankoopUI.Controllers
             }
             var artikel = await _artikelenService.MaakDetailsArtikel((int)id);
             
-            
-
-
-
 
             try
             {
@@ -66,8 +62,6 @@ namespace PrulariaAankoopUI.Controllers
             {
                 return NotFound(ex.Message);
             }
-
-
 
             return View(artikel);
         }
@@ -183,11 +177,6 @@ namespace PrulariaAankoopUI.Controllers
             return View(artikelViewModel);
         }
 
-
-
-
-
-        //****************************************************************************************
 
 
         // GET: Artikelen/Delete/5
@@ -318,20 +307,20 @@ namespace PrulariaAankoopUI.Controllers
             }
         }
 
-        //--------------------------------------------------------------------------------------------
-        // NIEUW
 
         // Lesley
         // BevestigCategorieToevoegen
         [HttpGet]
         public async Task<IActionResult> BevestigCategorieToevoegen(int artikelId, int categorieId)
         {
+
+
             var artikel = await _context.Artikelen.FindAsync(artikelId);
             var categorie = await _context.Categorieen.FindAsync(categorieId);
 
             if (artikel == null || categorie == null) return NotFound();
 
-            var viewModel = new BevestigCategorieToevoegenViewModel
+            var viewModel = new ArtikelCategorieViewModel
             {
                 ArtikelId = artikelId,
                 ArtikelNaam = artikel.Naam,
@@ -345,7 +334,7 @@ namespace PrulariaAankoopUI.Controllers
         // Lesley
         // CategorieToevoegenAanArtikel
         [HttpPost]
-        public async Task<IActionResult> CategorieToevoegenAanArtikel(BevestigCategorieToevoegenViewModel model)
+        public async Task<IActionResult> CategorieToevoegenAanArtikel(ArtikelCategorieViewModel model)
         {
             // Error boodschap zegt wat er mist om de modelstate.IsValid te doen slagen
             if (!ModelState.IsValid)
@@ -373,7 +362,7 @@ namespace PrulariaAankoopUI.Controllers
 
             if (artikel == null || categorie == null) return NotFound();
 
-            var viewModel = new BevestigCategorieToevoegenViewModel
+            var viewModel = new ArtikelCategorieViewModel
             {
                 ArtikelId = artikelId,
                 ArtikelNaam = artikel.Naam,
@@ -387,7 +376,7 @@ namespace PrulariaAankoopUI.Controllers
         // Lesley
         // CategorieToevoegenAanArtikel
         [HttpPost]
-        public async Task<IActionResult> CategorieVerwijderenVanArtikel(BevestigCategorieToevoegenViewModel model)
+        public async Task<IActionResult> CategorieVerwijderenVanArtikel(ArtikelCategorieViewModel model)
         {
             // Error boodschap zegt wat er mist om de modelstate.IsValid te doen slagen
             if (!ModelState.IsValid)
@@ -406,17 +395,7 @@ namespace PrulariaAankoopUI.Controllers
         }
 
 
-        //// VerwijderCategorieVanArtikel 
-        //[HttpPost]
-        //public async Task<IActionResult> VerwijderCategorieVanArtikel(int artikelId, int categorieId)
-        //{
-        //    bool success = await _artikelenService.VerwijderCategorieVanArtikelAsync(artikelId, categorieId);
 
-        //    if (!success)
-        //        return BadRequest("Fout bij verwijderen van de categorie.");
-
-        //    return RedirectToAction("Details", new { id = artikelId });
-        //}
 
 
     }

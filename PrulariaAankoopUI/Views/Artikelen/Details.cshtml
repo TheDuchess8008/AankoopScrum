@@ -102,7 +102,6 @@
             @Html.DisplayFor(model => model.Artikel.Leverancier.Naam)
         </dd>
 
-
         <dt class="col-sm-3">
             Categorie Toevoegen:
         </dt>
@@ -128,35 +127,6 @@
         <dt class="col-sm-3">
             Categorie(ën)
         </dt>
-
-
-@*             <dd class="col-sm-9">
-            @{
-                 for (int i = 0; i < Model.Artikel.Categorieën.Count; i++)
-                {
-                    if (Model.Artikel.Categorieën[i].HoofdCategorieId == null || i == 0)
-                    {
-                        <div>
-                            @Model.Artikel.Categorieën[i].HoofdCategorie.Naam
-                            <br />
-                            --@Model.Artikel.Categorieën[i].Naam
-                            <br />
-                        </div>
-                    }
-                    else
-                    {
-                        <div>
-                            --@Model.Artikel.Categorieën[i].HoofdCategorie.Naam
-                            <br />
-                            ----@Model.Artikel.Categorieën[i].Naam
-                            <br />
-                        </div>
-                    }
-                }
-            }
-        </dd>   *@
-        
-
          <dd class="col-sm-9">
             @{
                 for (int i = 0; i < Model.Artikel.Categorieën.Count; i++)
@@ -177,17 +147,6 @@
                             <br />
                             <span>----@categorie.Naam</span>
                         }
-
-                        <!-- Verwijdericoon met link naar VerwijderCategorieVanArtikel -->
-                        @*<a asp-action="VerwijderCategorieVanArtikel" asp-route-artikelId="@Model.Artikel.ArtikelId" asp-route-categorieId="@categorie.CategorieId"
-                           class="text-danger" title="Categorie verwijderen">
-                            <button class="btn btn-icon btn-delete"><i class="bi bi-trash"></i></button>
-                            <i class="fa fa-trash"></i>
-                            
-                        </a>*@
-
-
-
                         <a asp-action="BevestigCategorieVerwijderen"
                            asp-route-artikelId="@Model.Artikel.ArtikelId"
                            asp-route-categorieId="@categorie.CategorieId"
@@ -196,21 +155,6 @@
                                 <i class="bi bi-trash"></i>
                             </button>
                         </a>
-
-
-                        <!-- Verwijdericoon met link naar VerwijderCategorieVanArtikel -->
-                        @*<a asp-action="BevestigCategorieVerwijderen" method="get" asp-items="ViewBag.CategorieId"
-                           class="text-danger" title="Categorie verwijderen">
-                            <button class="btn btn-icon btn-delete"><i class="bi bi-trash"></i></button>
-                            <i class="fa fa-trash"></i>
-
-                        </a>*@
-
-
-
-
-
-
                         <br />
                     </div>
                 }
@@ -232,3 +176,9 @@
     <a asp-action="Index" class="btn btn-terug">Terug</a>
 </div>
 
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
