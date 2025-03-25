@@ -141,6 +141,7 @@ namespace PrulariaAankoopUI.Controllers
                 try
                 {
                     await _actiecodesService.UpdateAsync(actiecode);
+                    ViewBag.bevestiging = "De actiecode is gewijzigd";
                 }
                 catch (Exception ex)
                 {
