@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using PrulariaAankoopData.Models;
 using PrulariaAankoopData.Repositories;
+using PrulariaAankoopUI.Models;
 
 namespace PrulariaAankoopUI.Controllers
 {
@@ -36,13 +37,24 @@ namespace PrulariaAankoopUI.Controllers
 
             var categorie = await _context.Categorieen
                 .Include(c => c.HoofdCategorie)
-                .FirstOrDefaultAsync(m => m.CategorieId == id);
+                .Include(c => c.Subcategorieën)
+                .Include(c => c.Artikelen)
+                .FirstOrDefaultAsync(c => c.CategorieId == id);
             if (categorie == null)
             {
                 return NotFound();
             }
+            var viewModel = new CategorieViewModel
+            {
+                CategorieId = categorie.CategorieId,
+                Naam = categorie.Naam,
+                HoofdCategorieId = categorie.HoofdCategorieId,
+                HoofdCategorie = categorie.HoofdCategorie,
+                Subcategorieën = categorie.Subcategorieën,
+                Artikelen = categorie.Artikelen
+            };
 
-            return View(categorie);
+            return View(viewModel);
         }
 
         // GET: Categorieen/Create
