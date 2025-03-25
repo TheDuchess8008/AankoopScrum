@@ -321,8 +321,8 @@ namespace PrulariaAankoopUI.Controllers
         //--------------------------------------------------------------------------------------------
         // NIEUW
 
-
-
+        // Lesley
+        // BevestigCategorieToevoegen
         [HttpGet]
         public async Task<IActionResult> BevestigCategorieToevoegen(int artikelId, int categorieId)
         {
@@ -342,7 +342,8 @@ namespace PrulariaAankoopUI.Controllers
             return View(viewModel);
         }
 
-
+        // Lesley
+        // CategorieToevoegenAanArtikel
         [HttpPost]
         public async Task<IActionResult> CategorieToevoegenAanArtikel(BevestigCategorieToevoegenViewModel model)
         {
@@ -362,7 +363,60 @@ namespace PrulariaAankoopUI.Controllers
             return RedirectToAction("Details", new { id = model.ArtikelId });
         }
 
+        // Lesley
+        // BevestigCategorieVerwijderen
+        [HttpGet]
+        public async Task<IActionResult> BevestigCategorieVerwijderen(int artikelId, int categorieId)
+        {
+            var artikel = await _context.Artikelen.FindAsync(artikelId);
+            var categorie = await _context.Categorieen.FindAsync(categorieId);
 
+            if (artikel == null || categorie == null) return NotFound();
+
+            var viewModel = new BevestigCategorieToevoegenViewModel
+            {
+                ArtikelId = artikelId,
+                ArtikelNaam = artikel.Naam,
+                CategorieId = categorieId,
+                CategorieNaam = categorie.Naam
+            };
+
+            return View(viewModel);
+        }
+
+        // Lesley
+        // CategorieToevoegenAanArtikel
+        [HttpPost]
+        public async Task<IActionResult> CategorieVerwijderenVanArtikel(BevestigCategorieToevoegenViewModel model)
+        {
+            // Error boodschap zegt wat er mist om de modelstate.IsValid te doen slagen
+            if (!ModelState.IsValid)
+            {
+                var errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage);
+                return BadRequest(string.Join(", ", errors));
+            }
+            var categorie = await _categorieenService.GetCategorieByIdAsync(model.CategorieId);
+
+            bool success = await _artikelenService.RemoveCategorieVanArtikelAsync(model.ArtikelId, categorie);
+
+            if (!success)
+                return BadRequest("Fout bij Verwijderen van de categorie.");
+
+            return RedirectToAction("Details", new { id = model.ArtikelId });
+        }
+
+
+        //// VerwijderCategorieVanArtikel 
+        //[HttpPost]
+        //public async Task<IActionResult> VerwijderCategorieVanArtikel(int artikelId, int categorieId)
+        //{
+        //    bool success = await _artikelenService.VerwijderCategorieVanArtikelAsync(artikelId, categorieId);
+
+        //    if (!success)
+        //        return BadRequest("Fout bij verwijderen van de categorie.");
+
+        //    return RedirectToAction("Details", new { id = artikelId });
+        //}
 
 
     }

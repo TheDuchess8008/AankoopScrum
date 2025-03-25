@@ -35,7 +35,7 @@ public class SQLCategorieenRepository : ICategorieenRepository
             .ToListAsync();
 
         return await _context.Categorieen
-            .Where(c => !gekoppeldeCategorieen.Contains(c.CategorieId))
+            .Where(c => !gekoppeldeCategorieen.Contains(c.CategorieId) && c.HoofdCategorieId != null)
             .ToListAsync();
     }
 

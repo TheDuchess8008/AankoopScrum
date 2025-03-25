@@ -101,12 +101,38 @@
         <dd class="col-sm-9">
             @Html.DisplayFor(model => model.Artikel.Leverancier.Naam)
         </dd>
+
+
+        <dt class="col-sm-3">
+            Categorie Toevoegen:
+        </dt>
+        <dd class="col-sm-9">
+            <form asp-action="BevestigCategorieToevoegen" method="get" class="form-inline">
+                <input type="hidden" name="artikelId" value="@Model.Artikel.ArtikelId" />
+                
+                
+                <div class="d-flex gap-2">
+                    <select asp-for="CategorieId" class="form-control me-2" asp-items="ViewBag.CategorieId">
+                        <option value="">-- Selecteer een categorie --</option>
+                    </select>
+                    <span asp-validation-for="CategorieId" class="text-danger"></span>
+                
+                <button type="submit" class="btn btn-primary huiskleur">Categorie Toevoegen aan Artikel</button>
+                </div>
+            </form>
+        </dd>
+
+        <dt class="col-sm-3"></dt>
+        <dd class="col-sm-9"></dd>
+
         <dt class="col-sm-3">
             Categorie(ën)
         </dt>
-@*          <dd class="col-sm-9">
+
+
+@*             <dd class="col-sm-9">
             @{
-                for (int i = 0; i < Model.Artikel.Categorieën.Count; i++)
+                 for (int i = 0; i < Model.Artikel.Categorieën.Count; i++)
                 {
                     if (Model.Artikel.Categorieën[i].HoofdCategorieId == null || i == 0)
                     {
@@ -128,28 +154,81 @@
                     }
                 }
             }
-        </dd>  *@
+        </dd>   *@
+        
+
+         <dd class="col-sm-9">
+            @{
+                for (int i = 0; i < Model.Artikel.Categorieën.Count; i++)
+                {
+                    var categorie = Model.Artikel.Categorieën[i];
+                    var hoofdCategorieNaam = categorie.HoofdCategorie?.Naam ?? "Geen Hoofdcategorie";
+
+                    <div>
+                        @if (categorie.HoofdCategorieId == null || i == 0)
+                        {
+                            <span>@hoofdCategorieNaam</span>
+                            <br />
+                            <span>--@categorie.Naam</span>
+                        }
+                        else
+                        {
+                            <span>--@hoofdCategorieNaam</span>
+                            <br />
+                            <span>----@categorie.Naam</span>
+                        }
+
+                        <!-- Verwijdericoon met link naar VerwijderCategorieVanArtikel -->
+                        @*<a asp-action="VerwijderCategorieVanArtikel" asp-route-artikelId="@Model.Artikel.ArtikelId" asp-route-categorieId="@categorie.CategorieId"
+                           class="text-danger" title="Categorie verwijderen">
+                            <button class="btn btn-icon btn-delete"><i class="bi bi-trash"></i></button>
+                            <i class="fa fa-trash"></i>
+                            
+                        </a>*@
+
+
+
+                        <a asp-action="BevestigCategorieVerwijderen"
+                           asp-route-artikelId="@Model.Artikel.ArtikelId"
+                           asp-route-categorieId="@categorie.CategorieId"
+                           class="text-danger" title="Categorie verwijderen">
+                            <button class="btn btn-icon btn-delete">
+                                <i class="bi bi-trash"></i>
+                            </button>
+                        </a>
+
+
+                        <!-- Verwijdericoon met link naar VerwijderCategorieVanArtikel -->
+                        @*<a asp-action="BevestigCategorieVerwijderen" method="get" asp-items="ViewBag.CategorieId"
+                           class="text-danger" title="Categorie verwijderen">
+                            <button class="btn btn-icon btn-delete"><i class="bi bi-trash"></i></button>
+                            <i class="fa fa-trash"></i>
+
+                        </a>*@
+
+
+
+
+
+
+                        <br />
+                    </div>
+                }
+            }
+        </dd>
+
+        <dt class="col-sm-3"></dt>
+        <dd class="col-sm-9"></dd>
+        <dt class="col-sm-3"></dt>
+        <dd class="col-sm-9"></dd>
+
     </dl>
 </div>
+
+
+
 <div>
     <a asp-action="Edit" asp-route-id="@Model.Artikel.ArtikelId" class="btn huiskleur">Wijzigen</a>
     <a asp-action="Index" class="btn btn-terug">Terug</a>
 </div>
-
-
-
-
-
-
-<form asp-action="BevestigCategorieToevoegen" method="get">
-    <input type="hidden" name="artikelId" value="@Model.Artikel.ArtikelId" />
-    <div class="form-group">
-        <label asp-for="CategorieId" class="control-label">Categorie toevoegen:</label>
-        <select asp-for="CategorieId" class="form-control" asp-items="ViewBag.CategorieId"><option value="">-- Selecteer een categorie --</option></select>
-        <span asp-validation-for="CategorieId" class="text-danger"></span>
-    </div>
-    <button type="submit" class="btn btn-primary huiskleur">Categorie Toevoegen aan Artikel</button>
-</form>
-
-
 

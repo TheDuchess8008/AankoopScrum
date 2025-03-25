@@ -160,13 +160,15 @@ public class ArtikelenService
     //-----------------------------------------------------------
     // NIEUW
 
-
+    // Lesley
+    // IsCategorieLinkedToArtikelAsync
     public async Task<bool> IsCategorieLinkedToArtikelAsync(int artikelId, int categorieId)
     {
         return await _artikelenRepository.IsCategorieLinkedToArtikelAsync(artikelId, categorieId);
     }
 
-
+    // Lesley
+    // AddCategorieAanArtikelAsync
     public async Task<bool> AddCategorieAanArtikelAsync(int artikelId, Categorie categorie)
     {
         var artikel = await _artikelenRepository.GetArtikelMetCategorieenAsync(artikelId);
@@ -183,6 +185,29 @@ public class ArtikelenService
 
         return await _artikelenRepository.AddCategorieAanArtikelAsync(artikel, categorie);
     }
+
+    // Lesley
+    // RemoveCategorieVanArtikelAsync
+    public async Task<bool> RemoveCategorieVanArtikelAsync(int artikelId, Categorie categorie)
+    {
+        var artikel = await _artikelenRepository.GetArtikelMetCategorieenAsync(artikelId);
+        if (artikel == null)
+            throw new ArgumentException("Artikel niet gevonden.");
+
+        if (categorie == null)
+            throw new ArgumentException("Categorie is ongeldig.");
+
+        var isLinked = await _artikelenRepository.IsCategorieLinkedToArtikelAsync(artikelId, categorie.CategorieId);
+        if (!isLinked)
+            throw new InvalidOperationException("Categorie is niet gekoppeld aan het artikel.");
+
+        return await _artikelenRepository.RemoveCategorieVanArtikelAsync(artikel, categorie);
+    }
+
+    //public async Task<bool> VerwijderCategorieVanArtikelAsync(int artikelId, int categorieId)
+    //{
+    //    return await _artikelenRepository.VerwijderCategorieVanArtikelAsync(artikelId, categorieId);
+    //}
 
 
 
