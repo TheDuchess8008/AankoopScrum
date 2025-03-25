@@ -16,7 +16,6 @@ public class CategorieenService
     }
     public async Task<List<Categorie>> IndexService()
     {
-        
         return (await _categorieenRepository.GetLijstCategorieen());
     }
 }
