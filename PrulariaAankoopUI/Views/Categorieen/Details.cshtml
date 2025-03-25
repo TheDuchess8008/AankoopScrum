@@ -1,4 +1,4 @@
-﻿@model PrulariaAankoopData.Models.Categorie
+﻿@model PrulariaAankoopUI.Models.CategorieViewModel
 
 @{
     ViewData["Title"] = "Details";
@@ -10,21 +10,41 @@
     <h4>Categorie</h4>
     <hr />
     <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Naam)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Naam)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.HoofdCategorie)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.HoofdCategorie.Naam)
-        </dd>
+        <dt class="col-sm-2">Naam</dt>
+        <dd class="col-sm-10">@Model.Naam</dd>
+
+        @if (Model.HoofdCategorie != null)
+        {
+            <dt class="col-sm-2">Hoofdcategorie</dt>
+            <dd class="col-sm-10">
+                <a asp-action="Details" asp-route-id="@Model.HoofdCategorie.CategorieId" class="btn huiskleur">
+                    @Model.HoofdCategorie.Naam
+                </a>
+            </dd>
+        }
     </dl>
+
+    <dt class="col-sm-2">
+        Subcategorieën
+    </dt>
+    <dd class="col-sm-10">
+        @if (Model.Subcategorieën != null && Model.Subcategorieën.Any())
+        {
+            @foreach (var sub in Model.Subcategorieën.OrderBy(s => s.Naam))
+            {
+                <a asp-action="Details" asp-route-id="@sub.CategorieId" class="btn huiskleur">
+                    @sub.Naam
+                </a>
+            }
+        }
+        else
+        {
+            <span>Geen subcategorieën</span>
+        }
+    </dd>
+
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model?.CategorieId" class="btn huiskleur">Edit</a> 
+    <a asp-action="Edit" asp-route-id="@Model?.CategorieId" class="btn huiskleur">Wijzigen</a> 
     <a asp-action="Index" class="btn btn-terug">Terug</a>
 </div>
