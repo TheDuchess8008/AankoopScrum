@@ -4,6 +4,13 @@
     ViewData["Title"] = "Categorieen";
 }
 
+<!-- Geef een succesbericht weer indien beschikbaar -->
+@if (TempData["Melding"] != null)
+{
+    <div class="alert alert-success">
+        @TempData["Melding"]
+    </div>
+}
 <h1>Categorieen</h1>
 
 <p>

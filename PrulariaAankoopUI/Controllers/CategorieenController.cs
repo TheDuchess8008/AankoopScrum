@@ -7,12 +7,14 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using PrulariaAankoopData.Models;
 using PrulariaAankoopData.Repositories;
+using PrulariaAankoopService.Services;
 
 namespace PrulariaAankoopUI.Controllers
 {
     public class CategorieenController : Controller
     {
         private readonly PrulariaComContext _context;
+        private readonly CategorieenService _categorieenService;
 
         public CategorieenController(PrulariaComContext context)
         {
@@ -102,8 +104,15 @@ namespace PrulariaAankoopUI.Controllers
             {
                 try
                 {
-                    _context.Update(categorie);
-                    await _context.SaveChangesAsync();
+                    var categorieNaamUpdate = await _context.Categorieen.FindAsync(id);
+                    if (categorieNaamUpdate != null)
+                    {
+                        categorieNaamUpdate.Naam = categorie.Naam; // Rename logic integrated here
+                        _context.Update(categorieNaamUpdate);      // Update the entity
+                        await _context.SaveChangesAsync();
+                        TempData["Melding"] = "De categorie is succesvol hernoemd!";
+                        return RedirectToAction(nameof(Index));
+                    }
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -116,8 +125,8 @@ namespace PrulariaAankoopUI.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
             }
+
             ViewData["HoofdCategorieId"] = new SelectList(_context.Categorieen, "CategorieId", "Naam", categorie.HoofdCategorieId);
             return View(categorie);
         }

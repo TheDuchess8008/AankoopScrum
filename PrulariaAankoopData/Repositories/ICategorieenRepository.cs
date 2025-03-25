@@ -7,4 +7,5 @@ using System.Threading.Tasks;
 namespace PrulariaAankoopData.Repositories;
 public interface ICategorieenRepository
 {
+    Task HernoemCategorieAsync(int categorieId, string nieuweNaam);
 }
