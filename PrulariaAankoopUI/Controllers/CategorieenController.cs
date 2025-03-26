@@ -7,23 +7,29 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using PrulariaAankoopData.Models;
 using PrulariaAankoopData.Repositories;
+using PrulariaAankoopService.Services;
+using PrulariaAankoopUI.Models;
 
 namespace PrulariaAankoopUI.Controllers
 {
     public class CategorieenController : Controller
     {
         private readonly PrulariaComContext _context;
+        private readonly CategorieenService _categorieenService;
 
-        public CategorieenController(PrulariaComContext context)
+        public CategorieenController(PrulariaComContext context, CategorieenService categorieenService)
         {
             _context = context;
+            _categorieenService = categorieenService;
         }
 
         // GET: Categorieen
         public async Task<IActionResult> Index()
         {
-            var prulariaComContext = _context.Categorieen.Include(c => c.HoofdCategorie);
-            return View(await prulariaComContext.ToListAsync());
+            var categorieViewModel = new CategorieViewModel();
+            var lijstCategorieen = await _categorieenService.IndexService();
+            categorieViewModel.Categorieen = lijstCategorieen;
+            return View(categorieViewModel);
         }
 
         // GET: Categorieen/Details/5
