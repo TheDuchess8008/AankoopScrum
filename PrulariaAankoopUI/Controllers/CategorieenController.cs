@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using PrulariaAankoopData.Models;
 using PrulariaAankoopData.Repositories;
+using PrulariaAankoopService.Services;
 using PrulariaAankoopUI.Models;
 
 namespace PrulariaAankoopUI.Controllers
@@ -14,10 +15,12 @@ namespace PrulariaAankoopUI.Controllers
     public class CategorieenController : Controller
     {
         private readonly PrulariaComContext _context;
+        private readonly CategorieenService _categorieenService;
 
-        public CategorieenController(PrulariaComContext context)
+        public CategorieenController(PrulariaComContext context, CategorieenService categorieënService)
         {
             _context = context;
+            _categorieenService = categorieënService;
         }
 
         // GET: Categorieen
@@ -28,33 +31,17 @@ namespace PrulariaAankoopUI.Controllers
         }
 
         // GET: Categorieen/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public async Task<IActionResult> Details(int? id, string? zoekterm)
         {
             if (id == null)
-            {
                 return NotFound();
-            }
 
-            var categorie = await _context.Categorieen
-                .Include(c => c.HoofdCategorie)
-                .Include(c => c.Subcategorieën)
-                .Include(c => c.Artikelen)
-                .FirstOrDefaultAsync(c => c.CategorieId == id);
-            if (categorie == null)
-            {
+            var model = await _categorieenService.GetCategorieViewModelByIdAsync(id.Value);
+
+            if (model == null)
                 return NotFound();
-            }
-            var viewModel = new CategorieViewModel
-            {
-                CategorieId = categorie.CategorieId,
-                Naam = categorie.Naam,
-                HoofdCategorieId = categorie.HoofdCategorieId,
-                HoofdCategorie = categorie.HoofdCategorie,
-                Subcategorieën = categorie.Subcategorieën,
-                Artikelen = categorie.Artikelen
-            };
 
-            return View(viewModel);
+            return View(model);
         }
 
         // GET: Categorieen/Create
