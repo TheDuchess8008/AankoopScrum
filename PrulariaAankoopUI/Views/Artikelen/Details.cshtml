@@ -145,22 +145,13 @@
                     @if (!hoofdCategorieBestaat)
                     {
                         <span>@hoofdCategorieNaam:</span>
-                        <ul style="margin: 0px 0">
-                            <li style="margin: 0px 0">
-                                @categorie.Naam <a asp-action="BevestigCategorieVerwijderen" asp-route-artikelId="@Model.Artikel.ArtikelId" asp-route-categorieId="@categorie.CategorieId"
-                                                   class="text-danger" title="Categorie verwijderen"><button class="btn btn-icon btn-delete"><i class="bi bi-trash"></i></button></a>
-                            </li>
-                        </ul>
                     }
-                    else
-                    {
-                        <ul style="margin: 0px 0">
-                            <li style="margin: 0px 0">
-                                @categorie.Naam <a asp-action="BevestigCategorieVerwijderen" asp-route-artikelId="@Model.Artikel.ArtikelId" asp-route-categorieId="@categorie.CategorieId"
-                                                   class="text-danger" title="Categorie verwijderen"><button class="btn btn-icon btn-delete"><i class="bi bi-trash"></i></button></a>
-                            </li>
-                        </ul>
-                    }
+                    <ul style="margin: 0px 0">
+                        <li style="margin: 0px 0">
+                            @categorie.Naam <a asp-action="BevestigCategorieVerwijderen" asp-route-artikelId="@Model.Artikel.ArtikelId" asp-route-categorieId="@categorie.CategorieId"
+                                               class="text-danger" title="Categorie verwijderen"><button class="btn btn-icon btn-delete"><i class="bi bi-trash"></i></button></a>
+                        </li>
+                    </ul>
                 }
             }
         </dd>
