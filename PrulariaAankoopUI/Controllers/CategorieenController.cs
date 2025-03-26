@@ -16,9 +16,10 @@ namespace PrulariaAankoopUI.Controllers
         private readonly PrulariaComContext _context;
         private readonly CategorieenService _categorieenService;
 
-        public CategorieenController(PrulariaComContext context)
+        public CategorieenController(PrulariaComContext context, CategorieenService categorieenService)
         {
             _context = context;
+            _categorieenService = categorieenService;
         }
 
         // GET: Categorieen
@@ -79,18 +80,18 @@ namespace PrulariaAankoopUI.Controllers
                 return NotFound();
             }
 
-            var categorie = await _context.Categorieen.FindAsync(id);
+            var categorie = await _categorieenService.GetCategorieByIdAsync(id.Value);
             if (categorie == null)
             {
-                return NotFound();
+                TempData["Melding"] = "Categorie niet gevonden.";
+                return RedirectToAction(nameof(Index));
             }
-            ViewData["HoofdCategorieId"] = new SelectList(_context.Categorieen, "CategorieId", "Naam", categorie.HoofdCategorieId);
+
+            ViewData["HoofdCategorieId"] = new SelectList(await _categorieenService.GetAllCategorieenAsync(), "CategorieId", "Naam", categorie.HoofdCategorieId);
             return View(categorie);
         }
 
         // POST: Categorieen/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("CategorieId,Naam,HoofdCategorieId")] Categorie categorie)
@@ -104,30 +105,21 @@ namespace PrulariaAankoopUI.Controllers
             {
                 try
                 {
-                    var categorieNaamUpdate = await _context.Categorieen.FindAsync(id);
-                    if (categorieNaamUpdate != null)
+                    var bestaandeCategorie = await _categorieenService.GetCategorieByIdAsync(id);
+                    if (bestaandeCategorie != null)
                     {
-                        categorieNaamUpdate.Naam = categorie.Naam; // Rename logic integrated here
-                        _context.Update(categorieNaamUpdate);      // Update the entity
-                        await _context.SaveChangesAsync();
+                        await _categorieenService.HernoemCategorieAsync(id, categorie.Naam);
                         TempData["Melding"] = "De categorie is succesvol hernoemd!";
                         return RedirectToAction(nameof(Index));
                     }
                 }
-                catch (DbUpdateConcurrencyException)
+                catch
                 {
-                    if (!CategorieExists(categorie.CategorieId))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
+                    return BadRequest("Er is iets fout gegaan.");
                 }
             }
 
-            ViewData["HoofdCategorieId"] = new SelectList(_context.Categorieen, "CategorieId", "Naam", categorie.HoofdCategorieId);
+            ViewData["HoofdCategorieId"] = new SelectList(await _categorieenService.GetAllCategorieenAsync(), "CategorieId", "Naam", categorie.HoofdCategorieId);
             return View(categorie);
         }
 

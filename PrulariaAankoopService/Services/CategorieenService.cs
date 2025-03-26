@@ -1,20 +1,35 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using PrulariaAankoopData.Models;
 using PrulariaAankoopData.Repositories;
 
-namespace PrulariaAankoopService.Services;
-public class CategorieenService
+namespace PrulariaAankoopService.Services
 {
-    private readonly ICategorieenRepository _categorieenRepository;
-    public CategorieenService(ICategorieenRepository categorieenRepository)
+    public class CategorieenService
     {
-        _categorieenRepository = categorieenRepository;
-    }
-    public async Task HernoemCategorieAsync(int categorieId, string nieuweNaam)
-    {
-        await _categorieenRepository.HernoemCategorieAsync(categorieId, nieuweNaam);
+        private readonly ICategorieenRepository _categorieenRepository;
+
+        public CategorieenService(ICategorieenRepository categorieenRepository)
+        {
+            _categorieenRepository = categorieenRepository;
+        }
+
+        // Get a category by its ID
+        public async Task<Categorie?> GetCategorieByIdAsync(int id)
+        {
+            return await _categorieenRepository.GetCategorieByIdAsync(id);
+        }
+
+        // Get all categories
+        public async Task<IEnumerable<Categorie>> GetAllCategorieenAsync()
+        {
+            return await _categorieenRepository.GetAllCategorieenAsync();
+        }
+
+        // Rename a category by its ID
+        public async Task HernoemCategorieAsync(int categorieId, string nieuweNaam)
+        {
+            await _categorieenRepository.HernoemCategorieAsync(categorieId, nieuweNaam);
+        }
     }
 }
