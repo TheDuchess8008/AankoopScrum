@@ -27,38 +27,48 @@ namespace PrulariaAankoopUI.Controllers
         // GET: Artikelen
         public async Task<IActionResult> Index(ArtikelViewModel form)
         {
-            return View(await _artikelenService.MaakGefilterdeLijstArtikelen(form));
+            if (HttpContext.Session.GetString("Ingelogd") != null)
+                return View(await _artikelenService.MaakGefilterdeLijstArtikelen(form));
+            return RedirectToAction("Index", "Home");
         }
 
         // GET: Artikelen/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null)
+            if (HttpContext.Session.GetString("Ingelogd") != null)
             {
-                return NotFound();
-            }
-            var artikel = await _artikelenService.MaakDetailsArtikel((int)id);
-            try
-            {
-
-                if (artikel == null)
+                if (id == null)
                 {
                     return NotFound();
                 }
-            }
-            catch (Exception ex)
-            {
-                return NotFound(ex.Message);
-            }
+                var artikel = await _artikelenService.MaakDetailsArtikel((int)id);
+                try
+                {
 
-            return View(artikel);
+                    if (artikel == null)
+                    {
+                        return NotFound();
+                    }
+                }
+                catch (Exception ex)
+                {
+                    return NotFound(ex.Message);
+                }
+
+                return View(artikel);
+            }
+            return RedirectToAction("Index", "Home");
         }
 
         // GET: Artikelen/Create
         public IActionResult Create()
         {
-            ViewData["LeveranciersId"] = new SelectList(_context.Leveranciers, "LeveranciersId", "Naam");
-            return View();
+            if (HttpContext.Session.GetString("Ingelogd") != null)
+            {
+                ViewData["LeveranciersId"] = new SelectList(_context.Leveranciers, "LeveranciersId", "Naam");
+                return View();
+            }
+            return RedirectToAction("Index", "Home");
         }
 
         // POST: Artikelen/Create
@@ -85,19 +95,23 @@ namespace PrulariaAankoopUI.Controllers
         // GET: Artikelen/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null)
+            if (HttpContext.Session.GetString("Ingelogd") != null)
             {
-                return NotFound();
+                if (id == null)
+                {
+                    return NotFound();
+                }
+                var artikel = await _artikelenService.GetArtikelById(id.Value);
+                var artikelViewModel = new ArtikelViewModel();
+                artikelViewModel.Artikel = artikel;
+                if (artikel == null)
+                {
+                    return NotFound();
+                }
+                ViewData["LeveranciersId"] = new SelectList(_context.Leveranciers, "LeveranciersId", "Naam", artikelViewModel.Artikel.LeveranciersId);
+                return View(artikelViewModel);
             }
-            var artikel = await _artikelenService.GetArtikelById(id.Value);
-            var artikelViewModel = new ArtikelViewModel();
-            artikelViewModel.Artikel = artikel;
-            if (artikel == null)
-            {
-                return NotFound();
-            }
-            ViewData["LeveranciersId"] = new SelectList(_context.Leveranciers, "LeveranciersId", "Naam", artikelViewModel.Artikel.LeveranciersId);
-            return View(artikelViewModel);
+            return RedirectToAction("Index", "Home");
         }
 
         // POST: Artikelen/Edit/5
@@ -122,20 +136,24 @@ namespace PrulariaAankoopUI.Controllers
         // GET: Artikelen/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null)
+            if (HttpContext.Session.GetString("Ingelogd") != null)
             {
-                return NotFound();
-            }
+                if (id == null)
+                {
+                    return NotFound();
+                }
 
-            var artikel = await _context.Artikelen
-                .Include(a => a.Leverancier)
-                .FirstOrDefaultAsync(m => m.ArtikelId == id);
-            if (artikel == null)
-            {
-                return NotFound();
-            }
+                var artikel = await _context.Artikelen
+                    .Include(a => a.Leverancier)
+                    .FirstOrDefaultAsync(m => m.ArtikelId == id);
+                if (artikel == null)
+                {
+                    return NotFound();
+                }
 
-            return View(artikel);
+                return View(artikel);
+            }
+            return RedirectToAction("Index", "Home");
         }
 
         // POST: Artikelen/Delete/5

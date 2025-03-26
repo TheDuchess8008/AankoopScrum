@@ -22,34 +22,46 @@ namespace PrulariaAankoopUI.Controllers
         // GET: Categorieen
         public async Task<IActionResult> Index()
         {
-            var prulariaComContext = _context.Categorieen.Include(c => c.HoofdCategorie);
-            return View(await prulariaComContext.ToListAsync());
+            if (HttpContext.Session.GetString("Ingelogd") != null)
+            {
+                var prulariaComContext = _context.Categorieen.Include(c => c.HoofdCategorie);
+                return View(await prulariaComContext.ToListAsync());
+            }
+            return RedirectToAction("Index", "Home");
         }
 
         // GET: Categorieen/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null)
+            if (HttpContext.Session.GetString("Ingelogd") != null)
             {
-                return NotFound();
-            }
+                if (id == null)
+                {
+                    return NotFound();
+                }
 
-            var categorie = await _context.Categorieen
-                .Include(c => c.HoofdCategorie)
-                .FirstOrDefaultAsync(m => m.CategorieId == id);
-            if (categorie == null)
-            {
-                return NotFound();
-            }
+                var categorie = await _context.Categorieen
+                    .Include(c => c.HoofdCategorie)
+                    .FirstOrDefaultAsync(m => m.CategorieId == id);
+                if (categorie == null)
+                {
+                    return NotFound();
+                }
 
-            return View(categorie);
+                return View(categorie);
+            }
+            return RedirectToAction("Index", "Home");
         }
 
         // GET: Categorieen/Create
         public IActionResult Create()
         {
-            ViewData["HoofdCategorieId"] = new SelectList(_context.Categorieen, "CategorieId", "Naam");
-            return View();
+            if (HttpContext.Session.GetString("Ingelogd") != null)
+            {
+                ViewData["HoofdCategorieId"] = new SelectList(_context.Categorieen, "CategorieId", "Naam");
+                return View();
+            }
+            return RedirectToAction("Index", "Home");
         }
 
         // POST: Categorieen/Create
@@ -72,18 +84,22 @@ namespace PrulariaAankoopUI.Controllers
         // GET: Categorieen/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null)
+            if (HttpContext.Session.GetString("Ingelogd") != null)
             {
-                return NotFound();
-            }
+                if (id == null)
+                {
+                    return NotFound();
+                }
 
-            var categorie = await _context.Categorieen.FindAsync(id);
-            if (categorie == null)
-            {
-                return NotFound();
+                var categorie = await _context.Categorieen.FindAsync(id);
+                if (categorie == null)
+                {
+                    return NotFound();
+                }
+                ViewData["HoofdCategorieId"] = new SelectList(_context.Categorieen, "CategorieId", "Naam", categorie.HoofdCategorieId);
+                return View(categorie);
             }
-            ViewData["HoofdCategorieId"] = new SelectList(_context.Categorieen, "CategorieId", "Naam", categorie.HoofdCategorieId);
-            return View(categorie);
+            return RedirectToAction("Index", "Home");
         }
 
         // POST: Categorieen/Edit/5
@@ -125,20 +141,24 @@ namespace PrulariaAankoopUI.Controllers
         // GET: Categorieen/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null)
+            if (HttpContext.Session.GetString("Ingelogd") != null)
             {
-                return NotFound();
-            }
+                if (id == null)
+                {
+                    return NotFound();
+                }
 
-            var categorie = await _context.Categorieen
-                .Include(c => c.HoofdCategorie)
-                .FirstOrDefaultAsync(m => m.CategorieId == id);
-            if (categorie == null)
-            {
-                return NotFound();
-            }
+                var categorie = await _context.Categorieen
+                    .Include(c => c.HoofdCategorie)
+                    .FirstOrDefaultAsync(m => m.CategorieId == id);
+                if (categorie == null)
+                {
+                    return NotFound();
+                }
 
-            return View(categorie);
+                return View(categorie);
+            }
+            return RedirectToAction("Index", "Home");
         }
 
         // POST: Categorieen/Delete/5

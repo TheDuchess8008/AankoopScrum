@@ -25,21 +25,25 @@ namespace PrulariaAankoopUI.Controllers
 
         public async Task<IActionResult> Index()
         {
-            try
+            if(HttpContext.Session.GetString("Ingelogd") != null)
             {
-                var actiecodes = await _actiecodesService.ToListAsync();
-                return View(actiecodes);
-            }
+                try
+                {
+                    var actiecodes = await _actiecodesService.ToListAsync();
+                    return View(actiecodes);
+                }
 
-            catch (DbUpdateConcurrencyException ex)
-            {
-                return NotFound();
+                catch (DbUpdateConcurrencyException ex)
+                {
+                    return NotFound();
 
+                }
+                catch (Exception ex)
+                {
+                    throw;
+                }
             }
-            catch (Exception ex)
-            {
-                throw;
-            }
+            return RedirectToAction("Index", "Home");
         }
 
         // NIEUWE CODE ------------------------------------------------------------------------
@@ -49,26 +53,32 @@ namespace PrulariaAankoopUI.Controllers
         // GET: Actiecodes/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null)
+            if (HttpContext.Session.GetString("Ingelogd") != null)
             {
-                return NotFound();
-            }
+                if (id == null)
+                {
+                    return NotFound();
+                }
 
-            var actiecode = await _actiecodesService
-                .FirstOrDefaultAsync(m => m.ActiecodeId == id);
-            if (actiecode == null)
-            {
-                return NotFound();
-            }
+                var actiecode = await _actiecodesService
+                    .FirstOrDefaultAsync(m => m.ActiecodeId == id);
+                if (actiecode == null)
+                {
+                    return NotFound();
+                }
 
-            return View(actiecode);
+                return View(actiecode);
+            }
+            return RedirectToAction("Index", "Home");
         }
 
 
         // GET: Actiecodes/Create
         public IActionResult Create()
         {
-            return View();
+            if (HttpContext.Session.GetString("Ingelogd") != null)
+                return View();
+            return RedirectToAction("Index", "Home");
         }
 
         // POST: Actiecodes/Create
@@ -103,21 +113,25 @@ namespace PrulariaAankoopUI.Controllers
         // GET: Actiecodes/Edit/5
         public async Task<IActionResult> Edit(int id)
         {
-            var actiecode = await _context.Actiecodes.FirstOrDefaultAsync(a => a.ActiecodeId == id);
-            if (actiecode == null)
+            if (HttpContext.Session.GetString("Ingelogd") != null)
             {
-                return NotFound();
-            }
+                var actiecode = await _context.Actiecodes.FirstOrDefaultAsync(a => a.ActiecodeId == id);
+                if (actiecode == null)
+                {
+                    return NotFound();
+                }
 
-            var model = new ActiecodeWijzigenViewModel
-            {
-                Id = actiecode.ActiecodeId,
-                Naam = actiecode.Naam,
-                GeldigVanDatum = actiecode.GeldigVanDatum,
-                GeldigTotDatum = actiecode.GeldigTotDatum,
-                IsEenmalig = actiecode.IsEenmalig
-            };
-            return View(model);
+                var model = new ActiecodeWijzigenViewModel
+                {
+                    Id = actiecode.ActiecodeId,
+                    Naam = actiecode.Naam,
+                    GeldigVanDatum = actiecode.GeldigVanDatum,
+                    GeldigTotDatum = actiecode.GeldigTotDatum,
+                    IsEenmalig = actiecode.IsEenmalig
+                };
+                return View(model);
+            }
+            return RedirectToAction("Index", "Home");
         }
                 
         [HttpPost]
@@ -157,19 +171,23 @@ namespace PrulariaAankoopUI.Controllers
         // GET: Actiecodes/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null)
+            if (HttpContext.Session.GetString("Ingelogd") != null)
             {
-                return NotFound();
-            }
+                if (id == null)
+                {
+                    return NotFound();
+                }
 
-            var actiecode = await _actiecodesService
-                .FirstOrDefaultAsync(m => m.ActiecodeId == id);
-            if (actiecode == null)
-            {
-                return NotFound();
-            }
+                var actiecode = await _actiecodesService
+                    .FirstOrDefaultAsync(m => m.ActiecodeId == id);
+                if (actiecode == null)
+                {
+                    return NotFound();
+                }
 
-            return View(actiecode);
+                return View(actiecode);
+            }
+            return RedirectToAction("Index", "Home");
         }
 
         // POST: Actiecodes/Delete/5

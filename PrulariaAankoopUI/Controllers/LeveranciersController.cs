@@ -22,34 +22,46 @@ namespace PrulariaAankoopUI.Controllers
         // GET: Leveranciers
         public async Task<IActionResult> Index()
         {
-            var prulariaComContext = _context.Leveranciers.Include(l => l.Plaats);
-            return View(await prulariaComContext.ToListAsync());
+            if (HttpContext.Session.GetString("Ingelogd") != null)
+            {
+                var prulariaComContext = _context.Leveranciers.Include(l => l.Plaats);
+                return View(await prulariaComContext.ToListAsync());
+            }
+            return RedirectToAction("Index", "Home");
         }
 
         // GET: Leveranciers/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null)
+            if (HttpContext.Session.GetString("Ingelogd") != null)
             {
-                return NotFound();
-            }
+                if (id == null)
+                {
+                    return NotFound();
+                }
 
-            var leverancier = await _context.Leveranciers
-                .Include(l => l.Plaats)
-                .FirstOrDefaultAsync(m => m.LeveranciersId == id);
-            if (leverancier == null)
-            {
-                return NotFound();
-            }
+                var leverancier = await _context.Leveranciers
+                    .Include(l => l.Plaats)
+                    .FirstOrDefaultAsync(m => m.LeveranciersId == id);
+                if (leverancier == null)
+                {
+                    return NotFound();
+                }
 
-            return View(leverancier);
+                return View(leverancier);
+            }
+            return RedirectToAction("Index", "Home");
         }
 
         // GET: Leveranciers/Create
         public IActionResult Create()
         {
-            ViewData["PlaatsId"] = new SelectList(_context.Plaatsen, "PlaatsId", "Naam");
-            return View();
+            if (HttpContext.Session.GetString("Ingelogd") != null)
+            {
+                ViewData["PlaatsId"] = new SelectList(_context.Plaatsen, "PlaatsId", "Naam");
+                return View();
+            }
+            return RedirectToAction("Index", "Home");
         }
 
         // POST: Leveranciers/Create
@@ -72,18 +84,22 @@ namespace PrulariaAankoopUI.Controllers
         // GET: Leveranciers/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null)
+            if (HttpContext.Session.GetString("Ingelogd") != null)
             {
-                return NotFound();
-            }
+                if (id == null)
+                {
+                    return NotFound();
+                }
 
-            var leverancier = await _context.Leveranciers.FindAsync(id);
-            if (leverancier == null)
-            {
-                return NotFound();
+                var leverancier = await _context.Leveranciers.FindAsync(id);
+                if (leverancier == null)
+                {
+                    return NotFound();
+                }
+                ViewData["PlaatsId"] = new SelectList(_context.Plaatsen, "PlaatsId", "Naam", leverancier.PlaatsId);
+                return View(leverancier);
             }
-            ViewData["PlaatsId"] = new SelectList(_context.Plaatsen, "PlaatsId", "Naam", leverancier.PlaatsId);
-            return View(leverancier);
+            return RedirectToAction("Index", "Home");
         }
 
         // POST: Leveranciers/Edit/5
@@ -125,20 +141,24 @@ namespace PrulariaAankoopUI.Controllers
         // GET: Leveranciers/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null)
+            if (HttpContext.Session.GetString("Ingelogd") != null)
             {
-                return NotFound();
-            }
+                if (id == null)
+                {
+                    return NotFound();
+                }
 
-            var leverancier = await _context.Leveranciers
-                .Include(l => l.Plaats)
-                .FirstOrDefaultAsync(m => m.LeveranciersId == id);
-            if (leverancier == null)
-            {
-                return NotFound();
-            }
+                var leverancier = await _context.Leveranciers
+                    .Include(l => l.Plaats)
+                    .FirstOrDefaultAsync(m => m.LeveranciersId == id);
+                if (leverancier == null)
+                {
+                    return NotFound();
+                }
 
-            return View(leverancier);
+                return View(leverancier);
+            }
+            return RedirectToAction("Index", "Home");
         }
 
         // POST: Leveranciers/Delete/5

@@ -1,0 +1,9 @@
+﻿@{
+    ViewData["Title"] = "Default";
+}
+
+@if (ViewBag.Naam is not null)
+{
+    <p class="text-white">Welkom @ViewBag.Naam!</p>
+    <a class="btn huiskleur text-white" asp-controller = "Home" asp-action="Uitloggen">Uitloggen</a>
+}

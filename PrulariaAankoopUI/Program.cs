@@ -24,6 +24,7 @@ builder.Services.AddTransient<LeveranciersService>();
 builder.Services.AddTransient<ILeveranciersRepository, SQLLeveranciersRepository>();
 builder.Services.AddTransient<SecurityService>();
 builder.Services.AddTransient<ISecurityRepository, SQLSecurityRepository>();
+builder.Services.AddSession();
 
 builder.Services.Configure<RequestLocalizationOptions>(options =>
 {
@@ -59,6 +60,8 @@ app.UseRouting();
 app.UseAuthorization();
 
 app.UseRequestLocalization();
+
+app.UseSession();
 
 app.MapStaticAssets();
 

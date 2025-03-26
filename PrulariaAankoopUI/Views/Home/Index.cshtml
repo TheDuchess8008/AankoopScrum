@@ -1,7 +1,40 @@
-﻿@{
+﻿@model InlogViewModel
+@{
     ViewData["Title"] = "Home Page";
 }
 
 <div class="text-center">
     <h1 class="display-4">Welkom bij de aankoop pagina</h1>
 </div>
+
+@if(ViewBag.Ingelogd == false)
+{
+    <div class="text-center">
+        <h3>Gelieve u in te loggen.</h3>
+    </div>
+
+    <form asp-action="CheckInloggegevens">
+        <div class="row">
+            <div class="col-md-6">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="mb-3">
+                    <label>E-mailadres</label>
+                    <input asp-for="Email" />
+                    <span asp-validation-for="Email" class="text-danger"></span>
+                </div>
+                <div class="mb-3">
+                    <label>Wachtwoord</label>
+                    <input asp-for="Wachtwoord" />
+                    <span asp-validation-for="Wachtwoord" class="text-danger"></span>
+                </div>
+                <div class="d-flex gap-2 mt-3">
+                    <input type="submit" value="Inloggen" class="btn huiskleur" />
+                </div>
+            </div>
+        </div>
+    </form>
+}
+else
+{
+    <h4>Welkom @ViewBag.Naam!</h4>
+}
