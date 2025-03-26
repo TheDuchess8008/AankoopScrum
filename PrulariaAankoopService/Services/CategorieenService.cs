@@ -1,4 +1,5 @@
 ﻿using PrulariaAankoopData.Models;
+using PrulariaAankoopData.Models;
 using PrulariaAankoopData.Repositories;
 using System;
 using System.Collections.Generic;
@@ -18,4 +19,20 @@ public class CategorieenService
     {
         return (await _categorieenRepository.GetLijstCategorieen());
     }
+    
+    public async Task<List<Categorie>> GetAlleCategorieenAsync()
+    {
+        return await _categorieenRepository.GetAlleCategorieenAsync();
+    }
+
+    public async Task<Categorie> GetCategorieByIdAsync(int id)
+    {
+        return await _categorieenRepository.GetCategorieByIdAsync(id);
+    }
+
+    public async Task<List<Categorie>> GetOverigeCategorieenAsync(int artikelId)
+    {
+        return await _categorieenRepository.GetOverigeCategorieenAsync(artikelId);
+    }
+
 }
