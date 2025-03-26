@@ -76,10 +76,7 @@ namespace PrulariaAankoopUI.Controllers
                 var selectedPlaats = await _context.Plaatsen
                     .FirstOrDefaultAsync(p => p.PlaatsId == model.PlaatsId);
 
-                if (selectedPlaats == null || selectedPlaats.Postcode != model.SelectedPostcode)
-                {
-                    ModelState.AddModelError("PlaatsId", "De geselecteerde plaats komt niet overeen met de gekozen postcode.");
-                }
+             
 
                 if (ModelState.IsValid)
                 {
