@@ -4,7 +4,7 @@
 @{
     ViewData["Title"] = "Edit";
 }
-<h1 class="mb-3">Wijzig de Leverancier</h1>
+<h1 class="mb-3">Wijzig de leverancier</h1>
 
 <hr />
 <div class="row">
@@ -50,7 +50,7 @@
             </div>*@
 
             <div class="mb-3">
-                <label asp-for="PlaatsId" class="control-label"></label>
+                <label asp-for="PlaatsId" class="control-label">Plaats</label>
                 <select asp-for="PlaatsId" class="form-control" asp-items="ViewBag.PlaatsId"></select>
                 <span asp-validation-for="PlaatsId" class="text-danger"></span>
             </div>

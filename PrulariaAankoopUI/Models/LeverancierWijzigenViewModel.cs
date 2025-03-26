@@ -19,7 +19,7 @@ namespace PrulariaAankoopUI.Models
         public string Straat { get; set; } = null!;
 
         [Required(ErrorMessage = "Het huisnummer is verplicht.")]
-        [Display(Name = "Huisnr")]
+        [Display(Name = "Huisnummer")]
         public string HuisNummer { get; set; } = null!;
 
         public string? Bus { get; set; }
