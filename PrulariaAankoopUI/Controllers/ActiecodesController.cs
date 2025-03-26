@@ -116,11 +116,13 @@ namespace PrulariaAankoopUI.Controllers
                 Naam = actiecode.Naam,
                 GeldigVanDatum = actiecode.GeldigVanDatum,
                 GeldigTotDatum = actiecode.GeldigTotDatum,
-                IsEenmalig = actiecode.IsEenmalig
+                IsEenmalig = actiecode.IsEenmalig,
+                IsEdit = true,
+                OrigineleBegindatum = actiecode.GeldigVanDatum
             };
             return View(model);
         }
- 
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(ActiecodeWijzigenViewModel model)
@@ -141,14 +143,14 @@ namespace PrulariaAankoopUI.Controllers
                 try
                 {
                     await _actiecodesService.UpdateAsync(actiecode);
-                    ViewBag.bevestiging = "De actiecode is gewijzigd";
                 }
                 catch (Exception ex)
                 {
                     ModelState.AddModelError("", "Er is een fout opgetreden tijdens het verwerken van uw aanvraag. Probeer het later nog eens.");
                     return View(model);
                 }
-                return RedirectToAction(nameof(Index));
+                ViewBag.bevestiging = "De actiecode \"" + model.Naam + "\" is gewijzigd";
+                return View(model);
             }
 
             // Als de validatie mislukt:

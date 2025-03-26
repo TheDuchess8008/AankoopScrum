@@ -16,15 +16,21 @@ public class ActiecodeWijzigenViewModel
 
     [Required(ErrorMessage = "De begindatum is verplicht.")]
     [Display(Name = "Geldig vanaf")]
-    [CustomValidation(typeof(VanTotDateValidatie), nameof(VanTotDateValidatie.ValidateGeldigVanDatum))]
+    [BegindatumValidatie(nameof(IsEdit), nameof(OrigineleBegindatum))]
     [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
     public DateTime GeldigVanDatum { get; set; }
 
     [Required(ErrorMessage = "De einddatum is verplicht.")]
     [Display(Name = "Geldig tot")]
-    [CustomValidation(typeof(VanTotDateValidatie), nameof(VanTotDateValidatie.ValidateGeldigTotDatum))]
+    [EinddatumValidatie("GeldigVanDatum")]
     [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
+    [DataType(DataType.Date)]
     public DateTime GeldigTotDatum { get; set; }
 
     public bool IsEenmalig { get; set; }
+
+
+    public bool IsEdit { get; set; } // Wordt gebruikt om validatie te sturen bij edit
+
+    public DateTime OrigineleBegindatum { get; set; } // Originele begindatum om validatie correct te laten werken
 }

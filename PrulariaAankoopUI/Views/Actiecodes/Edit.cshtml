@@ -11,25 +11,29 @@
     <div class="row justify-content-center">
         <div class="col-md-6">
             <form asp-action="Edit">
+                <input asp-for="IsEdit" hidden />
+                <input asp-for="OrigineleBegindatum" hidden />
                 <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
                 <input type="hidden" asp-for="Id" />
 
                 <div class="form-group">
                     <label asp-for="Naam" class="form-label fw-bold">Naam: (niet wijzigen)</label>
-                    <input asp-for="Naam" class="form-control inputveldenhuiskleur" readonly style="color: #8a8787" />
+                    <input asp-for="Naam" class="form-control inputveldenhuiskleur"
+                           readonly style="color: #8a8787" />
                     <span asp-validation-for="Naam" class="text-danger"></span>
                 </div>
                 <br />
-                @if (@Model.GeldigVanDatum < DateTime.Today)
+                @if (@Model.OrigineleBegindatum < DateTime.Today)
                 {
                     <div class="form-group">
                         <label asp-for="GeldigVanDatum" class="form-label fw-bold">Geldig Van (niet wijzigen)</label>
                         <input asp-for="GeldigVanDatum" class="form-control inputveldenhuiskleur"
-                               style="color: #8a8787"
-                            type="date" value="@Model.GeldigVanDatum.ToString("yyyy-MM-dd")" readonly/>
+                               style="color: #8a8787" type="date"
+                               value="@Model.GeldigVanDatum.ToString("yyyy-MM-dd")" readonly />
                     </div>
                 }
-                else {
+                else
+                {
                     <div class="form-group">
                         <label asp-for="GeldigVanDatum" class="form-label fw-bold">Geldig Van</label>
                         <input asp-for="GeldigVanDatum" class="form-control inputveldenhuiskleur"
@@ -40,8 +44,8 @@
                 <br />
                 <div class="form-group">
                     <label asp-for="GeldigTotDatum" class="form-label fw-bold">Geldig Tot</label>
-                    <input asp-for="GeldigTotDatum" class="form-control inputveldenhuiskleur" 
-                        type="date" value="@Model.GeldigTotDatum.ToString("yyyy-MM-dd")" />
+                    <input asp-for="GeldigTotDatum" class="form-control inputveldenhuiskleur"
+                           type="date" value="@Model.GeldigTotDatum.ToString("yyyy-MM-dd")" />
                     <span asp-validation-for="GeldigTotDatum" class="text-danger"></span>
                 </div>
                 <br />
@@ -51,12 +55,13 @@
                 </div>
                 <br />
                 <p style="color: darkgreen">@ViewBag.bevestiging</p>
+                
                 <div class="d-flex gap-2">
                     <button type="submit" class="btn btn-primary huiskleur">Opslaan</button>
                     <a asp-action="Index" class="btn btn-secondary huiskleur">Terug</a>
                 </div>
             </form>
-
+           
         </div>
     </div>
 </div>
@@ -66,4 +71,3 @@
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
 }
-
