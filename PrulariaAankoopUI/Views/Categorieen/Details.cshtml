@@ -1,4 +1,4 @@
-﻿@model PrulariaAankoopUI.Models.CategorieViewModel
+﻿@model PrulariaAankoopData.Models.CategorieViewModel
 
 @{
     ViewData["Title"] = "Details";
@@ -23,15 +23,14 @@
             </dd>
         }
     </dl>
+
     <dl>
-        <dt class="col-sm-2">
-            Subcategorieën
-        </dt>
+        <dt class="col-sm-2">Subcategorieën</dt>
         <dd class="col-sm-10">
             @if (Model.Subcategorieën != null && Model.Subcategorieën.Any())
             {
                 @foreach (var sub in Model.Subcategorieën.OrderBy(s => s.Naam))
-                {   
+                {
                     <a asp-action="Details" asp-route-id="@sub.CategorieId" class="btn huiskleur">
                         @sub.Naam
                     </a>
@@ -43,12 +42,32 @@
             }
         </dd>
     </dl>
-    
 </div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model?.CategorieId" class="btn huiskleur">Bewerken</a> 
+
+<div class="mb-4">
+    <a asp-action="Edit" asp-route-id="@Model?.CategorieId" class="btn huiskleur">Bewerken</a><br />
     <a asp-action="Index" class="btn btn-terug">Terug naar categorieën</a>
 </div>
-<div>@await Component.InvokeAsync("ArtikelsPerSubcategorie", new { categorieId = Model.CategorieId })</div>
+
+<!-- Form om te zoeken op Artikel naam -->
+<div class="zoek-artikels mt-4 mb-3">
+    <h4>Zoek Artikelen binnen deze categorie</h4>
+    <form method="get" asp-action="Details" asp-controller="Categorieen">
+        <input type="hidden" name="id" value="@Model.CategorieId" />
+        <div class="input-group mb-3">
+            <input type="text" name="zoekterm" class="form-control" placeholder="Zoek artikel op naam..." value="@(Context.Request.Query["zoekterm"].FirstOrDefault() ?? "")" />
+            <button class="btn huiskleur" type="submit">Zoeken</button>
+        </div>
+    </form>
+</div>
+
+<!--ViewComponent wordt opgeroepen -->
+@await Component.InvokeAsync("ArtikelsPerSubcategorie", new
+    {
+        categorieId = Model.CategorieId,
+        zoekterm = Context.Request.Query["zoekterm"].FirstOrDefault()
+    })
+
+
 
 <div style="margin-bottom: 50px;"></div>

@@ -1,57 +1,52 @@
-﻿@using PrulariaAankoopUI.Components
-@model List<ArtikelsPerSubcategorieViewModel>
+﻿@model List<PrulariaAankoop.Models.ArtikelsPerSubcategorieViewModel>
 
-
-<h4>Artikelen</h4>
-
-@if (!Model.Any() || Model.All(m => !m.Artikels.Any()))
+@if (!Model.Any())
 {
-    <p>Er zijn geen artikelen gekoppeld aan deze categorie of haar subcategorieën.</p>
+        <p>Er zijn geen artikelen gevonden voor deze categorie of zoekterm.</p>
 }
 else if (Model.Count == 1 && !Model.First().HeeftSubcategorieën)
 {
     //Geen subcategorieën = lijst van artikels voor deze categorie
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Artikelnaam</th>
-                <th>Beschrijving</th>
-            </tr>
-        </thead>
-        <tbody>
-        @foreach (var artikel in Model.First().Artikels)
-        {
-            <tr>
-                <td>@artikel.Naam</td>
-                <td>@artikel.Beschrijving</td>
-            </tr>
-        }
-        </tbody>
-    </table>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Naam</th>
+                    <th>Beschrijving</th>
+                </tr>
+            </thead>
+            <tbody>
+            @foreach (var artikel in Model.First().Artikels)
+            {
+                        <tr>
+                            <td>@artikel.Naam</td>
+                            <td>@artikel.Beschrijving</td>
+                        </tr>
+            }
+            </tbody>
+        </table>
 }
 else
 {
     // Artikels gegroepeerd per Subcategorie als wel subcategorieën
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Subcategorie</th>
-                <th>Artikelnaam</th>
-                <th>Beschrijving</th>
-            </tr>
-        </thead>
-        <tbody>
-        @foreach (var groep in Model)
-        {
-            foreach (var artikel in groep.Artikels)
-            {
-                <tr>
-                    <td>@groep.SubcategorieNaam</td>
-                    <td>@artikel.Naam</td>
-                    <td>@artikel.Beschrijving</td>
-                </tr>
-            }
-        }
-        </tbody>
-    </table>
+    foreach (var groep in Model)
+    {
+                <h5>@groep.SubcategorieNaam</h5>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Naam</th>
+                            <th>Beschrijving</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                @foreach (var artikel in groep.Artikels)
+                {
+                                <tr>
+                                    <td>@artikel.Naam</td>
+                                    <td>@artikel.Beschrijving</td>
+                                </tr>
+                }
+                    </tbody>
+                </table>
+    }
 }

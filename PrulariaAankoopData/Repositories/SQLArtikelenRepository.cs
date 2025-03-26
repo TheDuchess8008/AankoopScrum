@@ -67,6 +67,20 @@ public class SQLArtikelenRepository : IArtikelenRepository
         _context.Entry(bestaandArtikel).CurrentValues.SetValues(artikel);
         await _context.SaveChangesAsync();
     }
+    public async Task<List<Artikel>> GetArtikelsByCategorieIdAsync(int categorieId, string? zoekterm)
+    {
+        IQueryable<Artikel> query = _context.Artikelen
+            .Include(a => a.Categorieën)
+            .Where(a => a.Categorieën.Any(c => c.CategorieId == categorieId));
+
+        if (!string.IsNullOrWhiteSpace(zoekterm))
+        {
+            query = query.Where(a => a.Naam != null &&
+                                     EF.Functions.Like(a.Naam, $"%{zoekterm}%"));
+        }
+
+        return await query.OrderBy(a => a.Naam).ToListAsync();
+    }
 }
 
 

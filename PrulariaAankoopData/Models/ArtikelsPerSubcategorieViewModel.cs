@@ -1,4 +1,4 @@
-﻿namespace PrulariaAankoopUI.Models;
+﻿namespace PrulariaAankoop.Models;
 public class ArtikelsPerSubcategorieViewModel
 {
     public string? SubcategorieNaam { get; set; }

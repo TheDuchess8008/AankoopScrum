@@ -1,7 +1,6 @@
-﻿using PrulariaAankoopData.Models;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
-namespace PrulariaAankoopUI.Models;
+namespace PrulariaAankoopData.Models;
 
 public class CategorieViewModel
 {
