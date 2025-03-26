@@ -46,9 +46,11 @@
     
 </div>
 <div>
+    <br />
     <a asp-action="Edit" asp-route-id="@Model?.CategorieId" class="btn huiskleur">Bewerken</a> 
     <a asp-action="Index" class="btn btn-terug">Terug naar categorieën</a>
 </div>
+<br />
 <div>@await Component.InvokeAsync("ArtikelsPerSubcategorie", new { categorieId = Model.CategorieId })</div>
 
 <div style="margin-bottom: 50px;"></div>
