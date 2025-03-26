@@ -1,57 +1,83 @@
-﻿@model PrulariaAankoopData.Models.Leverancier
+﻿@model NieuweLeverancierViewModel
 
 @{
     ViewData["Title"] = "Create";
 }
 
-<h1 class="mb-3">Maak een nieuwe Leverancier</h1>
+<h1 class="mb-3">Nieuwe Leverancier toevoegen</h1>
 
 <hr />
 <div class="row">
     <div class="col-md-6">
-        <form asp-action="Create">
+        <form asp-action="Create" method="post">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <!-- Naam Field -->
             <div class="mb-3">
                 <label asp-for="Naam" class="control-label"></label>
                 <input asp-for="Naam" class="form-control" />
                 <span asp-validation-for="Naam" class="text-danger"></span>
             </div>
+
+            <!-- BtwNummer Field -->
             <div class="mb-3">
                 <label asp-for="BtwNummer" class="control-label"></label>
                 <input asp-for="BtwNummer" class="form-control" />
                 <span asp-validation-for="BtwNummer" class="text-danger"></span>
             </div>
+
+            <!-- Straat Field -->
             <div class="mb-3">
                 <label asp-for="Straat" class="control-label"></label>
                 <input asp-for="Straat" class="form-control" />
                 <span asp-validation-for="Straat" class="text-danger"></span>
             </div>
+
+            <!-- HuisNummer Field -->
             <div class="mb-3">
                 <label asp-for="HuisNummer" class="control-label"></label>
                 <input asp-for="HuisNummer" class="form-control" />
                 <span asp-validation-for="HuisNummer" class="text-danger"></span>
             </div>
+
+            <!-- Bus Field -->
             <div class="mb-3">
                 <label asp-for="Bus" class="control-label"></label>
                 <input asp-for="Bus" class="form-control" />
                 <span asp-validation-for="Bus" class="text-danger"></span>
             </div>
+
+           
+
+            <!-- Plaats Dropdown (with Select2) -->
             <div class="mb-3">
                 <label asp-for="PlaatsId" class="control-label"></label>
-                <select asp-for="PlaatsId" class ="form-control" asp-items="ViewBag.PlaatsId"></select>
+                <select asp-for="PlaatsId" class="form-control select2" id="PlaatsId">
+                    <option value="">Selecteer een Plaats</option>
+                    @foreach (var plaats in Model.Plaatsen)
+                    {
+                        <option value="@plaats.Value">@plaats.Text</option>
+                    }
+                </select>
+                <span asp-validation-for="PlaatsId" class="text-danger"></span>
             </div>
+
+            <!-- Contactpersoon Fields -->
             <div class="mb-3">
                 <label asp-for="FamilienaamContactpersoon" class="control-label"></label>
                 <input asp-for="FamilienaamContactpersoon" class="form-control" />
                 <span asp-validation-for="FamilienaamContactpersoon" class="text-danger"></span>
             </div>
+
             <div class="mb-3">
                 <label asp-for="VoornaamContactpersoon" class="control-label"></label>
                 <input asp-for="VoornaamContactpersoon" class="form-control" />
                 <span asp-validation-for="VoornaamContactpersoon" class="text-danger"></span>
             </div>
+
+            <!-- Submit Button -->
             <div class="d-flex gap-2 mt-3">
-                <input type="submit" value="Create" class="btn huiskleur" />
+                <input type="submit" value="Voeg toe" class="btn huiskleur" />
                 <a asp-action="Index" class="btn btn-terug">Terug</a>
             </div>
         </form>
@@ -61,5 +87,22 @@
 <div style="margin-bottom: 120px;"></div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <!-- Select2 CSS & JS -->
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            // Apply Select2 to Postcode & Plaats dropdowns
+            $('#Postcode, #PlaatsId').select2({
+                placeholder: "Type om te zoeken...",
+                allowClear: true
+            });
+        });
+    </script>
 }
