@@ -17,7 +17,7 @@
             <th>Postcode</th>
             <th>Plaats</th>
             <th>Contactpersoon</th>
-            <th>Acties</th>
+            <th style="text-align: center">Acties</th>
         </tr>
     </thead>
     <tbody>
@@ -29,11 +29,8 @@
                 <td>@Html.DisplayFor(modelItem => item.Plaats.Naam)</td>
                 <td>@Html.DisplayFor(modelItem => item.FamilienaamContactpersoon) @Html.DisplayFor(modelItem => item.VoornaamContactpersoon)</td>
                 <td class="action-buttons">
-                    <a asp-action="Edit" asp-route-id="@item.LeveranciersId" title="Bewerken">
-                        <button class="btn btn-icon btn-edit"><i class="bi bi-pencil"></i></button>
-                    </a>
-                   
-                   
+                    <a asp-action="Edit" asp-route-id="@item.LeveranciersId" title="Bewerken"><button class="btn btn-icon btn-edit"><i class="bi bi-pencil"></i></button></a>
+                    <a asp-action="Details" asp-route-id="@item.LeveranciersId" title="Details bekijken"><button class="btn btn-icon btn-details"><i class="bi bi-eye"></i></button></a>
                 </td>
             </tr>
         }
