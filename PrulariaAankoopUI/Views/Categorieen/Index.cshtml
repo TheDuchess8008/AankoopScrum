@@ -1,42 +1,102 @@
-﻿@model IEnumerable<PrulariaAankoopData.Models.Categorie>
+﻿@model CategorieViewModel
 
 @{
-    ViewData["Title"] = "Categorieen";
+    ViewData["Title"] = "Categorieën";
 }
 
-<h1>Categorieen</h1>
+<h1>Categorieën</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create" class="btn huiskleur">Toevoegen</a>
 </p>
 <table class="table">
     <thead>
         <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Naam)
+            <th style="width: 220px">
+                Hoofdcategorieën
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model.HoofdCategorie)
+            <th style="width: 220px">
+                Subcategorieën
+            </th>
+            <th style="width: 140px">
+                Aantal artikelen
             </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Naam)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.HoofdCategorie.Naam)
-            </td>
-            <td class="action-buttons">
-                <a asp-action="Edit" asp-route-id="@item.CategorieId" title="Bewerken"><button class="btn btn-icon btn-edit"><i class="bi bi-pencil"></i></button></a>
-                <a asp-action="Details" asp-route-id="@item.CategorieId" title="Details bekijken"><button class="btn btn-icon btn-details"><i class="bi bi-eye"></i></button></a>
-                <a asp-action="Delete" asp-route-id="@item.CategorieId" title="Verwijderen"><button class="btn btn-icon btn-delete"><i class="bi bi-trash"></i></button></a>
-            </td>
+        @foreach (var item in Model.Categorieen)
+        {
+            @if (item.Subcategorieën.Count() > 0)
+            {
+                var hoofdcategorieId = item.CategorieId;
+                <tr>
+                    <td>
 
-        </tr>
-}
+                        @Html.DisplayFor(modelItem => item.Naam)
+
+                    </td>
+                    <td>
+                    </td>
+                    <td style="text-align: center">
+                        @{
+                            var artikelen = 0;
+                            foreach (var categorie in item.Subcategorieën)
+                            {
+                                if (categorie.Subcategorieën.Count() == 0)
+                                {
+                                    artikelen += categorie.Artikelen.Count();
+                                }
+                                else
+                                {
+                                    foreach (var subcategorie in categorie.Subcategorieën)
+                                    {
+                                        artikelen += subcategorie.Artikelen.Count();
+                                    }
+                                }
+                            }
+                            @artikelen
+                        }
+                    </td>
+                    <td class="action-buttons">
+                        <a asp-action="Edit" asp-route-id="@item.CategorieId" title="Bewerken"><button class="btn btn-icon btn-edit"><i class="bi bi-pencil"></i></button></a>
+                        <a asp-action="Details" asp-route-id="@item.CategorieId" title="Details bekijken"><button class="btn btn-icon btn-details"><i class="bi bi-eye"></i></button></a>
+                        <a asp-action="Delete" asp-route-id="@item.CategorieId" title="Verwijderen"><button class="btn btn-icon btn-delete"><i class="bi bi-trash"></i></button></a>
+                    </td>
+
+                </tr>
+                foreach (var subcategorie in item.Subcategorieën)
+                {
+                    <tr>
+                        <td>
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => subcategorie.Naam)
+                        </td>
+                        <td style="text-align: center">
+                            @if (subcategorie.Subcategorieën.Count() == 0)
+                            {
+                                @subcategorie.Artikelen.Count()
+                            }
+                            else
+                            {
+                                var aantalArtikelen = 0;
+                                foreach (var subSubcategorie in subcategorie.Subcategorieën)
+                                {
+                                    aantalArtikelen += subSubcategorie.Artikelen.Count();
+                                }
+                                @aantalArtikelen
+                            }
+                        </td>
+                        <td class="action-buttons">
+                            <a asp-action="Edit" asp-route-id="@subcategorie.CategorieId" title="Bewerken"><button class="btn btn-icon btn-edit"><i class="bi bi-pencil"></i></button></a>
+                            <a asp-action="Details" asp-route-id="@subcategorie.CategorieId" title="Details bekijken"><button class="btn btn-icon btn-details"><i class="bi bi-eye"></i></button></a>
+                            <a asp-action="Delete" asp-route-id="@subcategorie.CategorieId" title="Verwijderen"><button class="btn btn-icon btn-delete"><i class="bi bi-trash"></i></button></a>
+                        </td>
+
+                    </tr>
+                }
+            }
+        }
     </tbody>
 </table>
