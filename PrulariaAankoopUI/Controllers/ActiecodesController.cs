@@ -104,7 +104,8 @@ namespace PrulariaAankoopUI.Controllers
         // GET: Actiecodes/Edit/5
         public async Task<IActionResult> Edit(int id)
         {
-            var actiecode = await _context.Actiecodes.FirstOrDefaultAsync(a => a.ActiecodeId == id);
+            var actiecode = await _actiecodesService
+                .FirstOrDefaultAsync(m => m.ActiecodeId == id);
             if (actiecode == null)
             {
                 return NotFound();
