@@ -44,19 +44,13 @@
     </dl>
 </div>
 
+<!-- Actieknoppen -->
 <div class="mb-4">
-    <a asp-action="Edit" asp-route-id="@Model?.CategorieId" class="btn huiskleur">Bewerken</a><br />
+    <a asp-action="Edit" asp-route-id="@Model?.CategorieId" class="btn huiskleur">Bewerken</a>
     <a asp-action="Index" class="btn btn-terug">Terug naar categorieën</a>
 </div>
-<div>
-    <br />
-    <a asp-action="Edit" asp-route-id="@Model?.CategorieId" class="btn huiskleur">Bewerken</a> 
-    <a asp-action="Index" class="btn btn-terug">Terug naar categorieën</a>
-</div>
-<br />
-<div>@await Component.InvokeAsync("ArtikelsPerSubcategorie", new { categorieId = Model.CategorieId })</div>
 
-<!-- Form om te zoeken op Artikel naam -->
+<!-- Zoekformulier -->
 <div class="zoek-artikels mt-4 mb-3">
     <h4>Zoek Artikelen binnen deze categorie</h4>
     <form method="get" asp-action="Details" asp-controller="Categorieen">
@@ -68,13 +62,13 @@
     </form>
 </div>
 
-<!--ViewComponent wordt opgeroepen -->
-@await Component.InvokeAsync("ArtikelsPerSubcategorie", new
-    {
-        categorieId = Model.CategorieId,
-        zoekterm = Context.Request.Query["zoekterm"].FirstOrDefault()
-    })
-
-
+<!-- Artikels Table via ViewComponent -->
+<div>
+    @await Component.InvokeAsync("ArtikelsPerSubcategorie", new
+        {
+            categorieId = Model.CategorieId,
+            zoekterm = Context.Request.Query["zoekterm"].FirstOrDefault()
+        })
+</div>
 
 <div style="margin-bottom: 50px;"></div>
