@@ -13,7 +13,7 @@ public partial class Leverancier
     public string BtwNummer { get; set; } = null!;
 
     public string Straat { get; set; } = null!;
-    [Display(Name = "Huisnr")]
+    [Display(Name = "Huisnummer")]
     public string HuisNummer { get; set; } = null!;
 
     public string? Bus { get; set; }

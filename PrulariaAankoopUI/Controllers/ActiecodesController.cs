@@ -9,6 +9,7 @@ using MySqlX.XDevAPI.Common;
 using PrulariaAankoopData.Models;
 using PrulariaAankoopData.Repositories;
 using PrulariaAankoopService.Services;
+using PrulariaAankoopUI.Components;
 using PrulariaAankoopUI.Models;
 
 namespace PrulariaAankoopUI.Controllers
@@ -115,7 +116,8 @@ namespace PrulariaAankoopUI.Controllers
         {
             if (HttpContext.Session.GetString("Ingelogd") != null)
             {
-                var actiecode = await _context.Actiecodes.FirstOrDefaultAsync(a => a.ActiecodeId == id);
+                var actiecode = await _actiecodesService
+.FirstOrDefaultAsync(m => m.ActiecodeId == id);
                 if (actiecode == null)
                 {
                     return NotFound();
@@ -127,20 +129,23 @@ namespace PrulariaAankoopUI.Controllers
                     Naam = actiecode.Naam,
                     GeldigVanDatum = actiecode.GeldigVanDatum,
                     GeldigTotDatum = actiecode.GeldigTotDatum,
-                    IsEenmalig = actiecode.IsEenmalig
+                    IsEenmalig = actiecode.IsEenmalig,
+                    IsEdit = true,
+                    OrigineleBegindatum = actiecode.GeldigVanDatum
                 };
                 return View(model);
             }
             return RedirectToAction("Index", "Home");
+
         }
-                
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(ActiecodeWijzigenViewModel model)
         {
             if (ModelState.IsValid)
             {
-                var actiecode =await _actiecodesService.FindAsync(model.Id);
+                var actiecode = await _actiecodesService.FindAsync(model.Id);
                 if (actiecode == null)
                 {
                     return NotFound();
@@ -157,15 +162,16 @@ namespace PrulariaAankoopUI.Controllers
                 }
                 catch (Exception ex)
                 {
-                   ModelState.AddModelError("", "Er is een fout opgetreden tijdens het verwerken van uw aanvraag. Probeer het later nog eens.");
+                    ModelState.AddModelError("", "Er is een fout opgetreden tijdens het verwerken van uw aanvraag. Probeer het later nog eens.");
                     return View(model);
                 }
-                return RedirectToAction(nameof(Index)); 
+                ViewBag.bevestiging = "De actiecode \"" + model.Naam + "\" is gewijzigd";
+                return View(model);
             }
 
             // Als de validatie mislukt:
             return View(model);
-            
+
         }
 
         // GET: Actiecodes/Delete/5

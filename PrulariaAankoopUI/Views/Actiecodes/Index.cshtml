@@ -30,7 +30,7 @@
     <tbody>
 @foreach (var item in Model) {
         <tr>
-            <td>
+            <td >
                 @Html.DisplayFor(modelItem => item.Naam)
             </td>
             <td>
@@ -43,12 +43,8 @@
                 @Html.DisplayFor(modelItem => item.IsEenmalig)
             </td>
             <td class="action-buttons">
-                <a asp-action="Edit" asp-route-id="@item.ActiecodeId" title="Bewerken">
-                    <button class="btn btn-icon btn-edit"><i class="bi bi-pencil"></i></button>
-                </a>
-                <a asp-action="Details" asp-route-id="@item.ActiecodeId" title="Details bekijken">
-                    <button class="btn btn-icon btn-details"><i class="bi bi-eye"></i></button>
-                </a>
+                <a asp-action="Edit" asp-route-id="@item.ActiecodeId" title="Bewerken"><button class="btn btn-icon btn-edit"><i class="bi bi-pencil"></i></button></a>
+                <a asp-action="Details" asp-route-id="@item.ActiecodeId" title="Details bekijken"><button class="btn btn-icon btn-details"><i class="bi bi-eye"></i></button></a>
             </td>
 
         </tr>
