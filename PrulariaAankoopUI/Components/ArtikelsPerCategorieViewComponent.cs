@@ -1,68 +1,67 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using PrulariaAankoop.Models;
+using PrulariaAankoopData.Models;
 using PrulariaAankoopData.Repositories;
-using PrulariaAankoopUI.Models;
 
+namespace PrulariaAankoopUI.Components;
 public class ArtikelsPerSubcategorieViewComponent : ViewComponent
 {
-    private readonly PrulariaComContext _context;
+    private readonly ICategorieenRepository _categorieenRepository;
+    private readonly IArtikelenRepository _artikelenRepository;
 
-    public ArtikelsPerSubcategorieViewComponent(PrulariaComContext context)
+    public ArtikelsPerSubcategorieViewComponent(ICategorieenRepository categorieenRepository, IArtikelenRepository artikelenRepository)
     {
-        _context = context;
+        _categorieenRepository = categorieenRepository;
+        _artikelenRepository = artikelenRepository;
     }
 
-    public async Task<IViewComponentResult> InvokeAsync(int categorieId)
+    public async Task<IViewComponentResult> InvokeAsync(int categorieId, string? zoekterm = null)
     {
-        var categorie = await _context.Categorieen
-            .Include(c => c.Subcategorieën)
-            .FirstOrDefaultAsync(c => c.CategorieId == categorieId);
+        zoekterm = zoekterm?.Trim();
 
+        var categorie = await _categorieenRepository.GetByIdAsync(categorieId);
         if (categorie == null)
-        {
             return View(new List<ArtikelsPerSubcategorieViewModel>());
-        }
 
         var viewModel = new List<ArtikelsPerSubcategorieViewModel>();
 
         if (categorie.Subcategorieën.Any())
         {
-            var subcategorieën = await _context.Categorieen
-                .Where(c => c.HoofdCategorieId == categorieId)
-                .Include(c => c.Artikelen)
-                .ToListAsync();
+            foreach (var sub in categorie.Subcategorieën.OrderBy(s => s.Naam))
+            {
+                var artikels = await _artikelenRepository.GetArtikelsByCategorieIdAsync(sub.CategorieId, zoekterm);
 
-            viewModel = subcategorieën
-                .OrderBy(s => s.Naam)
-                .Select(sub => new ArtikelsPerSubcategorieViewModel
+                if (artikels.Any())
                 {
-                    SubcategorieNaam = sub.Naam,
-                    HeeftSubcategorieën = true,
-                    Artikels = sub.Artikelen
-                        .OrderBy(a => a.Naam)
-                        .Select(a => new ArtikelShortViewModel
+                    viewModel.Add(new ArtikelsPerSubcategorieViewModel
+                    {
+                        SubcategorieNaam = sub.Naam,
+                        HeeftSubcategorieën = true,
+                        Artikels = artikels.Select(a => new ArtikelShortViewModel
                         {
-                            Naam = a.Naam,
-                            Beschrijving = a.Beschrijving
+                            Naam = a.Naam ?? "(Geen naam)",
+                            Beschrijving = a.Beschrijving ?? "(Geen beschrijving)"
                         }).ToList()
-                }).ToList();
+                    });
+                }
+            }
         }
         else
         {
-            var artikels = await _context.Artikelen
-                .Where(a => a.Categorieën.Any(c => c.CategorieId == categorieId))
-                .OrderBy(a => a.Naam)
-                .ToListAsync();
-
-            viewModel.Add(new ArtikelsPerSubcategorieViewModel
+            var artikels = await _artikelenRepository.GetArtikelsByCategorieIdAsync(categorieId, zoekterm);
+            if (artikels.Any())
             {
-                HeeftSubcategorieën = false,
-                Artikels = artikels.Select(a => new ArtikelShortViewModel
+                viewModel.Add(new ArtikelsPerSubcategorieViewModel
                 {
-                    Naam = a.Naam,
-                    Beschrijving = a.Beschrijving
-                }).ToList()
-            });
+                    HeeftSubcategorieën = false,
+                    Artikels = artikels.Select(a => new ArtikelShortViewModel
+                    {
+                        Naam = a.Naam ?? "(Geen naam)",
+                        Beschrijving = a.Beschrijving ?? "(Geen beschrijving)"
+                    }).ToList()
+                });
+            }
         }
 
         return View(viewModel);
