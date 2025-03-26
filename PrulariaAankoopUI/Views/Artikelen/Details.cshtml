@@ -46,7 +46,7 @@
         </dt>
         <dd class="col-sm-9">
             @Html.DisplayFor(model => model.Artikel.Prijs)
-          
+
         </dd>
         <dt class="col-sm-3">
             Gewicht in gram
@@ -109,15 +109,15 @@
         <dd class="col-sm-9">
             <form asp-action="BevestigCategorieToevoegen" method="post" class="form-inline">
                 <input type="hidden" name="artikelId" value="@Model.Artikel.ArtikelId" />
-                
-                
+
+
                 <div class="d-flex gap-2">
                     <select asp-for="CategorieId" class="form-control me-2" asp-items="ViewBag.CategorieId">
                         <option value="">-- Selecteer een categorie --</option>
                     </select>
                     <span asp-validation-for="CategorieId" class="text-danger"></span>
-                
-                <button type="submit" class="btn btn-primary huiskleur">Toevoegen</button>
+
+                    <button type="submit" class="btn btn-primary huiskleur">Toevoegen</button>
                 </div>
             </form>
         </dd>
@@ -128,36 +128,30 @@
         <dt class="col-sm-3">
             Categorie(ën)
         </dt>
-         <dd class="col-sm-9">
+        <dd class="col-sm-9">
             @{
                 for (int i = 0; i < Model.Artikel.Categorieën.Count; i++)
                 {
                     var categorie = Model.Artikel.Categorieën[i];
                     var hoofdCategorieNaam = categorie.HoofdCategorie?.Naam ?? "Geen Hoofdcategorie";
-
-                    <div>
-                        @if (categorie.HoofdCategorieId == null || i == 0)
+                    var hoofdCategorieBestaat = false;
+                    @for (int j = 0; j < i; j++)
+                    {
+                        if (Model.Artikel.Categorieën[j].HoofdCategorieId == Model.Artikel.Categorieën[i].HoofdCategorieId)
                         {
-                            <span>@hoofdCategorieNaam</span>
-                            <br />
-                            <span>--@categorie.Naam</span>
+                            hoofdCategorieBestaat = true;
                         }
-                        else
-                        {
-                            <span>--@hoofdCategorieNaam</span>
-                            <br />
-                            <span>----@categorie.Naam</span>
-                        }
-                        <a asp-action="BevestigCategorieVerwijderen"
-                           asp-route-artikelId="@Model.Artikel.ArtikelId"
-                           asp-route-categorieId="@categorie.CategorieId"
-                           class="text-danger" title="Categorie verwijderen">
-                            <button class="btn btn-icon btn-delete">
-                                <i class="bi bi-trash"></i>
-                            </button>
-                        </a>
-                        <br />
-                    </div>
+                    }
+                    @if (!hoofdCategorieBestaat)
+                    {
+                        <span>@hoofdCategorieNaam:</span>
+                    }
+                    <ul style="margin: 0px 0">
+                        <li style="margin: 0px 0">
+                            @categorie.Naam <a asp-action="BevestigCategorieVerwijderen" asp-route-artikelId="@Model.Artikel.ArtikelId" asp-route-categorieId="@categorie.CategorieId"
+                                               class="text-danger" title="Categorie verwijderen"><button class="btn btn-icon btn-delete"><i class="bi bi-trash"></i></button></a>
+                        </li>
+                    </ul>
                 }
             }
         </dd>
