@@ -30,14 +30,14 @@ table, .table {
   table-layout: fixed;
   width: 100%;
   border-collapse: collapse;
-  margin-bottom: 1.5rem;
+  margin-bottom: 120px;
   font-size: 0.95rem;
   background-color: #fff;
 }
 
 table th, .table th,
 table td, .table td {
-  padding: 0.75rem;
+  padding: 12px;
   text-align: left;
   vertical-align: middle;
 }
@@ -52,7 +52,7 @@ table tbody tr:hover, .table tbody tr:hover {
 }
 
 .table td.action-buttons {
-  text-align: right;
+  text-align: center;
   white-space: nowrap;
 }
 
@@ -155,9 +155,8 @@ footer.footer {
   background-color: #ffe5e5;
 }
 .action-buttons {
-  display: flex;
-  gap: 6px;
-  align-items: center;
+  padding-left:0;
+  text-align: left;
 }
 
 /* PRIMARY button in house color */
