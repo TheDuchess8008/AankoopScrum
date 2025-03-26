@@ -15,4 +15,6 @@ public interface IArtikelenRepository
     Task<Artikel?> GetArtikelById(int artikelId);
     Task<Artikel> GetByIdAsync(int artikelId);
     Task UpdateArtikel(Artikel bestaandArtikel, Artikel artikel);
+    Task<List<Artikel>> GetArtikelsByCategorieIdAsync(int categorieId, string? zoekterm);
+
 }
