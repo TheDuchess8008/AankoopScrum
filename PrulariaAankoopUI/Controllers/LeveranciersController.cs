@@ -48,22 +48,35 @@ namespace PrulariaAankoopUI.Controllers
         }
 
         // GET: Leveranciers/Details/5
-        public async Task<IActionResult> Details(int? id)
+        [HttpGet("Leveranciers/Details/{id}")]
+        public async Task<IActionResult> Details(int id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
             var leverancier = await _context.Leveranciers
-                .Include(l => l.Plaats)
-                .FirstOrDefaultAsync(m => m.LeveranciersId == id);
+                .Include(l => l.Plaats) // Laad de Plaats data in
+                .FirstOrDefaultAsync(l => l.LeveranciersId == id);
+
             if (leverancier == null)
             {
                 return NotFound();
             }
 
-            return View(leverancier);
+            // Converteer naar LeverancierViewModel
+            var viewModel = new LeverancierViewModel
+            {
+                LeveranciersId = leverancier.LeveranciersId,
+                Naam = leverancier.Naam,
+                BtwNummer = leverancier.BtwNummer,
+                Straat = leverancier.Straat,
+                HuisNummer = leverancier.HuisNummer,
+                Bus = leverancier.Bus,
+                PlaatsId = leverancier.PlaatsId,
+                Plaats = leverancier.Plaats,
+                FamilienaamContactpersoon = leverancier.FamilienaamContactpersoon,
+                VoornaamContactpersoon = leverancier.VoornaamContactpersoon,
+                Artikelen = leverancier.Artikelen
+            };
+
+            return View(viewModel);
         }
 
         // GET: Leveranciers/Create
@@ -135,40 +148,7 @@ namespace PrulariaAankoopUI.Controllers
 // GET: Leveranciers/Edit/5
 public async Task<IActionResult> Edit(int? id)
         {
-            //var leverancier = await _context.Leveranciers.FirstOrDefaultAsync(a => a.LeveranciersId == id);
-            //var leverancier = await _context.Leveranciers
-            //.Include(l => l.Plaats)
-            //.FirstOrDefaultAsync(a => a.LeveranciersId == id);
-
-            //if (id == null)
-            //{
-            //    return NotFound();
-            //}
-
-            //var leverancier = await _leveranciersService.GetLeverancierByIdAsync(id.Value);
-            //if (leverancier == null)
-            //{
-            //    return NotFound();
-            //}
-
-            //var model = new LeverancierWijzigenViewModel
-            //{
-            //    LeveranciersId = leverancier.LeveranciersId,
-            //    Naam = leverancier.Naam,
-            //    BtwNummer = leverancier.BtwNummer,
-            //    Straat = leverancier.Straat,
-            //    HuisNummer = leverancier.HuisNummer,
-            //    Bus = leverancier.Bus,
-            //    PlaatsId = leverancier.PlaatsId,
-            //    FamilienaamContactpersoon = leverancier.FamilienaamContactpersoon,
-            //    VoornaamContactpersoon = leverancier.VoornaamContactpersoon,
-            //    Artikelen = leverancier.Artikelen,
-            //    InkomendeLeveringen = leverancier.InkomendeLeveringen,
-            //    Plaats = leverancier.Plaats
-
-            //};
-            //ViewData["PlaatsId"] = new SelectList(_context.Plaatsen, "PlaatsId", "Naam", leverancier.PlaatsId);
-            //return View(model);
+         
 
             try
             {
@@ -215,33 +195,7 @@ public async Task<IActionResult> Edit(int? id)
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("LeveranciersId,Naam,BtwNummer,Straat,HuisNummer,Bus,PlaatsId,FamilienaamContactpersoon,VoornaamContactpersoon")] Leverancier leverancier)
         {
-            //if (id != leverancier.LeveranciersId)
-            //{
-            //    return NotFound();
-            //}
-
-            //if (ModelState.IsValid)
-            //{
-            //    try
-            //    {
-            //        _context.Update(leverancier);
-            //        await _context.SaveChangesAsync();
-            //    }
-            //    catch (DbUpdateConcurrencyException)
-            //    {
-            //        if (!LeverancierExists(leverancier.LeveranciersId))
-            //        {
-            //            return NotFound();
-            //        }
-            //        else
-            //        {
-            //            throw;
-            //        }
-            //    }
-            //    return RedirectToAction(nameof(Index));
-            //}
-            //ViewData["PlaatsId"] = new SelectList(_context.Plaatsen, "PlaatsId", "Naam", leverancier.PlaatsId);
-            //return View(leverancier);
+           
 
             try
             {
@@ -286,41 +240,8 @@ public async Task<IActionResult> Edit(int? id)
 
 
         }
-        /*
-        // GET: Leveranciers/Delete/5
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var leverancier = await _context.Leveranciers
-                .Include(l => l.Plaats)
-                .FirstOrDefaultAsync(m => m.LeveranciersId == id);
-            if (leverancier == null)
-            {
-                return NotFound();
-            }
-
-            return View(leverancier);
-        }
-
-        // POST: Leveranciers/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            var leverancier = await _context.Leveranciers.FindAsync(id);
-            if (leverancier != null)
-            {
-                _context.Leveranciers.Remove(leverancier);
-            }
-
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
-        }
-        */
+        
+        
         private bool LeverancierExists(int id)
         {
             return _context.Leveranciers.Any(e => e.LeveranciersId == id);
