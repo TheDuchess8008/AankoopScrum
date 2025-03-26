@@ -47,6 +47,7 @@ namespace PrulariaAankoopUI.Controllers
             return View(viewModel);
         }
 
+        // GET: Leveranciers/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -285,7 +286,7 @@ public async Task<IActionResult> Edit(int? id)
 
 
         }
-
+        /*
         // GET: Leveranciers/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
@@ -319,7 +320,7 @@ public async Task<IActionResult> Edit(int? id)
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
-
+        */
         private bool LeverancierExists(int id)
         {
             return _context.Leveranciers.Any(e => e.LeveranciersId == id);
