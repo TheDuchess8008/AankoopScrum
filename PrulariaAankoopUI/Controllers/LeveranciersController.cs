@@ -47,6 +47,23 @@ namespace PrulariaAankoopUI.Controllers
             return View(viewModel);
         }
 
+        public async Task<IActionResult> Details(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var leverancier = await _context.Leveranciers
+                .Include(l => l.Plaats)
+                .FirstOrDefaultAsync(m => m.LeveranciersId == id);
+            if (leverancier == null)
+            {
+                return NotFound();
+            }
+
+            return View(leverancier);
+        }
 
         // GET: Leveranciers/Create
         public IActionResult Create()

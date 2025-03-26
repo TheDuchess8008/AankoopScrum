@@ -9,13 +9,9 @@ using System.Threading.Tasks;
 namespace PrulariaAankoopData.Repositories;
 public interface ILeveranciersRepository
 {
-
-
-
     Task<Leverancier?> GetByIdAsync(int id);
     Task<IEnumerable<Plaats>> GetAllPlaatsenAsync();
     Task<bool> SaveChangesAsync();
-
     Task<List<Leverancier>> GetAllLeveranciersAsync();
     Task AddLeverancierAsync(Leverancier leverancier);
 }

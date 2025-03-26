@@ -8,7 +8,8 @@ using System.Threading.Tasks;
 
 namespace PrulariaAankoopData.Repositories;
 public class SQLLeveranciersRepository : ILeveranciersRepository
-{private readonly PrulariaComContext _context;
+{
+    private readonly PrulariaComContext _context;
 
     public SQLLeveranciersRepository(PrulariaComContext context)
     {
@@ -26,16 +27,6 @@ public class SQLLeveranciersRepository : ILeveranciersRepository
     {
         _context.Leveranciers.Add(leverancier);
         await _context.SaveChangesAsync();
-    }
-}
-
-{
-
-    private readonly PrulariaComContext _context;
-
-    public SQLLeveranciersRepository(PrulariaComContext context)
-    {
-        _context = context;
     }
 
     public async Task<Leverancier?> GetByIdAsync(int id)
