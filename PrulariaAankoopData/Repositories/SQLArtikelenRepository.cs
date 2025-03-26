@@ -69,26 +69,18 @@ public class SQLArtikelenRepository : IArtikelenRepository
     }
     public async Task<List<Artikel>> GetArtikelsByCategorieIdAsync(int categorieId, string? zoekterm)
     {
-        IQueryable<Artikel> query = _context.Artikelen
+        var artikels = await _context.Artikelen
             .Include(a => a.Categorieën)
-            .Where(a => a.Categorieën.Any(c => c.CategorieId == categorieId));
+            .ToListAsync();
 
-        if (!string.IsNullOrWhiteSpace(zoekterm))
-        {
-            query = query.Where(a => a.Naam != null &&
-                                     EF.Functions.Like(a.Naam, $"%{zoekterm}%"));
-        }
-
-        return await query.OrderBy(a => a.Naam).ToListAsync();
+        return artikels
+            .Where(a => a.Categorieën.Any(c => c.CategorieId == categorieId))
+            .Where(a => string.IsNullOrEmpty(zoekterm) ||
+                        (!string.IsNullOrEmpty(a.Naam) &&
+                         a.Naam.Contains(zoekterm, StringComparison.OrdinalIgnoreCase)))
+            .OrderBy(a => a.Naam)
+            .ToList();
     }
+
+
 }
-
-
-
-
-
-
-
-
-
-

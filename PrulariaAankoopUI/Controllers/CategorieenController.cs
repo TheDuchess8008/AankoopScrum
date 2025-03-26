@@ -31,17 +31,25 @@ namespace PrulariaAankoopUI.Controllers
         }
 
         // GET: Categorieen/Details/5
-        public async Task<IActionResult> Details(int? id, string? zoekterm)
+        public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
                 return NotFound();
 
-            var model = await _categorieenService.GetCategorieViewModelByIdAsync(id.Value);
-
-            if (model == null)
+            var categorie = await _categorieenService.GetCategorieByIdAsync(id.Value);
+            if (categorie == null)
                 return NotFound();
 
-            return View(model);
+            var viewModel = new CategorieViewModel
+            {
+                CategorieId = categorie.CategorieId,
+                Naam = categorie.Naam,
+                HoofdCategorieId = categorie.HoofdCategorieId,
+                HoofdCategorie = categorie.HoofdCategorie,
+                Subcategorieën = categorie.Subcategorieën.ToList()
+            };
+
+            return View(viewModel);
         }
 
         // GET: Categorieen/Create

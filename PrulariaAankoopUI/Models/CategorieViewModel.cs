@@ -1,16 +1,18 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using PrulariaAankoopData.Models;
+using System.ComponentModel.DataAnnotations;
 
-namespace PrulariaAankoopData.Models;
+namespace PrulariaAankoopUI.Models;
 
 public class CategorieViewModel
 {
     public int CategorieId { get; set; }
+
     [Display(Name = "Naam")]
     public string Naam { get; set; } = null!;
 
     public int? HoofdCategorieId { get; set; }
-    [Display(Name = "Hoofdcategorie")]
 
+    [Display(Name = "Hoofdcategorie")]
     public virtual Categorie? HoofdCategorie { get; set; }
 
     public virtual ICollection<Categorie> Subcategorieën { get; set; } = new List<Categorie>();

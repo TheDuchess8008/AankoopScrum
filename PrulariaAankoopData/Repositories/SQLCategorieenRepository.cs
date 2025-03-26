@@ -15,10 +15,13 @@ public class SQLCategorieenRepository : ICategorieenRepository
     public async Task<Categorie?> GetByIdAsync(int id)
     {
         return await _context.Categorieen
-            .Include(c => c.HoofdCategorie)
             .Include(c => c.Subcategorieën)
+                .ThenInclude(sub => sub.Artikelen)
+            .Include(c => c.Artikelen)
+            .Include(c => c.HoofdCategorie)
             .FirstOrDefaultAsync(c => c.CategorieId == id);
     }
+
 
     public async Task<List<Categorie>> GetSubcategorieenAsync(int hoofdCategorieId)
     {
