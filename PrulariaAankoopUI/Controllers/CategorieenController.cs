@@ -87,7 +87,6 @@ namespace PrulariaAankoopUI.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
-            ViewData["HoofdCategorieId"] = new SelectList(await _categorieenService.GetAllCategorieenAsync(), "CategorieId", "Naam", categorie.HoofdCategorieId);
             return View(categorie);
         }
 
@@ -119,7 +118,6 @@ namespace PrulariaAankoopUI.Controllers
                 }
             }
 
-            ViewData["HoofdCategorieId"] = new SelectList(await _categorieenService.GetAllCategorieenAsync(), "CategorieId", "Naam", categorie.HoofdCategorieId);
             return View(categorie);
         }
 
