@@ -28,7 +28,7 @@ namespace PrulariaAankoopUI.Controllers
         // GET: Leveranciers
         public async Task<IActionResult> Index()
         {
-            var leveranciers = await _leveranciersRepository.GetAllLeveranciersAsync();
+            var leveranciers = await _leveranciersService.GetAllLeveranciersAsync();
 
             var viewModel = leveranciers.Select(l => new LeverancierViewModel
             {
@@ -47,55 +47,22 @@ namespace PrulariaAankoopUI.Controllers
             return View(viewModel);
         }
 
-        // GET: Leveranciers/Details/5
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var leverancier = await _context.Leveranciers
-                .Include(l => l.Plaats)
-                .FirstOrDefaultAsync(m => m.LeveranciersId == id);
-            if (leverancier == null)
-            {
-                return NotFound();
-            }
-
-            return View(leverancier);
-        }
 
         // GET: Leveranciers/Create
         public IActionResult Create()
         {
-            // Load all unique postcodes
-            var postcodes = _context.Plaatsen
-                .Select(p => p.Postcode)
-                .Distinct()
-                .ToList();
-
-            var plaatsen = _context.Plaatsen
-                .Select(p => new SelectListItem
-                {
-                    Value = p.PlaatsId.ToString(),
-                    Text = p.Naam
-                })
-                .ToList();
-
+            // Laad postcodes en plaatsen zoals voorheen, maar via service als nodig
             var model = new NieuweLeverancierViewModel
             {
-                // Populate the Postcode dropdown
-                Postcodes = postcodes.Select(p => new SelectListItem
-                {
-                    Text = p,
-                    Value = p
-                }).ToList(),
-
-                // Populate the Plaatsen dropdown with all places
-                Plaatsen = plaatsen
+                Postcodes = _context.Plaatsen
+                            .Select(p => p.Postcode)
+                            .Distinct()
+                            .Select(p => new SelectListItem { Text = p, Value = p })
+                            .ToList(),
+                Plaatsen = _context.Plaatsen
+                            .Select(p => new SelectListItem { Value = p.PlaatsId.ToString(), Text = p.Naam })
+                            .ToList()
             };
-
             return View(model);
         }
 
@@ -106,19 +73,16 @@ namespace PrulariaAankoopUI.Controllers
         {
             if (ModelState.IsValid)
             {
-                // Validate if the selected Plaats matches the selected Postcode
                 var selectedPlaats = await _context.Plaatsen
                     .FirstOrDefaultAsync(p => p.PlaatsId == model.PlaatsId);
 
                 if (selectedPlaats == null || selectedPlaats.Postcode != model.SelectedPostcode)
                 {
-                    // Add a model error if the Plaats does not match the selected Postcode
                     ModelState.AddModelError("PlaatsId", "De geselecteerde plaats komt niet overeen met de gekozen postcode.");
                 }
 
                 if (ModelState.IsValid)
                 {
-                    // Create a new Leverancier
                     var leverancier = new Leverancier
                     {
                         Naam = model.Naam,
@@ -126,45 +90,30 @@ namespace PrulariaAankoopUI.Controllers
                         Straat = model.Straat,
                         HuisNummer = model.HuisNummer,
                         Bus = model.Bus,
-                        PlaatsId = model.PlaatsId,  // (foreign key)
+                        PlaatsId = model.PlaatsId,
                         FamilienaamContactpersoon = model.FamilienaamContactpersoon,
                         VoornaamContactpersoon = model.VoornaamContactpersoon
                     };
 
-                    // Add the new leverancier to the database
-                    _context.Leveranciers.Add(leverancier);
-                    await _context.SaveChangesAsync();
+                    await _leveranciersService.AddLeverancierAsync(leverancier);
 
                     return RedirectToAction(nameof(Index));
                 }
             }
 
-            // If validation failed, repopulate the dropdowns and return the view
-            var postcodes = _context.Plaatsen
-                .Select(p => p.Postcode)
-                .Distinct()
-                .ToList();
+            // Als de validatie faalt, vul dan de dropdowns opnieuw in
+            model.Postcodes = _context.Plaatsen
+                            .Select(p => p.Postcode)
+                            .Distinct()
+                            .Select(p => new SelectListItem { Text = p, Value = p })
+                            .ToList();
 
-            var plaatsen = _context.Plaatsen
-                .Select(p => new SelectListItem
-                {
-                    Value = p.PlaatsId.ToString(),
-                    Text = p.Naam
-                })
-                .ToList();
-
-            model.Postcodes = postcodes.Select(p => new SelectListItem
-            {
-                Text = p,
-                Value = p
-            }).ToList();
-
-            model.Plaatsen = plaatsen;
+            model.Plaatsen = _context.Plaatsen
+                            .Select(p => new SelectListItem { Value = p.PlaatsId.ToString(), Text = p.Naam })
+                            .ToList();
 
             return View(model);
         }
-
-
     
 
 
