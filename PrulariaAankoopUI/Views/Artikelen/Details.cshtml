@@ -135,46 +135,32 @@
                     var categorie = Model.Artikel.Categorieën[i];
                     var hoofdCategorieNaam = categorie.HoofdCategorie?.Naam ?? "Geen Hoofdcategorie";
                     var hoofdCategorieBestaat = false;
-                    <div>
-                        @for (int j = 0; j < i; j++)
+                    @for (int j = 0; j < i; j++)
+                    {
+                        if (Model.Artikel.Categorieën[j].HoofdCategorieId == Model.Artikel.Categorieën[i].HoofdCategorieId)
                         {
-                            if (Model.Artikel.Categorieën[j].HoofdCategorieId == Model.Artikel.Categorieën[i].HoofdCategorieId)
-                            {
-                                hoofdCategorieBestaat = true;
-                            }
+                            hoofdCategorieBestaat = true;
                         }
-                        @if (!hoofdCategorieBestaat)
-                        {
-                            <span>@hoofdCategorieNaam</span>
-                            <br />
-                            <span>--@categorie.Naam</span>
-                        }
-                            <span>@categorie.HoofdCategorie.Naam</span>
-
-                        <br />
-                        <span>--@categorie.Naam</span>
-                        @if (categorie.HoofdCategorieId == null || i == 0)
-                        {
-                            <span>@hoofdCategorieNaam</span>
-                            <br />
-                            <span>--@categorie.Naam</span>
-                        }
-                        else
-                        {
-                            <span>--@hoofdCategorieNaam</span>
-                            <br />
-                            <span>----@categorie.Naam</span>
-                        }
-                        <a asp-action="BevestigCategorieVerwijderen"
-                           asp-route-artikelId="@Model.Artikel.ArtikelId"
-                           asp-route-categorieId="@categorie.CategorieId"
-                           class="text-danger" title="Categorie verwijderen">
-                            <button class="btn btn-icon btn-delete">
-                                <i class="bi bi-trash"></i>
-                            </button>
-                        </a>
-                        <br />
-                    </div>
+                    }
+                    @if (!hoofdCategorieBestaat)
+                    {
+                        <span>@hoofdCategorieNaam:</span>
+                        <ul style="margin: 0px 0">
+                            <li style="margin: 0px 0">
+                                @categorie.Naam <a asp-action="BevestigCategorieVerwijderen" asp-route-artikelId="@Model.Artikel.ArtikelId" asp-route-categorieId="@categorie.CategorieId"
+                                                   class="text-danger" title="Categorie verwijderen"><button class="btn btn-icon btn-delete"><i class="bi bi-trash"></i></button></a>
+                            </li>
+                        </ul>
+                    }
+                    else
+                    {
+                        <ul style="margin: 0px 0">
+                            <li style="margin: 0px 0">
+                                @categorie.Naam <a asp-action="BevestigCategorieVerwijderen" asp-route-artikelId="@Model.Artikel.ArtikelId" asp-route-categorieId="@categorie.CategorieId"
+                                                   class="text-danger" title="Categorie verwijderen"><button class="btn btn-icon btn-delete"><i class="bi bi-trash"></i></button></a>
+                            </li>
+                        </ul>
+                    }
                 }
             }
         </dd>
