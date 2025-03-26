@@ -8,47 +8,67 @@
     <h1 class="mb-3">Wijzig de Actiecode</h1>
     <hr />
 
-    <div class="row">
+    <div class="row justify-content-center">
         <div class="col-md-6">
             <form asp-action="Edit">
+                <input asp-for="IsEdit" hidden />
+                <input asp-for="OrigineleBegindatum" hidden />
                 <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
                 <input type="hidden" asp-for="Id" />
 
-                <div class="mb-3">
-                    <label asp-for="Naam" class="control-label"></label>
-                    <input asp-for="Naam" class="form-control" value="1" placeholder="Enter name"/>
+                <div class="form-group">
+                    <label asp-for="Naam" class="form-label fw-bold">Naam: (niet wijzigen)</label>
+                    <input asp-for="Naam" class="form-control inputveldenhuiskleur"
+                           readonly style="color: #8a8787" />
                     <span asp-validation-for="Naam" class="text-danger"></span>
                 </div>
-
-                <div class="mb-3">
-                    <label asp-for="GeldigVanDatum" class="control-label">Geldig Van</label>
-                    <input asp-for="GeldigVanDatum" class="form-control" type="date" />
-                    <span asp-validation-for="GeldigVanDatum" class="text-danger"></span>
-                </div>
-
-                <div class="mb-3">
-                    <label asp-for="GeldigTotDatum" class="control-label">Geldig Tot</label>
-                    <input asp-for="GeldigTotDatum" class="form-control" type="date" />
+                <br />
+                @if (@Model.OrigineleBegindatum < DateTime.Today)
+                {
+                    <div class="form-group">
+                        <label asp-for="GeldigVanDatum" class="form-label fw-bold">Geldig Van (niet wijzigen)</label>
+                        <input asp-for="GeldigVanDatum" class="form-control inputveldenhuiskleur"
+                               style="color: #8a8787" type="date"
+                               value="@Model.GeldigVanDatum.ToString("yyyy-MM-dd")" readonly />
+                    </div>
+                }
+                else
+                {
+                    <div class="form-group">
+                        <label asp-for="GeldigVanDatum" class="form-label fw-bold">Geldig Van</label>
+                        <input asp-for="GeldigVanDatum" class="form-control inputveldenhuiskleur"
+                               type="date" value="@Model.GeldigVanDatum.ToString("yyyy-MM-dd")" />
+                        <span asp-validation-for="GeldigVanDatum" class="text-danger"></span>
+                    </div>
+                }
+                <br />
+                <div class="form-group">
+                    <label asp-for="GeldigTotDatum" class="form-label fw-bold">Geldig Tot</label>
+                    <input asp-for="GeldigTotDatum" class="form-control inputveldenhuiskleur"
+                           type="date" value="@Model.GeldigTotDatum.ToString("yyyy-MM-dd")" />
                     <span asp-validation-for="GeldigTotDatum" class="text-danger"></span>
                 </div>
-
+                <br />
                 <div class="form-check mb-3">
                     <input class="form-check-input" type="checkbox" asp-for="IsEenmalig" />
                     <label class="form-check-label fw-bold">Eenmalig</label>
-                        @Html.DisplayNameFor(model => model.IsEenmalig)
-                    
                 </div>
-
-                <div class="d-flex gap-2 mt-3">
-                    <button type="submit" class="btn huiskleur">Opslaan</button>
-                    <a asp-action="Index" class="btn btn-terug">Terug</a>
+                <br />
+                <p style="color: darkgreen">@ViewBag.bevestiging</p>
+                
+                <div class="d-flex gap-2">
+                    <button type="submit" class="btn btn-primary huiskleur">Opslaan</button>
+                    <a asp-action="Index" class="btn btn-secondary huiskleur">Terug</a>
                 </div>
             </form>
+           
         </div>
     </div>
 </div>
 
 <div style="margin-bottom: 50px;"></div>
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }
