@@ -48,6 +48,13 @@
     <a asp-action="Edit" asp-route-id="@Model?.CategorieId" class="btn huiskleur">Bewerken</a><br />
     <a asp-action="Index" class="btn btn-terug">Terug naar categorieën</a>
 </div>
+<div>
+    <br />
+    <a asp-action="Edit" asp-route-id="@Model?.CategorieId" class="btn huiskleur">Bewerken</a> 
+    <a asp-action="Index" class="btn btn-terug">Terug naar categorieën</a>
+</div>
+<br />
+<div>@await Component.InvokeAsync("ArtikelsPerSubcategorie", new { categorieId = Model.CategorieId })</div>
 
 <!-- Form om te zoeken op Artikel naam -->
 <div class="zoek-artikels mt-4 mb-3">
