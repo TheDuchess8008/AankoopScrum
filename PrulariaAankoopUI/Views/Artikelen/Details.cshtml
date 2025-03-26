@@ -107,7 +107,7 @@
             Categorie Toevoegen:
         </dt>
         <dd class="col-sm-9">
-            <form asp-action="BevestigCategorieToevoegen" method="get" class="form-inline">
+            <form asp-action="BevestigCategorieToevoegen" method="post" class="form-inline">
                 <input type="hidden" name="artikelId" value="@Model.Artikel.ArtikelId" />
                 
                 
@@ -117,7 +117,7 @@
                     </select>
                     <span asp-validation-for="CategorieId" class="text-danger"></span>
                 
-                <button type="submit" class="btn btn-primary huiskleur">Categorie Toevoegen aan Artikel</button>
+                <button type="submit" class="btn btn-primary huiskleur">Toevoegen</button>
                 </div>
             </form>
         </dd>

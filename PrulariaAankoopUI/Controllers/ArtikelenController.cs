@@ -312,7 +312,7 @@ namespace PrulariaAankoopUI.Controllers
 
         // Lesley
         // BevestigCategorieToevoegen
-        [HttpGet]
+        [HttpPost]
         public async Task<IActionResult> BevestigCategorieToevoegen(int artikelId, int categorieId)
         {
             try
