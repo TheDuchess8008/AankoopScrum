@@ -8,7 +8,8 @@ using System.Threading.Tasks;
 
 namespace PrulariaAankoopData.Repositories;
 public class SQLLeveranciersRepository : ILeveranciersRepository
-{private readonly PrulariaComContext _context;
+{
+    private readonly PrulariaComContext _context;
 
     public SQLLeveranciersRepository(PrulariaComContext context)
     {
@@ -27,5 +28,24 @@ public class SQLLeveranciersRepository : ILeveranciersRepository
         _context.Leveranciers.Add(leverancier);
         await _context.SaveChangesAsync();
     }
-}
 
+    public async Task<Leverancier?> GetByIdAsync(int id)
+    {
+        return await _context.Leveranciers
+            .Include(l => l.Plaats)
+            .FirstOrDefaultAsync(l => l.LeveranciersId == id);
+
+    }
+
+    public async Task<IEnumerable<Plaats>> GetAllPlaatsenAsync()
+    {
+        return await _context.Plaatsen.ToListAsync();
+    }
+
+
+    public async Task<bool> SaveChangesAsync()
+    {
+        return await _context.SaveChangesAsync() > 0;
+    }
+
+}

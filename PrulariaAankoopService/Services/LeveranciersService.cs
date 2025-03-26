@@ -5,28 +5,58 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-namespace PrulariaAankoopService.Services
+namespace PrulariaAankoopService.Services;
+
+public class LeveranciersService
 {
-    public class LeveranciersService
+    private readonly ILeveranciersRepository _leveranciersRepository;
+    private readonly PrulariaComContext _context;
+
+    public LeveranciersService(ILeveranciersRepository leveranciersRepository, PrulariaComContext context)
     {
-        private readonly ILeveranciersRepository _leveranciersRepository;
-        private readonly PrulariaComContext _context;
+        _leveranciersRepository = leveranciersRepository;
+        _context = context;
+    }
 
-        public LeveranciersService(ILeveranciersRepository leveranciersRepository, PrulariaComContext context)
+    public async Task<List<Leverancier>> GetAllLeveranciersAsync()
+    {
+        return await _leveranciersRepository.GetAllLeveranciersAsync();
+    }
+
+    public async Task AddLeverancierAsync(Leverancier leverancier)
+    {
+        await _leveranciersRepository.AddLeverancierAsync(leverancier);
+        await _context.SaveChangesAsync(); // Hier wordt SaveChangesAsync nu vanuit de service aangeroepen
+    }
+
+    public async Task<Leverancier?> GetLeverancierByIdAsync(int id)
+    {
+        return await _leveranciersRepository.GetByIdAsync(id);
+    }
+
+    public async Task<IEnumerable<Plaats>> GetPlaatsenAsync()
+    {
+        return await _leveranciersRepository.GetAllPlaatsenAsync();
+    }
+
+    public async Task<bool> UpdateLeverancierAsync(Leverancier updatedLeverancier)
+    {
+        var leverancier = await _leveranciersRepository.GetByIdAsync(updatedLeverancier.LeveranciersId);
+        if (leverancier == null)
         {
-            _leveranciersRepository = leveranciersRepository;
-            _context = context;
+            return false;
         }
 
-        public async Task<List<Leverancier>> GetAllLeveranciersAsync()
-        {
-            return await _leveranciersRepository.GetAllLeveranciersAsync();
-        }
+        leverancier.Naam = updatedLeverancier.Naam;
+        leverancier.BtwNummer = updatedLeverancier.BtwNummer;
+        leverancier.Straat = updatedLeverancier.Straat;
+        leverancier.HuisNummer = updatedLeverancier.HuisNummer;
+        leverancier.Bus = updatedLeverancier.Bus;
+        leverancier.PlaatsId = updatedLeverancier.PlaatsId;
+        leverancier.FamilienaamContactpersoon = updatedLeverancier.FamilienaamContactpersoon;
+        leverancier.VoornaamContactpersoon = updatedLeverancier.VoornaamContactpersoon;
 
-        public async Task AddLeverancierAsync(Leverancier leverancier)
-        {
-            await _leveranciersRepository.AddLeverancierAsync(leverancier);
-            await _context.SaveChangesAsync(); // Hier wordt SaveChangesAsync nu vanuit de service aangeroepen
-        }
+        return await _leveranciersRepository.SaveChangesAsync();
     }
 }
+
