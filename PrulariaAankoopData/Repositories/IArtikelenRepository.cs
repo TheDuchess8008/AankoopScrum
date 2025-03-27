@@ -34,5 +34,4 @@ public interface IArtikelenRepository
     //A.1200.2 Amaury Artikel toevoegen aan een categorie
     Task<List<Artikel>> GetNietGekoppeldeArtikelsVoorCategorieAsync(int categorieId);
     Task<bool> AddArtikelAanCategorieAsync(int artikelId, int categorieId);
-
 }

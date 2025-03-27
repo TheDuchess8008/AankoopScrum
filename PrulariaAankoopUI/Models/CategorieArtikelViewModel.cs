@@ -7,6 +7,7 @@ public class CategorieArtikelViewModel
     public int CategorieId { get; set; }
     public string CategorieNaam { get; set; } = string.Empty;
 
+    [Display(Name = "Artikel")]
     [Required(ErrorMessage = "Selecteer een artikel.")]
     public int ArtikelId { get; set; }
 
