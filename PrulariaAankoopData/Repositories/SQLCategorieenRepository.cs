@@ -30,7 +30,11 @@ public class SQLCategorieenRepository : ICategorieenRepository
 
     public async Task<Categorie> GetCategorieByIdAsync(int id)
     {
-        return await _context.Categorieen.FindAsync(id);
+        var categorie = await _context.Categorieen
+            .Include(c => c.HoofdCategorie)
+            .Where(c => c.CategorieId == id)
+            .FirstOrDefaultAsync();
+        return categorie;
     }
 
     // get list of Categorieen, not linked to an artikel with a given id, and that this categories have a parent category
