@@ -7,15 +7,12 @@
 <h1>Details</h1>
 
 <div>
-    <h4>Categorie</h4>
+    <h4>Categorie: @Model.Naam</h4>
     <hr />
     <dl class="row">
-        <dt class="col-sm-2">Naam</dt>
-        <dd class="col-sm-10">@Model.Naam</dd>
-
         @if (Model.HoofdCategorie != null)
         {
-            <dt class="col-sm-2">Hoofdcategorie</dt>
+            <dt class="col-sm-2">Hoofdcategorie:</dt>
             <dd class="col-sm-10">
                 <a asp-action="Details" asp-route-id="@Model.HoofdCategorie.CategorieId" class="btn huiskleur">
                     @Model.HoofdCategorie.Naam
