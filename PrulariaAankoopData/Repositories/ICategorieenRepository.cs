@@ -12,8 +12,7 @@ public interface ICategorieenRepository
     Task<List<Categorie>> GetLijstCategorieen();
     Task<List<Categorie>> GetAlleCategorieenAsync();
     Task<Categorie> GetCategorieByIdAsync(int id);
-    Task<List<Categorie>> GetOverigeCategorieenAsync(int artikelId);
-    Task<Categorie?> GetCategorieByIdAsync(int id);
+    Task<List<Categorie?>> GetOverigeCategorieenAsync(int artikelId);    
     Task<IEnumerable<Categorie>> GetAllCategorieenAsync();
     Task HernoemCategorieAsync(int categorieId, string nieuweNaam);
     Task<bool> HeeftSubCategorieenAsync(int categorieId);

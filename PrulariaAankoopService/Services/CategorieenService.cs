@@ -1,11 +1,8 @@
 ﻿using PrulariaAankoopData.Models;
-using PrulariaAankoopData.Models;
 using PrulariaAankoopData.Repositories;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using PrulariaAankoopData.Models;
-using PrulariaAankoopData.Repositories;
 
 namespace PrulariaAankoopService.Services;
 public class CategorieenService
@@ -19,7 +16,7 @@ public class CategorieenService
     {
         return (await _categorieenRepository.GetLijstCategorieen());
     }
-    
+
     public async Task<List<Categorie>> GetAlleCategorieenAsync()
     {
         return await _categorieenRepository.GetAlleCategorieenAsync();
@@ -35,43 +32,29 @@ public class CategorieenService
         return await _categorieenRepository.GetOverigeCategorieenAsync(artikelId);
     }
 
-namespace PrulariaAankoopService.Services
-{
-    public class CategorieenService
+
+
+
+    // Get all categories
+    public async Task<IEnumerable<Categorie>> GetAllCategorieenAsync()
     {
-        private readonly ICategorieenRepository _categorieenRepository;
+        return await _categorieenRepository.GetAllCategorieenAsync();
+    }
 
-        public CategorieenService(ICategorieenRepository categorieenRepository)
-        {
-            _categorieenRepository = categorieenRepository;
-        }
+    // Rename a category by its ID
+    public async Task HernoemCategorieAsync(int categorieId, string nieuweNaam)
+    {
+        await _categorieenRepository.HernoemCategorieAsync(categorieId, nieuweNaam);
+    }
+    public async Task<bool> KanVerwijderdWordenAsync(int id)
+    {
+        var categorie = await _categorieenRepository.GetCategorieMetRelatiesByIdAsync(id);
+        return categorie != null && !categorie.Subcategorieën.Any() && !categorie.Artikelen.Any();
+    }
 
-        // Get a category by its ID
-        public async Task<Categorie?> GetCategorieByIdAsync(int id)
-        {
-            return await _categorieenRepository.GetCategorieByIdAsync(id);
-        }
-
-        // Get all categories
-        public async Task<IEnumerable<Categorie>> GetAllCategorieenAsync()
-        {
-            return await _categorieenRepository.GetAllCategorieenAsync();
-        }
-
-        // Rename a category by its ID
-        public async Task HernoemCategorieAsync(int categorieId, string nieuweNaam)
-        {
-            await _categorieenRepository.HernoemCategorieAsync(categorieId, nieuweNaam);
-        }
-        public async Task<bool> KanVerwijderdWordenAsync(int id)
-        {
-            var categorie = await _categorieenRepository.GetCategorieMetRelatiesByIdAsync(id);
-            return categorie != null && !categorie.Subcategorieën.Any() && !categorie.Artikelen.Any();
-        }
-
-        public async Task<bool> VerwijderCategorieAsync(int id)
-        {
-            return await _categorieenRepository.DeleteCategorieAsync(id);
-        }
+    public async Task<bool> VerwijderCategorieAsync(int id)
+    {
+        return await _categorieenRepository.DeleteCategorieAsync(id);
     }
 }
+
