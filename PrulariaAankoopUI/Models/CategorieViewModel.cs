@@ -17,7 +17,5 @@ public class CategorieViewModel
 
     public virtual ICollection<Categorie> Subcategorieën { get; set; } = new List<Categorie>();
 
-    public virtual ICollection<Artikel> Artikelen { get; set; } = new List<Artikel>();
-
     public List<Categorie> Categorieen {  get; set; } = new List<Categorie>();
 }
