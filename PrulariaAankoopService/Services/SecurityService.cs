@@ -25,7 +25,7 @@ public class SecurityService
 
     public async Task<bool> CheckEmailEnPaswoord(Personeelslid gebruiker, string email, string paswoord)
     {
-        if(gebruiker is not null)
+        if(gebruiker is not null && paswoord is not null)
         {
             if (BCrypt.Net.BCrypt.Verify(paswoord, gebruiker.PersoneelslidAccount.Paswoord))
                 return true;
