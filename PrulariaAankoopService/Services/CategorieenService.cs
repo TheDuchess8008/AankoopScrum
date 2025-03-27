@@ -9,9 +9,12 @@ namespace PrulariaAankoopService.Services;
 public class CategorieenService
 {
     private readonly ICategorieenRepository _categorieenRepository;
-    public CategorieenService(ICategorieenRepository categorieenRepository)
+    private readonly IArtikelenRepository _artikelenRepository;
+    public CategorieenService(ICategorieenRepository categorieenRepository, 
+        IArtikelenRepository artikelenRepository)
     {
         _categorieenRepository = categorieenRepository;
+        _artikelenRepository = artikelenRepository;
     }
     public async Task<List<Categorie>> IndexService()
     {
@@ -56,5 +59,14 @@ public class CategorieenService
     {
         return await _categorieenRepository.DeleteCategorieAsync(id);
     }
-}
+    public async Task<List<Artikel>> GetNietGekoppeldeArtikelsVoorCategorieAsync(int categorieId)
+    {
+        return await _artikelenRepository.GetNietGekoppeldeArtikelsVoorCategorieAsync(categorieId);
+    }
 
+    public async Task<bool> AddArtikelAanCategorieAsync(int artikelId, int categorieId)
+    {
+        return await _artikelenRepository.AddArtikelAanCategorieAsync(artikelId, categorieId);
+    }
+
+}

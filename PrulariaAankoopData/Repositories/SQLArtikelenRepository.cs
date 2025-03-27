@@ -143,6 +143,37 @@ public class SQLArtikelenRepository : IArtikelenRepository
             .OrderBy(a => a.Naam)
             .ToList();
     }
+    //Niet gelinkte artikels ophalen voor dropdown
+    public async Task<List<Artikel>> GetNietGekoppeldeArtikelsVoorCategorieAsync(int categorieId)
+    {
+        var gekoppeldeArtikels = await _context.Categorieen
+            .Where(c => c.CategorieId == categorieId)
+            .SelectMany(c => c.Artikelen)
+            .Select(a => a.ArtikelId)
+            .ToListAsync();
 
+        return await _context.Artikelen
+            .Where(a => !gekoppeldeArtikels.Contains(a.ArtikelId))
+            .OrderBy(a => a.Naam)
+            .ToListAsync();
+    }
+
+    //returns true als geslaagd
+    public async Task<bool> AddArtikelAanCategorieAsync(int artikelId, int categorieId)
+    {
+        var artikel = await _context.Artikelen
+            .Include(a => a.Categorieën)
+            .FirstOrDefaultAsync(a => a.ArtikelId == artikelId);
+
+        var categorie = await _context.Categorieen.FindAsync(categorieId);
+
+        if (artikel == null || categorie == null) return false;
+
+        if (artikel.Categorieën.Any(c => c.CategorieId == categorieId)) return false;
+
+        artikel.Categorieën.Add(categorie);
+        await _context.SaveChangesAsync();
+        return true;
+    }
 
 }

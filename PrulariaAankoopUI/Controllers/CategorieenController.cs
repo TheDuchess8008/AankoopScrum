@@ -16,11 +16,13 @@ namespace PrulariaAankoopUI.Controllers
     {
         private readonly PrulariaComContext _context;
         private readonly CategorieenService _categorieenService;
-
-        public CategorieenController(PrulariaComContext context, CategorieenService categorieenService)
+        private readonly ArtikelenService _artikelenService;
+        public CategorieenController(PrulariaComContext context, CategorieenService categorieenService,
+            ArtikelenService artikelenService)
         {
             _context = context;
             _categorieenService = categorieenService;
+            _artikelenService = artikelenService;
         }
 
         // GET: Categorieen
@@ -42,17 +44,35 @@ namespace PrulariaAankoopUI.Controllers
             if (categorie == null)
                 return NotFound();
 
+            // Get alle Artikelen nog niet gelinkt aan de huidige Categorie
+            var beschikbareArtikelen = 
+                await _artikelenService.GetNietGekoppeldeArtikelsVoorCategorieAsync(categorie.CategorieId);
+
+            var dropdownItems = beschikbareArtikelen.Select(a => new SelectListItem
+            {
+                Value = a.ArtikelId.ToString(),
+                Text = a.Naam
+            }).ToList();
+
             var viewModel = new CategorieViewModel
             {
                 CategorieId = categorie.CategorieId,
                 Naam = categorie.Naam,
                 HoofdCategorieId = categorie.HoofdCategorieId,
                 HoofdCategorie = categorie.HoofdCategorie,
-                Subcategorieën = categorie.Subcategorieën.ToList()
+                Subcategorieën = categorie.Subcategorieën.ToList(),
+
+                ArtikelToevoegenForm = new CategorieArtikelViewModel
+                {
+                    CategorieId = categorie.CategorieId,
+                    CategorieNaam = categorie.Naam,
+                    BeschikbareArtikelen = dropdownItems
+                }
             };
 
             return View(viewModel);
         }
+
 
         // GET: Categorieen/Create
         public IActionResult Create()
@@ -180,6 +200,47 @@ namespace PrulariaAankoopUI.Controllers
         private bool CategorieExists(int id)
         {
             return _context.Categorieen.Any(e => e.CategorieId == id);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> VoegArtikelToe(int categorieId)
+        {
+            var categorie = await _categorieenService.GetCategorieByIdAsync(categorieId);
+            if (categorie == null) return NotFound();
+
+            var beschikbareArtikels = await _categorieenService.GetNietGekoppeldeArtikelsVoorCategorieAsync(categorieId);
+
+            var model = new CategorieArtikelViewModel
+            {
+                CategorieId = categorieId,
+                CategorieNaam = categorie.Naam,
+                BeschikbareArtikelen = beschikbareArtikels
+                    .Select(a => new SelectListItem { Value = a.ArtikelId.ToString(), Text = a.Naam })
+                    .ToList()
+            };
+
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> KoppelArtikelAanCategorie(CategorieViewModel model)
+        {
+            var form = model.ArtikelToevoegenForm;
+
+            if (form.ArtikelId == 0)
+            {
+                TempData["ErrorMessage"] = "Selecteer een geldig artikel.";
+                return RedirectToAction("Details", new { id = form.CategorieId });
+            }
+
+            bool success = await _categorieenService.AddArtikelAanCategorieAsync(form.ArtikelId, form.CategorieId);
+
+            TempData["SuccessMessage"] = success
+                ? "Artikel succesvol gekoppeld."
+                : "Artikel is mogelijk al gekoppeld of koppeling is mislukt.";
+
+            return RedirectToAction("Details", new { id = form.CategorieId });
         }
     }
 }
