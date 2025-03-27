@@ -199,7 +199,17 @@ public class SQLCategorieenRepository : ICategorieenRepository
     }
 
 
-
+    // A.1300.Lesley
+    // RemoveArtikelVanCategorieAsync
+    public async Task<bool> RemoveArtikelVanCategorieAsync(Artikel artikel, Categorie categorie)
+    {
+        if (categorie.Artikelen.Remove(artikel))
+        {
+            await _context.SaveChangesAsync();
+            return true;
+        }
+        return false;
+    }
 
 
 

@@ -43,7 +43,8 @@ namespace PrulariaAankoopUI.Controllers
             if (id == null)
                 return NotFound();
 
-            var categorie = await _categorieenService.GetCategorieByIdAsync(id.Value);
+            //var categorie = await _categorieenService.GetCategorieByIdAsync(id.Value);// ORIGINELE
+            var categorie = await _categorieenService.GetCategorieByIdMetHoofdEnSubcategorieenEnArtikelenAsync((int)id);//NIEUWE
             if (categorie == null)
                 return NotFound();
 
@@ -72,6 +73,9 @@ namespace PrulariaAankoopUI.Controllers
                     BeschikbareArtikelen = dropdownItems
                 }
             };
+
+            var overigeCategorieen = await _categorieenService.GetOverigeCategorieen2Async((int)id);
+            ViewData["LijstOverigeCategorieId"] = new SelectList(overigeCategorieen, "CategorieId", "Naam");
 
             return View(viewModel);
         }
