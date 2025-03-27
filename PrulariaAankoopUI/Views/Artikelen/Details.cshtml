@@ -134,15 +134,7 @@
                 {
                     var categorie = Model.Artikel.Categorieën[i];
                     var hoofdCategorieNaam = categorie.HoofdCategorie?.Naam ?? "Geen Hoofdcategorie";
-                    var hoofdCategorieBestaat = false;
-                    @for (int j = 0; j < i; j++)
-                    {
-                        if (Model.Artikel.Categorieën[j].HoofdCategorieId == Model.Artikel.Categorieën[i].HoofdCategorieId)
-                        {
-                            hoofdCategorieBestaat = true;
-                        }
-                    }
-                    @if (!hoofdCategorieBestaat)
+                    @if (i == 0 || i > 0 && Model.Artikel.Categorieën[i].HoofdCategorieId != Model.Artikel.Categorieën[i - 1].HoofdCategorieId)
                     {
                         <span>@hoofdCategorieNaam:</span>
                     }
