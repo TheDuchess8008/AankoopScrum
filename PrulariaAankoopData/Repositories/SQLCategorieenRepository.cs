@@ -125,4 +125,22 @@ public class SQLCategorieenRepository : ICategorieenRepository
             .Include(c => c.Artikelen)
             .ToListAsync();
     }
+
+    
+    public async Task<bool> CategorieMetNaamAlBestaat(string categorieNaam)
+    {
+        return await _context.Categorieen
+            .AnyAsync(c => c.Naam.ToLower() == categorieNaam.ToLower()); // case sensitivity included
+    }
+
+    public async Task CategorieToevoegen(Categorie categorie)
+    {
+        _context.Categorieen.Add(categorie);
+        await _context.SaveChangesAsync();
+    }
+
+    public async Task<List<Categorie>> GetHoofdCategorien()
+    {
+        return await _context.Categorieen.Where(c => c.HoofdCategorieId == null || c.Subcategorieën.Count > 0).ToListAsync();
+    }
 }

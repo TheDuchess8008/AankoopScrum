@@ -73,12 +73,15 @@ namespace PrulariaAankoopUI.Controllers
             return View(viewModel);
         }
 
-
-        // GET: Categorieen/Create
-        public IActionResult Create()
+        [HttpGet]
+        public async Task<IActionResult> Create()
         {
-            ViewData["HoofdCategorieId"] = new SelectList(_context.Categorieen, "CategorieId", "Naam");
-            return View();
+            var hoofdCategorien = await _categorieenService.GetHoofdCategorien();
+            var categorieToevoegenViewModel = new CategorieToevoegenViewModel()
+            {
+                HoofdCategorien = new SelectList(hoofdCategorien, "CategorieId", "Naam")
+            };
+            return View(categorieToevoegenViewModel);
         }
 
         // POST: Categorieen/Create
@@ -86,16 +89,30 @@ namespace PrulariaAankoopUI.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("CategorieId,Naam,HoofdCategorieId")] Categorie categorie)
+        public async Task<IActionResult> Create(CategorieToevoegenViewModel categorieToevoegenViewModel)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(categorie);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                bool categorieAlBestaat = await _categorieenService.CategorieMetNaamAlBestaat(categorieToevoegenViewModel.Naam);
+                if (categorieAlBestaat)
+                {
+                    ModelState.AddModelError("Naam", "Categorie met dezelfde naam bestaat al. Geef een andere naam");
+                }
+                else
+                {
+                    var nieuweCategorie = new Categorie()
+                    {
+                        Naam = categorieToevoegenViewModel.Naam,
+                        HoofdCategorieId = categorieToevoegenViewModel.HoofdCategorieId,
+                    };
+                    await _categorieenService.CategorieToevoegen(nieuweCategorie);
+                    TempData["Boodschap"] = "Categorie werd toegevoegd.";
+                    return RedirectToAction(nameof(Index));
+                }
             }
-            ViewData["HoofdCategorieId"] = new SelectList(_context.Categorieen, "CategorieId", "Naam", categorie.HoofdCategorieId);
-            return View(categorie);
+            var hoofdCategorien = await _categorieenService.GetHoofdCategorien();
+            categorieToevoegenViewModel.HoofdCategorien = new SelectList(hoofdCategorien, "CategorieId", "Naam");
+            return View(categorieToevoegenViewModel);
         }
 
         // GET: Categorieen/Edit/5

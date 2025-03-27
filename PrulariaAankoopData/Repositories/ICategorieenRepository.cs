@@ -21,4 +21,8 @@ public interface ICategorieenRepository
     Task<Categorie?> GetCategorieMetRelatiesByIdAsync(int id); // New method for related data
     Task<Categorie?> GetByIdAsync(int id);
     Task<List<Categorie>> GetSubcategorieenAsync(int hoofdCategorieId);
+    Task<bool> CategorieMetNaamAlBestaat(string categorieNaam);
+
+    Task CategorieToevoegen(Categorie categorie);
+    Task<List<Categorie>> GetHoofdCategorien();
 }
