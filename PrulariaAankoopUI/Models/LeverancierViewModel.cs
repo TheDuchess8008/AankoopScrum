@@ -28,4 +28,8 @@ public class LeverancierViewModel
     public virtual ICollection<Artikel> Artikelen { get; set; } = new List<Artikel>();
 
     public virtual Plaats? Plaats { get; set; } = null!;
+    [Display(Name = "Postcode")]
+    public string? Postcode => Plaats?.Postcode;
+    [Display(Name = "Adres")]
+    public string VolledigAdres => $"{Straat} {HuisNummer}{(string.IsNullOrEmpty(Bus) ? "" : " bus " + Bus)}, {Postcode} {Plaats?.Naam}";
 }

@@ -74,7 +74,9 @@ public class SQLActiecodesRepository : IActiecodesRepository
     // ToListAsync
     public async Task<List<Actiecode>> ToListAsync()
     {
-        return await _context.Actiecodes.ToListAsync();
+        return await _context.Actiecodes
+                    .OrderBy(a=>a.GeldigVanDatum)
+                    .ToListAsync();
     }
 
     // SYNCHROON ===========================================================

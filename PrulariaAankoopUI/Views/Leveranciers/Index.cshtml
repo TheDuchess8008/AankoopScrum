@@ -1,4 +1,4 @@
-﻿@model IEnumerable<PrulariaAankoopData.Models.Leverancier>
+﻿@model IEnumerable<PrulariaAankoopUI.Models.LeverancierViewModel>
 
 @{
     ViewData["Title"] = "Leveranciers";
@@ -7,74 +7,32 @@
 <h1>Leveranciers</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create" class="btn huiskleur">Toevoegen</a>
 </p>
+
 <table class="table">
     <thead>
         <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Naam)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.BtwNummer)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Straat)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.HuisNummer)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Bus)
-            </th>
-            <th>
-              Naam en Voornaam Van Contactpersoon
-            </th>
-           
-            <th>
-                @Html.DisplayNameFor(model => model.Plaats)
-            </th>
-            <th></th>
+            <th>Naam</th>
+            <th style="width: 120px">Postcode</th>
+            <th>Plaats</th>
+            <th>Contactpersoon</th>
+            <th style="text-align: center">Acties</th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Naam)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.BtwNummer)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Straat)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.HuisNummer)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Bus)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.FamilienaamContactpersoon) @Html.DisplayFor(modelItem => item.VoornaamContactpersoon)
-            </td>
-           
-            <td>
-                @Html.DisplayFor(modelItem => item.Plaats.Naam)
-            </td>
-            <td class="action-buttons">
-                <a asp-action="Edit" asp-route-id="@item.LeveranciersId" title="Bewerken">
-                    <button class="btn btn-icon btn-edit"><i class="bi bi-pencil"></i></button>
-                </a>
-                <a asp-action="Details" asp-route-id="@item.LeveranciersId" title="Details bekijken">
-                    <button class="btn btn-icon btn-details"><i class="bi bi-eye"></i></button>
-                </a>
-                <a asp-action="Delete" asp-route-id="@item.LeveranciersId" title="Verwijderen">
-                    <button class="btn btn-icon btn-delete"><i class="bi bi-trash"></i></button>
-                </a>
-            </td>
-
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@Html.DisplayFor(modelItem => item.Naam)</td>
+                <td>@Html.DisplayFor(modelItem => item.Postcode)</td>
+                <td>@Html.DisplayFor(modelItem => item.Plaats.Naam)</td>
+                <td>@Html.DisplayFor(modelItem => item.FamilienaamContactpersoon) @Html.DisplayFor(modelItem => item.VoornaamContactpersoon)</td>
+                <td class="action-buttons">
+                    <a asp-action="Edit" asp-route-id="@item.LeveranciersId" title="Bewerken"><button class="btn btn-icon btn-edit"><i class="bi bi-pencil"></i></button></a>
+                    <a asp-action="Details" asp-route-id="@item.LeveranciersId" title="Details bekijken"><button class="btn btn-icon btn-details"><i class="bi bi-eye"></i></button></a>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>

@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using PrulariaAankoopData.Models;
 using PrulariaAankoopData.Repositories;
 using PrulariaAankoopService.Services;
+using PrulariaAankoopUI.Models;
 
 namespace PrulariaAankoopUI.Controllers
 {
@@ -25,8 +26,10 @@ namespace PrulariaAankoopUI.Controllers
         // GET: Categorieen
         public async Task<IActionResult> Index()
         {
-            var prulariaComContext = _context.Categorieen.Include(c => c.HoofdCategorie);
-            return View(await prulariaComContext.ToListAsync());
+            var categorieViewModel = new CategorieViewModel();
+            var lijstCategorieen = await _categorieenService.IndexService();
+            categorieViewModel.Categorieen = lijstCategorieen;
+            return View(categorieViewModel);
         }
 
         // GET: Categorieen/Details/5

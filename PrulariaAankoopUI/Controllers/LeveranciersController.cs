@@ -7,83 +7,180 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using PrulariaAankoopData.Models;
 using PrulariaAankoopData.Repositories;
+using PrulariaAankoopService.Services;
+using PrulariaAankoopUI.Models;
 
 namespace PrulariaAankoopUI.Controllers
 {
     public class LeveranciersController : Controller
     {
+        private readonly ILeveranciersRepository _leveranciersRepository;
+        private readonly LeveranciersService _leveranciersService;
         private readonly PrulariaComContext _context;
-
-        public LeveranciersController(PrulariaComContext context)
+        
+        public LeveranciersController(PrulariaComContext context, ILeveranciersRepository leveranciersRepository, LeveranciersService leveranciersService)
         {
             _context = context;
+            _leveranciersRepository = leveranciersRepository;
+            _leveranciersService = leveranciersService; 
         }
 
         // GET: Leveranciers
         public async Task<IActionResult> Index()
         {
-            var prulariaComContext = _context.Leveranciers.Include(l => l.Plaats);
-            return View(await prulariaComContext.ToListAsync());
+            var leveranciers = await _leveranciersService.GetAllLeveranciersAsync();
+
+            var viewModel = leveranciers.Select(l => new LeverancierViewModel
+            {
+                LeveranciersId = l.LeveranciersId,
+                Naam = l.Naam,
+                BtwNummer = l.BtwNummer,
+                Straat = l.Straat,
+                HuisNummer = l.HuisNummer,
+                Bus = l.Bus,
+                PlaatsId = l.PlaatsId,
+                FamilienaamContactpersoon = l.FamilienaamContactpersoon,
+                VoornaamContactpersoon = l.VoornaamContactpersoon,
+                Plaats = l.Plaats
+            }).ToList();
+
+            return View(viewModel);
         }
 
         // GET: Leveranciers/Details/5
-        public async Task<IActionResult> Details(int? id)
+        [HttpGet("Leveranciers/Details/{id}")]
+        public async Task<IActionResult> Details(int id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var leverancier = await _context.Leveranciers
-                .Include(l => l.Plaats)
-                .FirstOrDefaultAsync(m => m.LeveranciersId == id);
+            var leverancier = await _leveranciersService.GetLeverancierByIdAsync(id);
             if (leverancier == null)
-            {
                 return NotFound();
-            }
 
-            return View(leverancier);
+            // Converteer naar LeverancierViewModel
+            var viewModel = new LeverancierViewModel
+            {
+                LeveranciersId = leverancier.LeveranciersId,
+                Naam = leverancier.Naam,
+                BtwNummer = leverancier.BtwNummer,
+                Straat = leverancier.Straat,
+                HuisNummer = leverancier.HuisNummer,
+                Bus = leverancier.Bus,
+                PlaatsId = leverancier.PlaatsId,
+                Plaats = leverancier.Plaats,
+                FamilienaamContactpersoon = leverancier.FamilienaamContactpersoon,
+                VoornaamContactpersoon = leverancier.VoornaamContactpersoon,
+                Artikelen = leverancier.Artikelen
+            };
+
+            return View(viewModel);
         }
 
         // GET: Leveranciers/Create
         public IActionResult Create()
         {
-            ViewData["PlaatsId"] = new SelectList(_context.Plaatsen, "PlaatsId", "Naam");
-            return View();
+            // Laad postcodes en plaatsen zoals voorheen, maar via service als nodig
+            var model = new NieuweLeverancierViewModel
+            {
+                Postcodes = _context.Plaatsen
+                            .Select(p => p.Postcode)
+                            .Distinct()
+                            .Select(p => new SelectListItem { Text = p, Value = p })
+                            .ToList(),
+                Plaatsen = _context.Plaatsen
+                            .Select(p => new SelectListItem { Value = p.PlaatsId.ToString(), Text = p.Naam })
+                            .ToList()
+            };
+            return View(model);
         }
 
         // POST: Leveranciers/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("LeveranciersId,Naam,BtwNummer,Straat,HuisNummer,Bus,PlaatsId,FamilienaamContactpersoon,VoornaamContactpersoon")] Leverancier leverancier)
+        public async Task<IActionResult> Create(NieuweLeverancierViewModel model)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(leverancier);
-                await _context.SaveChangesAsync();
+                var selectedPlaats = await _context.Plaatsen
+                    .FirstOrDefaultAsync(p => p.PlaatsId == model.PlaatsId);
+
+             
+
+                if (ModelState.IsValid)
+                {
+                    var leverancier = new Leverancier
+                    {
+                        Naam = model.Naam,
+                        BtwNummer = model.BtwNummer,
+                        Straat = model.Straat,
+                        HuisNummer = model.HuisNummer,
+                        Bus = model.Bus,
+                        PlaatsId = model.PlaatsId,
+                        FamilienaamContactpersoon = model.FamilienaamContactpersoon,
+                        VoornaamContactpersoon = model.VoornaamContactpersoon
+                    };
+
+                    await _leveranciersService.AddLeverancierAsync(leverancier);
+
+                    return RedirectToAction(nameof(Index));
+                }
+            }
+
+            // Als de validatie faalt, vul dan de dropdowns opnieuw in
+            model.Postcodes = _context.Plaatsen
+                            .Select(p => p.Postcode)
+                            .Distinct()
+                            .Select(p => new SelectListItem { Text = p, Value = p })
+                            .ToList();
+
+            model.Plaatsen = _context.Plaatsen
+                            .Select(p => new SelectListItem { Value = p.PlaatsId.ToString(), Text = p.Naam })
+                            .ToList();
+
+            return View(model);
+        }
+    
+
+
+// GET: Leveranciers/Edit/5
+public async Task<IActionResult> Edit(int? id)
+        {
+         
+
+            try
+            {
+                if (id == null)
+                {
+                    return NotFound();
+                }
+
+                var leverancier = await _leveranciersService.GetLeverancierByIdAsync(id.Value);
+                if (leverancier == null)
+                {
+                    return NotFound();
+                }
+
+                var model = new LeverancierWijzigenViewModel
+                {
+                    LeveranciersId = leverancier.LeveranciersId,
+                    Naam = leverancier.Naam,
+                    BtwNummer = leverancier.BtwNummer,
+                    Straat = leverancier.Straat,
+                    HuisNummer = leverancier.HuisNummer,
+                    Bus = leverancier.Bus,
+                    PlaatsId = leverancier.PlaatsId,
+                    FamilienaamContactpersoon = leverancier.FamilienaamContactpersoon,
+                    VoornaamContactpersoon = leverancier.VoornaamContactpersoon
+                };
+
+                ViewData["PlaatsId"] = new SelectList(await _leveranciersService.GetPlaatsenAsync(), "PlaatsId", "Naam", leverancier.PlaatsId);
+                return View(model);
+            }
+            catch (Exception ex)
+            {
+              
+                ModelState.AddModelError("", "Er is een fout opgetreden bij het laden van de leverancier.");
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["PlaatsId"] = new SelectList(_context.Plaatsen, "PlaatsId", "Naam", leverancier.PlaatsId);
-            return View(leverancier);
-        }
 
-        // GET: Leveranciers/Edit/5
-        public async Task<IActionResult> Edit(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var leverancier = await _context.Leveranciers.FindAsync(id);
-            if (leverancier == null)
-            {
-                return NotFound();
-            }
-            ViewData["PlaatsId"] = new SelectList(_context.Plaatsen, "PlaatsId", "Naam", leverancier.PlaatsId);
-            return View(leverancier);
         }
 
         // POST: Leveranciers/Edit/5
@@ -93,69 +190,53 @@ namespace PrulariaAankoopUI.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("LeveranciersId,Naam,BtwNummer,Straat,HuisNummer,Bus,PlaatsId,FamilienaamContactpersoon,VoornaamContactpersoon")] Leverancier leverancier)
         {
-            if (id != leverancier.LeveranciersId)
-            {
-                return NotFound();
-            }
+           
 
-            if (ModelState.IsValid)
+            try
             {
-                try
+                if (id != leverancier.LeveranciersId)
                 {
-                    _context.Update(leverancier);
-                    await _context.SaveChangesAsync();
+                    return NotFound();
                 }
-                catch (DbUpdateConcurrencyException)
+
+                if (ModelState.IsValid)
                 {
-                    if (!LeverancierExists(leverancier.LeveranciersId))
+                    var updatedLeverancier = new Leverancier
                     {
-                        return NotFound();
-                    }
-                    else
+                        LeveranciersId = leverancier.LeveranciersId,
+                        Naam = leverancier.Naam,
+                        BtwNummer = leverancier.BtwNummer,
+                        Straat = leverancier.Straat,
+                        HuisNummer = leverancier.HuisNummer,
+                        Bus = leverancier.Bus,
+                        PlaatsId = leverancier.PlaatsId,
+                        FamilienaamContactpersoon = leverancier.FamilienaamContactpersoon,
+                        VoornaamContactpersoon = leverancier.VoornaamContactpersoon
+                    };
+
+                    bool success = await _leveranciersService.UpdateLeverancierAsync(updatedLeverancier);
+                    if (success)
                     {
-                        throw;
+                        return RedirectToAction(nameof(Index));
                     }
+
+                    ModelState.AddModelError("", "Er is iets misgegaan bij het opslaan.");
                 }
-                return RedirectToAction(nameof(Index));
-            }
-            ViewData["PlaatsId"] = new SelectList(_context.Plaatsen, "PlaatsId", "Naam", leverancier.PlaatsId);
-            return View(leverancier);
-        }
 
-        // GET: Leveranciers/Delete/5
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null)
+                ViewData["PlaatsId"] = new SelectList(await _leveranciersService.GetPlaatsenAsync(), "PlaatsId", "Naam", leverancier.PlaatsId);
+                return View(leverancier);
+            }
+            catch (Exception ex)
             {
-                return NotFound();
+                ModelState.AddModelError("", "Er is een onverwachte fout opgetreden bij het bijwerken van de leverancier.");
+                return View(leverancier);
             }
 
-            var leverancier = await _context.Leveranciers
-                .Include(l => l.Plaats)
-                .FirstOrDefaultAsync(m => m.LeveranciersId == id);
-            if (leverancier == null)
-            {
-                return NotFound();
-            }
 
-            return View(leverancier);
+
         }
-
-        // POST: Leveranciers/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            var leverancier = await _context.Leveranciers.FindAsync(id);
-            if (leverancier != null)
-            {
-                _context.Leveranciers.Remove(leverancier);
-            }
-
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
-        }
-
+        
+        
         private bool LeverancierExists(int id)
         {
             return _context.Leveranciers.Any(e => e.LeveranciersId == id);

@@ -9,7 +9,7 @@
 <h1>Artikelen</h1>
 
 <p>
-    <a asp-action="Create">Voeg nieuw artikel toe</a>
+    <a asp-action="Create" class="btn huiskleur">Toevoegen</a>
 </p>
 <form asp-action="Filter">
     <div class="row">
@@ -78,13 +78,10 @@
                         @Html.DisplayFor(modelItem => item.Voorraad)
                     </td>
                     <td class="action-buttons">
-                        <a asp-action="Edit" asp-route-id="@item.ArtikelId" title="Bewerken">
-                            <button class="btn btn-icon btn-edit"><i class="bi bi-pencil"></i></button>
-                        </a>
-                        <a asp-action="Details" asp-route-id="@item.ArtikelId" title="Details bekijken">
-                            <button class="btn btn-icon btn-details"><i class="bi bi-eye"></i></button>
-                        </a>
+                        <a asp-action="Edit" asp-route-id="@item.ArtikelId" title="Bewerken"><button class="btn btn-icon btn-edit"><i class="bi bi-pencil"></i></button></a>
+                        <a asp-action="Details" asp-route-id="@item.ArtikelId" title="Details bekijken"><button class="btn btn-icon btn-details"><i class="bi bi-eye"></i></button></a>
                     </td>
+
 
                 </tr>
             }
