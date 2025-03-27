@@ -17,12 +17,15 @@ namespace PrulariaAankoopUI.Controllers
         private readonly PrulariaComContext _context;
         private readonly CategorieenService _categorieenService;
         private readonly ArtikelenService _artikelenService;
+        private readonly ICategorieenRepository _categorieenRepository;
+
         public CategorieenController(PrulariaComContext context, CategorieenService categorieenService,
-            ArtikelenService artikelenService)
+            ArtikelenService artikelenService, ICategorieenRepository categorieenRepository)
         {
             _context = context;
             _categorieenService = categorieenService;
             _artikelenService = artikelenService;
+            _categorieenRepository = categorieenRepository;
         }
 
         // GET: Categorieen
@@ -349,16 +352,7 @@ namespace PrulariaAankoopUI.Controllers
         }
 
 
-        GekozenCategorie = gekozenCategorie
-    };
 
-                return View(categorieCategorieViewModel);
-}
-            catch (Exception)
-            {
-    return StatusCode(500, "Er is een interne fout opgetreden.");
-}
-        }
 
         // A.1500.Lesley
         // CategorieVerwijderenVanCategorie
