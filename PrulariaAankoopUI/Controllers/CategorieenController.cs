@@ -26,10 +26,14 @@ namespace PrulariaAankoopUI.Controllers
         // GET: Categorieen
         public async Task<IActionResult> Index()
         {
-            var categorieViewModel = new CategorieViewModel();
-            var lijstCategorieen = await _categorieenService.IndexService();
-            categorieViewModel.Categorieen = lijstCategorieen;
-            return View(categorieViewModel);
+            if (HttpContext.Session.GetString("Ingelogd") != null)
+            {
+                var categorieViewModel = new CategorieViewModel();
+                var lijstCategorieen = await _categorieenService.IndexService();
+                categorieViewModel.Categorieen = lijstCategorieen;
+                return View(categorieViewModel);
+            }
+            return RedirectToAction("Index", "Home");
         }
 
         // GET: Categorieen/Details/5
