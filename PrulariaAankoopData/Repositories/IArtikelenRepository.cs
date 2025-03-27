@@ -29,6 +29,10 @@ public interface IArtikelenRepository
 
     Task<List<Artikel>> GetArtikelenMetFilteren(int? categorieId, string? actiefStatus);
     Task<bool> RemoveCategorieVanArtikelAsync(Artikel artikel, Categorie categorie);
+    //A.1100 Amaury
     Task<List<Artikel>> GetArtikelsByCategorieIdAsync(int categorieId, string? zoekterm);
+    //A.1200.2 Amaury Artikel toevoegen aan een categorie
+    Task<List<Artikel>> GetNietGekoppeldeArtikelsVoorCategorieAsync(int categorieId);
+    Task<bool> AddArtikelAanCategorieAsync(int artikelId, int categorieId);
 
 }
