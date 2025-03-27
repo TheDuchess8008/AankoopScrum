@@ -1,4 +1,4 @@
-﻿@model PrulariaAankoopData.Models.Categorie
+﻿@model PrulariaAankoopUI.Models.CategorieViewModel
 
 @{
     ViewData["Title"] = "Details";
@@ -7,26 +7,66 @@
 <h1>Details</h1>
 
 <div>
-    <h4>Categorie</h4>
+    <h4>Categorie: @Model.Naam</h4>
     <hr />
     <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Naam)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Naam)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.HoofdCategorie)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.HoofdCategorie.Naam)
+        @if (Model.HoofdCategorie != null)
+        {
+            <dt class="col-sm-2">Hoofdcategorie:</dt>
+            <dd class="col-sm-10">
+                <a asp-action="Details" asp-route-id="@Model.HoofdCategorie.CategorieId" class="btn huiskleur">
+                    @Model.HoofdCategorie.Naam
+                </a>
+            </dd>
+        }
+    </dl>
+
+    <dl>
+        <dt class="col-sm-2">Subcategorieën</dt>
+        <dd class="col-sm-10">
+            @if (Model.Subcategorieën != null && Model.Subcategorieën.Any())
+            {
+                @foreach (var sub in Model.Subcategorieën.OrderBy(s => s.Naam))
+                {
+                    <a asp-action="Details" asp-route-id="@sub.CategorieId" class="btn huiskleur">
+                        @sub.Naam
+                    </a>
+                }
+            }
+            else
+            {
+                <span>Geen subcategorieën</span>
+            }
         </dd>
     </dl>
 </div>
+
+<!-- Actieknoppen -->
+<div class="mb-4">
+    <a asp-action="Edit" asp-route-id="@Model?.CategorieId" class="btn huiskleur">Bewerken</a>
+    <a asp-action="Index" class="btn btn-terug">Terug naar categorieën</a>
+</div>
+
+<!-- Zoekformulier -->
+<div class="zoek-artikels mt-4 mb-3">
+    <h4>Zoek Artikelen binnen deze categorie</h4>
+    <form method="get" asp-action="Details" asp-controller="Categorieen">
+        <input type="hidden" name="id" value="@Model.CategorieId" />
+        <div class="input-group mb-3">
+            <input type="text" name="zoekterm" class="form-control" placeholder="Zoek artikel op naam..." value="@(Context.Request.Query["zoekterm"].FirstOrDefault() ?? "")" />
+            <button class="btn huiskleur" type="submit">Zoeken</button>
+        </div>
+    </form>
+</div>
+
+<!-- Artikels Table via ViewComponent -->
 <div>
-    <a asp-action="Edit" asp-route-id="@Model?.CategorieId" class="btn huiskleur">Edit</a> 
-    <a asp-action="Index" class="btn btn-terug">Terug</a>
+    @await Component.InvokeAsync("ArtikelsPerSubcategorie", new
+        {
+            categorieId = Model.CategorieId,
+            zoekterm = Context.Request.Query["zoekterm"].FirstOrDefault()
+        })
+
 </div>
 
 <div style="margin-bottom: 50px;"></div>

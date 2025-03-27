@@ -36,19 +36,22 @@ namespace PrulariaAankoopUI.Controllers
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
-            {
                 return NotFound();
-            }
 
-            var categorie = await _context.Categorieen
-                .Include(c => c.HoofdCategorie)
-                .FirstOrDefaultAsync(m => m.CategorieId == id);
+            var categorie = await _categorieenService.GetCategorieByIdAsync(id.Value);
             if (categorie == null)
-            {
                 return NotFound();
-            }
 
-            return View(categorie);
+            var viewModel = new CategorieViewModel
+            {
+                CategorieId = categorie.CategorieId,
+                Naam = categorie.Naam,
+                HoofdCategorieId = categorie.HoofdCategorieId,
+                HoofdCategorie = categorie.HoofdCategorie,
+                Subcategorieën = categorie.Subcategorieën.ToList()
+            };
+
+            return View(viewModel);
         }
 
         // GET: Categorieen/Create
@@ -83,18 +86,17 @@ namespace PrulariaAankoopUI.Controllers
                 return NotFound();
             }
 
-            var categorie = await _context.Categorieen.FindAsync(id);
+            var categorie = await _categorieenService.GetCategorieByIdAsync(id.Value);
             if (categorie == null)
             {
-                return NotFound();
+                TempData["Melding"] = "Categorie niet gevonden.";
+                return RedirectToAction(nameof(Index));
             }
-            ViewData["HoofdCategorieId"] = new SelectList(_context.Categorieen, "CategorieId", "Naam", categorie.HoofdCategorieId);
+
             return View(categorie);
         }
 
         // POST: Categorieen/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("CategorieId,Naam,HoofdCategorieId")] Categorie categorie)
@@ -108,23 +110,20 @@ namespace PrulariaAankoopUI.Controllers
             {
                 try
                 {
-                    _context.Update(categorie);
-                    await _context.SaveChangesAsync();
+                    var bestaandeCategorie = await _categorieenService.GetCategorieByIdAsync(id);
+                    if (bestaandeCategorie != null)
+                    {
+                        await _categorieenService.HernoemCategorieAsync(id, categorie.Naam);
+                        TempData["Melding"] = "De categorie is succesvol hernoemd!";
+                        return RedirectToAction(nameof(Index));
+                    }
                 }
-                catch (DbUpdateConcurrencyException)
+                catch
                 {
-                    if (!CategorieExists(categorie.CategorieId))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
+                    return BadRequest("Er is iets fout gegaan.");
                 }
-                return RedirectToAction(nameof(Index));
             }
-            ViewData["HoofdCategorieId"] = new SelectList(_context.Categorieen, "CategorieId", "Naam", categorie.HoofdCategorieId);
+
             return View(categorie);
         }
 
@@ -136,9 +135,7 @@ namespace PrulariaAankoopUI.Controllers
                 return NotFound();
             }
 
-            var categorie = await _context.Categorieen
-                .Include(c => c.HoofdCategorie)
-                .FirstOrDefaultAsync(m => m.CategorieId == id);
+            var categorie = await _categorieenService.GetCategorieByIdAsync(id.Value);
             if (categorie == null)
             {
                 return NotFound();
@@ -152,14 +149,32 @@ namespace PrulariaAankoopUI.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var categorie = await _context.Categorieen.FindAsync(id);
-            if (categorie != null)
+            var categorie = await _categorieenService.GetCategorieByIdAsync(id);
+
+            if (categorie == null)
             {
-                _context.Categorieen.Remove(categorie);
+                TempData["Melding"] = "Categorie niet gevonden.";
+                return RedirectToAction(nameof(Index));
             }
 
-            await _context.SaveChangesAsync();
+            // Controleer of de categorie leeg is
+            bool kanVerwijderdWorden = await _categorieenService.KanVerwijderdWordenAsync(id);
+
+            if (!kanVerwijderdWorden)
+            {
+                return View("DeleteFailed", categorie); // Toon foutpagina
+            }
+
+            bool success = await _categorieenService.VerwijderCategorieAsync(id);
+
+            if (success)
+            {
+                return View("DeleteSuccess"); // Toon succespagina
+            }
+
+            TempData["Melding"] = "Er is een fout opgetreden bij het verwijderen van de categorie.";
             return RedirectToAction(nameof(Index));
+        
         }
 
         private bool CategorieExists(int id)

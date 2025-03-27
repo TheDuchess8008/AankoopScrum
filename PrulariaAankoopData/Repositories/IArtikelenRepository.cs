@@ -29,4 +29,6 @@ public interface IArtikelenRepository
 
     Task<List<Artikel>> GetArtikelenMetFilteren(int? categorieId, string? actiefStatus);
     Task<bool> RemoveCategorieVanArtikelAsync(Artikel artikel, Categorie categorie);
+    Task<List<Artikel>> GetArtikelsByCategorieIdAsync(int categorieId, string? zoekterm);
+
 }

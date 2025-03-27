@@ -129,16 +129,20 @@ public class SQLArtikelenRepository : IArtikelenRepository
         _context.Entry(bestaandArtikel).CurrentValues.SetValues(artikel);
         await _context.SaveChangesAsync();
     }
+    public async Task<List<Artikel>> GetArtikelsByCategorieIdAsync(int categorieId, string? zoekterm)
+    {
+        var artikels = await _context.Artikelen
+            .Include(a => a.Categorieën)
+            .ToListAsync();
+
+        return artikels
+            .Where(a => a.Categorieën.Any(c => c.CategorieId == categorieId))
+            .Where(a => string.IsNullOrEmpty(zoekterm) ||
+                        (!string.IsNullOrEmpty(a.Naam) &&
+                         a.Naam.Contains(zoekterm, StringComparison.OrdinalIgnoreCase)))
+            .OrderBy(a => a.Naam)
+            .ToList();
+    }
 
 
 }
-
-
-
-
-
-
-
-
-
-
