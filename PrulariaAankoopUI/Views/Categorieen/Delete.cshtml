@@ -4,9 +4,9 @@
     ViewData["Title"] = "Delete";
 }
 
-<h1>Delete</h1>
+<h2>Verwijder Categorie</h2>
+<p>Weet u zeker dat u de categorie "<strong>@Model.Naam</strong>" wilt verwijderen?</p>
 
-<h3>Are you sure you want to delete this?</h3>
 <div>
     <h4>Categorie</h4>
     <hr />
@@ -27,7 +27,7 @@
     
     <form asp-action="Delete">
         <input type="hidden" asp-for="CategorieId" />
-        <input type="submit" value="Delete" class="btn btn-danger" /> |
-        <a asp-action="Index" class="btn btn-secondary huiskleur">Terug</a>
+        <button type="submit" value="Delete" class="btn btn-danger">Ja, verwijder</button>
+        <a asp-action="Index" class="btn btn-secondary huiskleur">Annuleren</a>
     </form>
 </div>

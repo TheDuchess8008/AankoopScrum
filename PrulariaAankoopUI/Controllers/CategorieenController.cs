@@ -129,9 +129,7 @@ namespace PrulariaAankoopUI.Controllers
                 return NotFound();
             }
 
-            var categorie = await _context.Categorieen
-                .Include(c => c.HoofdCategorie)
-                .FirstOrDefaultAsync(m => m.CategorieId == id);
+            var categorie = await _categorieenService.GetCategorieByIdAsync(id.Value);
             if (categorie == null)
             {
                 return NotFound();
@@ -145,14 +143,32 @@ namespace PrulariaAankoopUI.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var categorie = await _context.Categorieen.FindAsync(id);
-            if (categorie != null)
+            var categorie = await _categorieenService.GetCategorieByIdAsync(id);
+
+            if (categorie == null)
             {
-                _context.Categorieen.Remove(categorie);
+                TempData["Melding"] = "Categorie niet gevonden.";
+                return RedirectToAction(nameof(Index));
             }
 
-            await _context.SaveChangesAsync();
+            // Controleer of de categorie leeg is
+            bool kanVerwijderdWorden = await _categorieenService.KanVerwijderdWordenAsync(id);
+
+            if (!kanVerwijderdWorden)
+            {
+                return View("DeleteFailed", categorie); // Toon foutpagina
+            }
+
+            bool success = await _categorieenService.VerwijderCategorieAsync(id);
+
+            if (success)
+            {
+                return View("DeleteSuccess"); // Toon succespagina
+            }
+
+            TempData["Melding"] = "Er is een fout opgetreden bij het verwijderen van de categorie.";
             return RedirectToAction(nameof(Index));
+        
         }
 
         private bool CategorieExists(int id)

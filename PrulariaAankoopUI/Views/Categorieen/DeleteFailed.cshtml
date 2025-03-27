@@ -1,0 +1,11 @@
+﻿@model PrulariaAankoopData.Models.Categorie
+
+@{
+    ViewData["Title"] = "DeleteFailed";
+}
+
+<h2 class="text-danger">Categorie kan niet worden verwijderd</h2>
+
+<p>Deze categorie kan niet worden verwijderd omdat er nog subcategorieën of artikelen aan gekoppeld zijn.</p>
+
+<a asp-action="Index" class="btn btn-primary">Terug naar overzicht</a>

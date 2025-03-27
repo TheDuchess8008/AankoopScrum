@@ -37,5 +37,42 @@ namespace PrulariaAankoopData.Repositories
                 await _context.SaveChangesAsync();
             }
         }
+        // Get a category including Artikelen and Subcategorieën
+        public async Task<Categorie?> GetCategorieMetRelatiesByIdAsync(int id)
+        {
+            return await _context.Categorieen
+                .Include(c => c.Artikelen)
+                .Include(c => c.Subcategorieën)
+                .FirstOrDefaultAsync(c => c.CategorieId == id);
+        }
+        // Check if the category has subcategories
+        public async Task<bool> HeeftSubCategorieenAsync(int id)
+        {
+            return await _context.Categorieen.AnyAsync(c => c.HoofdCategorieId == id);
+        }
+        // Check if the category has associated articles
+        public async Task<bool> HeeftArtikelenAsync(int id)
+        {
+            return await _context.Categorieen
+                .Where(c => c.CategorieId == id)
+                .SelectMany(c => c.Artikelen)
+                .AnyAsync();
+        }
+        // Delete a category only if it has no subcategories or articles
+        public async Task<bool> DeleteCategorieAsync(int id)
+        {
+            var categorie = await GetCategorieMetRelatiesByIdAsync(id);
+
+            if (categorie == null || categorie.Artikelen.Any() || categorie.Subcategorieën.Any())
+            {
+                return false; // Cannot delete non-empty category
+            }
+
+            _context.Categorieen.Remove(categorie);
+            await _context.SaveChangesAsync();
+            return true;
+        }
+
+       
     }
 }

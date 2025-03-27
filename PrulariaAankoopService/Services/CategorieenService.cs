@@ -31,5 +31,15 @@ namespace PrulariaAankoopService.Services
         {
             await _categorieenRepository.HernoemCategorieAsync(categorieId, nieuweNaam);
         }
+        public async Task<bool> KanVerwijderdWordenAsync(int id)
+        {
+            var categorie = await _categorieenRepository.GetCategorieMetRelatiesByIdAsync(id);
+            return categorie != null && !categorie.Subcategorieën.Any() && !categorie.Artikelen.Any();
+        }
+
+        public async Task<bool> VerwijderCategorieAsync(int id)
+        {
+            return await _categorieenRepository.DeleteCategorieAsync(id);
+        }
     }
 }
