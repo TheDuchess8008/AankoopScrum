@@ -34,7 +34,7 @@
     <tbody>
         @foreach (var item in Model.Categorieen)
         {
-            @if (item.Subcategorieën.Count() > 0)
+            @if (item.Subcategorieën.Count() > 0 || item.HoofdCategorieId == null)
             {
                 var hoofdcategorieId = item.CategorieId;
                 <tr>
