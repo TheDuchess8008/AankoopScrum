@@ -51,14 +51,9 @@ namespace PrulariaAankoopUI.Controllers
         [HttpGet("Leveranciers/Details/{id}")]
         public async Task<IActionResult> Details(int id)
         {
-            var leverancier = await _context.Leveranciers
-                .Include(l => l.Plaats) // Laad de Plaats data in
-                .FirstOrDefaultAsync(l => l.LeveranciersId == id);
-
+            var leverancier = await _leveranciersService.GetLeverancierByIdAsync(id);
             if (leverancier == null)
-            {
                 return NotFound();
-            }
 
             // Converteer naar LeverancierViewModel
             var viewModel = new LeverancierViewModel
