@@ -72,7 +72,7 @@
                     </td>
 
                 </tr>
-                foreach (var subcategorie in item.Subcategorieën)
+                foreach (var subcategorie in item.Subcategorieën.OrderBy(s => s.Naam))
                 {
                     <tr>
                         <td>
