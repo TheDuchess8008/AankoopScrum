@@ -39,31 +39,33 @@ namespace PrulariaAankoopUI.Controllers
         // GET: Artikelen/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null)
+            if (HttpContext.Session.GetString("Ingelogd") != null)
             {
-                return NotFound();
-            }
-            var artikel = await _artikelenService.MaakDetailsArtikel((int)id);
-            
-
-            try
-            {
-                if (artikel == null)
+                if (id == null)
                 {
-                    throw new Exception($"Artikel met ID {id} werd niet gevonden.");
+                    return NotFound();
                 }
-                ViewData["LeveranciersId"] = new SelectList(_context.Leveranciers, "LeveranciersId", "BtwNummer", artikel.LeveranciersId);
+                var artikel = await _artikelenService.MaakDetailsArtikel((int)id);
 
-                //var categorieen = await _categorieenService.GetAlleCategorieenAsync();
-                var categorieen = await _categorieenService.GetOverigeCategorieenAsync((int)id);
 
-                ViewData["CategorieId"] = new SelectList(categorieen, "CategorieId", "Naam"); // "Naam" moet overeenkomen met je model
+                try
+                {
+                    if (artikel == null)
+                    {
+                        throw new Exception($"Artikel met ID {id} werd niet gevonden.");
+                    }
+                    ViewData["LeveranciersId"] = new SelectList(_context.Leveranciers, "LeveranciersId", "BtwNummer", artikel.LeveranciersId);
 
-            }
-            catch (Exception ex)
-            {
-                return NotFound(ex.Message);
-            }
+                    //var categorieen = await _categorieenService.GetAlleCategorieenAsync();
+                    var categorieen = await _categorieenService.GetOverigeCategorieenAsync((int)id);
+
+                    ViewData["CategorieId"] = new SelectList(categorieen, "CategorieId", "Naam"); // "Naam" moet overeenkomen met je model
+
+                }
+                catch (Exception ex)
+                {
+                    return NotFound(ex.Message);
+                }
 
                 return View(artikel);
             }

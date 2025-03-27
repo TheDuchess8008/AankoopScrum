@@ -28,68 +28,80 @@ namespace PrulariaAankoopUI.Controllers
         // GET: Leveranciers
         public async Task<IActionResult> Index()
         {
-            var leveranciers = await _leveranciersService.GetAllLeveranciersAsync();
-
-            var viewModel = leveranciers.Select(l => new LeverancierViewModel
+            if (HttpContext.Session.GetString("Ingelogd") != null)
             {
-                LeveranciersId = l.LeveranciersId,
-                Naam = l.Naam,
-                BtwNummer = l.BtwNummer,
-                Straat = l.Straat,
-                HuisNummer = l.HuisNummer,
-                Bus = l.Bus,
-                PlaatsId = l.PlaatsId,
-                FamilienaamContactpersoon = l.FamilienaamContactpersoon,
-                VoornaamContactpersoon = l.VoornaamContactpersoon,
-                Plaats = l.Plaats
-            }).ToList();
+                var leveranciers = await _leveranciersService.GetAllLeveranciersAsync();
 
-            return View(viewModel);
+                var viewModel = leveranciers.Select(l => new LeverancierViewModel
+                {
+                    LeveranciersId = l.LeveranciersId,
+                    Naam = l.Naam,
+                    BtwNummer = l.BtwNummer,
+                    Straat = l.Straat,
+                    HuisNummer = l.HuisNummer,
+                    Bus = l.Bus,
+                    PlaatsId = l.PlaatsId,
+                    FamilienaamContactpersoon = l.FamilienaamContactpersoon,
+                    VoornaamContactpersoon = l.VoornaamContactpersoon,
+                    Plaats = l.Plaats
+                }).ToList();
+
+                return View(viewModel);
+            }
+            return RedirectToAction("Index", "Home");
         }
 
         // GET: Leveranciers/Details/5
         [HttpGet("Leveranciers/Details/{id}")]
         public async Task<IActionResult> Details(int id)
         {
-            var leverancier = await _leveranciersService.GetLeverancierByIdAsync(id);
-            if (leverancier == null)
-                return NotFound();
-
-            // Converteer naar LeverancierViewModel
-            var viewModel = new LeverancierViewModel
+            if (HttpContext.Session.GetString("Ingelogd") != null)
             {
-                LeveranciersId = leverancier.LeveranciersId,
-                Naam = leverancier.Naam,
-                BtwNummer = leverancier.BtwNummer,
-                Straat = leverancier.Straat,
-                HuisNummer = leverancier.HuisNummer,
-                Bus = leverancier.Bus,
-                PlaatsId = leverancier.PlaatsId,
-                Plaats = leverancier.Plaats,
-                FamilienaamContactpersoon = leverancier.FamilienaamContactpersoon,
-                VoornaamContactpersoon = leverancier.VoornaamContactpersoon,
-                Artikelen = leverancier.Artikelen
-            };
+                var leverancier = await _leveranciersService.GetLeverancierByIdAsync(id);
+                if (leverancier == null)
+                    return NotFound();
 
-            return View(viewModel);
+                // Converteer naar LeverancierViewModel
+                var viewModel = new LeverancierViewModel
+                {
+                    LeveranciersId = leverancier.LeveranciersId,
+                    Naam = leverancier.Naam,
+                    BtwNummer = leverancier.BtwNummer,
+                    Straat = leverancier.Straat,
+                    HuisNummer = leverancier.HuisNummer,
+                    Bus = leverancier.Bus,
+                    PlaatsId = leverancier.PlaatsId,
+                    Plaats = leverancier.Plaats,
+                    FamilienaamContactpersoon = leverancier.FamilienaamContactpersoon,
+                    VoornaamContactpersoon = leverancier.VoornaamContactpersoon,
+                    Artikelen = leverancier.Artikelen
+                };
+
+                return View(viewModel);
+            }
+            return RedirectToAction("Index", "Home");
         }
 
         // GET: Leveranciers/Create
         public IActionResult Create()
         {
-            // Laad postcodes en plaatsen zoals voorheen, maar via service als nodig
-            var model = new NieuweLeverancierViewModel
+            if (HttpContext.Session.GetString("Ingelogd") != null)
             {
-                Postcodes = _context.Plaatsen
+                // Laad postcodes en plaatsen zoals voorheen, maar via service als nodig
+                var model = new NieuweLeverancierViewModel
+                {
+                    Postcodes = _context.Plaatsen
                             .Select(p => p.Postcode)
                             .Distinct()
                             .Select(p => new SelectListItem { Text = p, Value = p })
                             .ToList(),
-                Plaatsen = _context.Plaatsen
+                    Plaatsen = _context.Plaatsen
                             .Select(p => new SelectListItem { Value = p.PlaatsId.ToString(), Text = p.Naam })
                             .ToList()
-            };
-            return View(model);
+                };
+                return View(model);
+            }
+            return RedirectToAction("Index", "Home");
         }
 
         // POST: Leveranciers/Create
@@ -143,43 +155,45 @@ namespace PrulariaAankoopUI.Controllers
 // GET: Leveranciers/Edit/5
 public async Task<IActionResult> Edit(int? id)
         {
-         
-
-            try
+            if (HttpContext.Session.GetString("Ingelogd") != null)
             {
-                if (id == null)
+                try
                 {
-                    return NotFound();
+                    if (id == null)
+                    {
+                        return NotFound();
+                    }
+
+                    var leverancier = await _leveranciersService.GetLeverancierByIdAsync(id.Value);
+                    if (leverancier == null)
+                    {
+                        return NotFound();
+                    }
+
+                    var model = new LeverancierWijzigenViewModel
+                    {
+                        LeveranciersId = leverancier.LeveranciersId,
+                        Naam = leverancier.Naam,
+                        BtwNummer = leverancier.BtwNummer,
+                        Straat = leverancier.Straat,
+                        HuisNummer = leverancier.HuisNummer,
+                        Bus = leverancier.Bus,
+                        PlaatsId = leverancier.PlaatsId,
+                        FamilienaamContactpersoon = leverancier.FamilienaamContactpersoon,
+                        VoornaamContactpersoon = leverancier.VoornaamContactpersoon
+                    };
+
+                    ViewData["PlaatsId"] = new SelectList(await _leveranciersService.GetPlaatsenAsync(), "PlaatsId", "Naam", leverancier.PlaatsId);
+                    return View(model);
                 }
-
-                var leverancier = await _leveranciersService.GetLeverancierByIdAsync(id.Value);
-                if (leverancier == null)
+                catch (Exception ex)
                 {
-                    return NotFound();
+
+                    ModelState.AddModelError("", "Er is een fout opgetreden bij het laden van de leverancier.");
+                    return RedirectToAction(nameof(Index));
                 }
-
-                var model = new LeverancierWijzigenViewModel
-                {
-                    LeveranciersId = leverancier.LeveranciersId,
-                    Naam = leverancier.Naam,
-                    BtwNummer = leverancier.BtwNummer,
-                    Straat = leverancier.Straat,
-                    HuisNummer = leverancier.HuisNummer,
-                    Bus = leverancier.Bus,
-                    PlaatsId = leverancier.PlaatsId,
-                    FamilienaamContactpersoon = leverancier.FamilienaamContactpersoon,
-                    VoornaamContactpersoon = leverancier.VoornaamContactpersoon
-                };
-
-                ViewData["PlaatsId"] = new SelectList(await _leveranciersService.GetPlaatsenAsync(), "PlaatsId", "Naam", leverancier.PlaatsId);
-                return View(model);
             }
-            catch (Exception ex)
-            {
-              
-                ModelState.AddModelError("", "Er is een fout opgetreden bij het laden van de leverancier.");
-                return RedirectToAction(nameof(Index));
-            }
+            return RedirectToAction("Index", "Home");
 
         }
 
