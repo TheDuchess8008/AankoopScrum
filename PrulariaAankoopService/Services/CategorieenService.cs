@@ -34,5 +34,19 @@ public class CategorieenService
     {
         return await _categorieenRepository.GetOverigeCategorieenAsync(artikelId);
     }
+    public async Task<bool> CategorieMetNaamAlBestaat(string categorieNaam)
+    {
+        return await _categorieenRepository.CategorieMetNaamAlBestaat(categorieNaam);
+    }
+
+    public async Task CategorieToevoegen(Categorie categorie)
+    {
+        await _categorieenRepository.CategorieToevoegen(categorie);
+    }
+
+    public async Task<List<Categorie>> GetHoofdCategorien()
+    {
+        return await _categorieenRepository.GetHoofdCategorien();
+    }
 
 }
