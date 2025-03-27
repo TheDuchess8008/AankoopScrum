@@ -25,4 +25,18 @@ public interface ICategorieenRepository
 
     Task CategorieToevoegen(Categorie categorie);
     Task<List<Categorie>> GetHoofdCategorien();
+
+
+
+
+    //Task<List<Categorie>> GetLijstCategorieen();
+    //Task<List<Categorie>> GetAlleCategorieenAsync();
+    //Task<Categorie> GetCategorieByIdAsync(int id); // gebruikt in A.1300.Lesley.Test
+    Task<List<Categorie>> GetOverigeCategorieen2Async(int categorieId); // A.1500.Lesley
+    Task<Categorie> GetCategorieByIdMetHoofdEnSubcategorieenEnArtikelenAsync(int id);// A.1500.Lesley
+    Task<int> SaveChangesAsync(); // A.1500.Lesley
+    Task HoofdcategorieIdOpNullZettenAsync(int categorieId); // A.1500.Lesley
+    //Task<bool> RemoveArtikelVanCategorieAsync(int artikelId, Categorie categorie);
+    Task<bool> RemoveArtikelVanCategorieAsync(Artikel artikel, Categorie categorie); // A.1300.Lesley
+
 }
