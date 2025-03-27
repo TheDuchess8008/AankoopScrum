@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.CodeAnalysis.FlowAnalysis.DataFlow;
 using Microsoft.EntityFrameworkCore;
 using PrulariaAankoopData.Models;
 using PrulariaAankoopData.Repositories;
@@ -76,6 +77,13 @@ namespace PrulariaAankoopUI.Controllers
 
             var overigeCategorieen = await _categorieenService.GetOverigeCategorieen2Async((int)id);
             ViewData["LijstOverigeCategorieId"] = new SelectList(overigeCategorieen, "CategorieId", "Naam");
+
+            var subCategorieen =  categorie.Subcategorieën;
+            //var subCategorieen = await _categorieenService.GetSubCategorieënAsync((int)id);
+            //var subCategorieen = await _categorieenService.GetOverigeCategorieen2Async((int)id);
+            ViewData["LijstSubCategorieenId"] = new SelectList(subCategorieen, "CategorieId", "Naam");
+
+           
 
             return View(viewModel);
         }

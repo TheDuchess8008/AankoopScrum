@@ -39,4 +39,5 @@ public interface ICategorieenRepository
     //Task<bool> RemoveArtikelVanCategorieAsync(int artikelId, Categorie categorie);
     Task<bool> RemoveArtikelVanCategorieAsync(Artikel artikel, Categorie categorie); // A.1300.Lesley
 
+   
 }
