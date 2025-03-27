@@ -51,7 +51,7 @@ namespace PrulariaAankoopUI.Controllers
             var dropdownItems = beschikbareArtikelen.Select(a => new SelectListItem
             {
                 Value = a.ArtikelId.ToString(),
-                Text = a.Naam
+                Text = a.Naam + " " + a.Beschrijving.ToString()
             }).ToList();
 
             var viewModel = new CategorieViewModel
