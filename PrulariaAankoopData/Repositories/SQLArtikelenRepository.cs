@@ -12,6 +12,11 @@ public class SQLArtikelenRepository : IArtikelenRepository
     {
         this._context = context;
     }
+
+
+    //-----------------------------------------------------------------------------------------------
+    // A.800 Koen
+    // GetArtikelById
     public async Task<Artikel> GetArtikelById(int id)
     {
         return await _context.Artikelen
@@ -20,14 +25,12 @@ public class SQLArtikelenRepository : IArtikelenRepository
                 .FirstOrDefaultAsync(m => m.ArtikelId == id);
     }
 
-    public async Task<Artikel> GetByIdAsync(int artikelId)
-    {
-        return await _context.Artikelen.FindAsync(artikelId);
-    }
-
+    // A.800 Koen
+    // GetArtikelenMetFilteren
     public async Task<List<Artikel>> GetArtikelenMetFilteren(int? categorieId, string? actiefStatus)
     {
-        IQueryable<Artikel> query = _context.Artikelen.Include(c => c.Categorieën)
+        IQueryable<Artikel> query = _context.Artikelen
+            .Include(c => c.Categorieën)
             .Include(l => l.Leverancier);
         if (categorieId == 1)
             query = query.Where(a => a.Categorieën.Any(c => c.CategorieId == categorieId || c.HoofdCategorieId == categorieId || c.HoofdCategorieId == 3));
@@ -45,17 +48,76 @@ public class SQLArtikelenRepository : IArtikelenRepository
         var gefilterdeLijstArtikelen = await query.OrderBy(a => a.Naam).ToListAsync();
         return gefilterdeLijstArtikelen;
     }
+
+    // A.800 Koen
+    // GetAlleCategorieen
     public async Task<List<Categorie>> GetAlleCategorieen()
     {
         return await (_context.Categorieen).ToListAsync();
     }
+    //-----------------------------------------------------------------------------------------------
+   
 
+
+    // A.900 lesley 
+    // GetArtikelMetCategorieenAsync
+    public async Task<Artikel> GetArtikelMetCategorieenAsync(int artikelId)
+    {
+        return await _context.Artikelen
+            .Include(a => a.Categorieën)
+            .FirstOrDefaultAsync(a => a.ArtikelId == artikelId);
+    }
+
+    // A.900 lesley
+    // IsCategorieLinkedToArtikelAsync
+    public async Task<bool> IsCategorieLinkedToArtikelAsync(int artikelId, int categorieId)
+    {
+        var artikel = await _context.Artikelen
+            .Include(a => a.Categorieën)
+            .FirstOrDefaultAsync(a => a.ArtikelId == artikelId);
+
+        return artikel?.Categorieën.Any(c => c.CategorieId == categorieId) ?? false;
+    }
+
+    // A.900 lesley
+    // AddCategorieAanArtikelAsync
+    public async Task<bool> AddCategorieAanArtikelAsync(Artikel artikel, Categorie categorie)
+    {
+        artikel.Categorieën.Add(categorie);
+        await _context.SaveChangesAsync();
+        return true;
+    }
+
+    // A.900 Lesley
+    // RemoveCategorieVanArtikelAsync
+    public async Task<bool> RemoveCategorieVanArtikelAsync(Artikel artikel, Categorie categorie)
+    {
+        artikel.Categorieën.Remove(categorie);
+        await _context.SaveChangesAsync();
+        return true;
+    }
+
+
+
+    //-----------------------------------------------------------------------------------------------
+
+    // merge
+    // FindAsync
+    public async Task<Artikel> GetByIdAsync(int artikelId)
+    {
+        return await _context.Artikelen.FindAsync(artikelId);
+    }
+
+    // merge
+    // AddArtikel
     public async Task AddArtikel(Artikel artikel)
     {
         await _context.Artikelen.AddAsync(artikel);
         await _context.SaveChangesAsync();
     }
 
+    // merge
+    // UpdateArtikel
     public async Task UpdateArtikel(Artikel bestaandArtikel, Artikel artikel)
     {
         if (artikel == null)

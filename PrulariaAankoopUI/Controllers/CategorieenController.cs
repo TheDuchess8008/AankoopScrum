@@ -17,17 +17,19 @@ namespace PrulariaAankoopUI.Controllers
         private readonly PrulariaComContext _context;
         private readonly CategorieenService _categorieenService;
 
-        public CategorieenController(PrulariaComContext context, CategorieenService categorieënService)
+        public CategorieenController(PrulariaComContext context, CategorieenService categorieenService)
         {
             _context = context;
-            _categorieenService = categorieënService;
+            _categorieenService = categorieenService;
         }
 
         // GET: Categorieen
         public async Task<IActionResult> Index()
         {
-            var prulariaComContext = _context.Categorieen.Include(c => c.HoofdCategorie);
-            return View(await prulariaComContext.ToListAsync());
+            var categorieViewModel = new CategorieViewModel();
+            var lijstCategorieen = await _categorieenService.IndexService();
+            categorieViewModel.Categorieen = lijstCategorieen;
+            return View(categorieViewModel);
         }
 
         // GET: Categorieen/Details/5
