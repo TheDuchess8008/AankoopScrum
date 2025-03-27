@@ -11,7 +11,6 @@ public interface ICategorieenRepository
 {
     Task<List<Categorie>> GetLijstCategorieen();
     Task<List<Categorie>> GetAlleCategorieenAsync();
-    Task<Categorie> GetCategorieByIdAsync(int id);
     Task<List<Categorie>> GetOverigeCategorieenAsync(int artikelId);
     Task<Categorie?> GetByIdAsync(int id);
     Task<List<Categorie>> GetSubcategorieenAsync(int hoofdCategorieId);

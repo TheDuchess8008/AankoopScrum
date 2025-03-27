@@ -33,11 +33,6 @@ public class SQLCategorieenRepository : ICategorieenRepository
         return await _context.Categorieen.ToListAsync();
     }
 
-    public async Task<Categorie> GetCategorieByIdAsync(int id)
-    {
-        return await _context.Categorieen.FindAsync(id);
-    }
-
     // get list of Categorieen, not linked to an artikel with a given id, and that this categories have a parent category
     public async Task<List<Categorie>> GetOverigeCategorieenAsync(int artikelId)
     {
