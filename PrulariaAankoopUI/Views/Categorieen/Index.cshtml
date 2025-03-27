@@ -4,7 +4,14 @@
     ViewData["Title"] = "Categorieën";
 }
 
-<h1>Categorieën</h1>
+<!-- Geef een succesbericht weer indien beschikbaar -->
+@if (TempData["Melding"] != null)
+{
+    <div class="alert alert-success">
+        @TempData["Melding"]
+    </div>
+}
+<h1>Categorieen</h1>
 
 <p>
     <a asp-action="Create" class="btn huiskleur">Toevoegen</a>
