@@ -87,7 +87,62 @@
             <button type="submit" class="btn huiskleur">Toevoegen</button>
         </form>
 
-    </div>
+    
+    <!-- Rechtse kolom: Categorie toevoegen form -->
+    <div class="col-md-6">
+        <h5>Artikel toevoegen aan deze categorie</h5>
+
+        <form asp-action="KoppelArtikelAanCategorie" method="post">
+            <input type="hidden" asp-for="ArtikelToevoegenForm.CategorieId" />
+
+            <div class="mb-3">
+                <label asp-for="ArtikelToevoegenForm.ArtikelId" class="form-label"></label>
+                <select asp-for="ArtikelToevoegenForm.ArtikelId" class="form-select"
+                        asp-items="@Model.ArtikelToevoegenForm.BeschikbareArtikelen">
+                    <option value="">-- Kies een artikel --</option>
+                </select>
+                <span asp-validation-for="ArtikelToevoegenForm.ArtikelId" class="text-danger"></span>
+            </div>
+
+            <button type="submit" class="btn huiskleur">Toevoegen</button>
+        </form>
+
+
+@* @model PrulariaAankoopData.Models.Categorie *@
+@* @model prulariaaankoopui.models.categorieviewmodel *@
+
+        @*Dropdown Categorie Toevoegen*@
+         <dt class="col-sm-3">
+            Subcategorie Toevoegen:
+        </dt>
+        <dd class="col-sm-9">
+            <form asp-action="BevestigCategorieToevoegen" method="post" class="form-inline">
+                <input type="hidden" name="categorieId" value="@Model.CategorieId" />
+
+                <div class="d-flex gap-2">
+                    <select name="GekozenCategorieId" class="form-control me-2" asp-items="ViewBag.LijstOverigeCategorieId">
+                        <option value="">-- Selecteer een categorie --</option>
+                    </select>
+                    <span asp-validation-for="CategorieId" class="text-danger"></span>
+
+                    <button type="submit" class="btn btn-primary huiskleur">Toevoegen</button>
+                </div>
+            </form>
+        </dd> 
+
+
+
+
+
+
+
+
+
+
+
+
+
+        </div>
 </div>
 
 
