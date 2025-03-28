@@ -195,12 +195,19 @@ label.control-label {
 
 .inputveldenhuiskleur {
     background-color: #edf2e9;
+    outline: none;
 }
+
+
 
 input.form-control.huiskleur::placeholder {
   color: #aaa;
 }
 
+.inputveldenhuiskleur:focus {
+    border: 2px solid #4CAF50; 
+    box-shadow: 0 0 5px rgba(76, 175, 80, 0.5); 
+}
 
 .btn {
   z-index: 10;
@@ -211,4 +218,13 @@ input.form-control.huiskleur::placeholder {
 
 .mb-3 {
   margin-bottom: 1.5rem;
+}
+
+#toggle-password {
+    font-size: 20px;
+    color: #aaa;
+}
+
+#toggle-password:hover {
+    color: #555; /* Darker color on hover */
 }

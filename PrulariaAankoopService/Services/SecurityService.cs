@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using PrulariaAankoopData.Models;
 using PrulariaAankoopData.Repositories;
@@ -13,9 +14,11 @@ namespace PrulariaAankoopService.Services;
 public class SecurityService
 {
     private readonly ISecurityRepository _securityRepository;
-    public SecurityService(ISecurityRepository securityRepository)
+    private readonly PrulariaComContext _context;
+    public SecurityService(ISecurityRepository securityRepository, PrulariaComContext context)
     {
         _securityRepository = securityRepository;
+        _context = context;
     }
 
     public async Task<Personeelslid> GetGebruikerEnCheckEmail(string email)
@@ -44,4 +47,49 @@ public class SecurityService
         }
         return false;
     }
+
+    //wachtwoord wijzigen
+
+    public async Task<Personeelslid?> GetIngelogdeLid(string voornaam, string familienaam) 
+    {
+        return await _securityRepository.GetIngelogdeLid(voornaam, familienaam);
+    }
+
+    public bool IsOudeWachtwoordJuist(Personeelslid gebruiker, string paswoord)
+    {
+        if (gebruiker is not null && paswoord is not null)
+        {
+            if (BCrypt.Net.BCrypt.Verify(paswoord, gebruiker.PersoneelslidAccount.Paswoord))
+                return true;
+        }
+        return false;
+    }
+
+    public bool IsNieuwWachtwoordVerschillendVanOud(Personeelslid gebruiker, string nieuwePaswoord)
+    {
+        if (gebruiker is not null && nieuwePaswoord is not null)
+        {
+            if (BCrypt.Net.BCrypt.Verify(nieuwePaswoord, gebruiker.PersoneelslidAccount.Paswoord))
+                return false;
+        }
+        return true;
+    }
+
+    public async Task<bool> WijzigWachtwoord(Personeelslid gebruiker, string nieuwPaswoord)
+    {
+        
+        try
+        {
+            string nieuwGehashedPaswoord = BCrypt.Net.BCrypt.HashPassword(nieuwPaswoord);
+            gebruiker.PersoneelslidAccount.Paswoord = nieuwGehashedPaswoord;
+            _context.Personeelsleden.Update(gebruiker);
+            await _context.SaveChangesAsync();
+            return true; 
+        }
+        catch (Exception ex)
+        {
+            return false;
+        }
+    }
+
 }

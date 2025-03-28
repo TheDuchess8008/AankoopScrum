@@ -1,0 +1,87 @@
+﻿@model WachtwoordWijzigenViewModel
+
+@{
+    ViewData["Title"] = "Wachtwoord Wijzigen";
+}
+
+<div class="container d-flex justify-content-lg-center align-items-lg-start" style="min-height: 100vh;">
+    <form asp-action="WachtWoordWijzigen" method="post">
+        
+        <div class="alert" asp-validation-summary="All"></div>
+
+        <div class="mb-3">
+            <label for="OudeWachtwoord" class="form-label">Oude wachtwoord:</label>
+            <div class="input-group">
+                <input id="OudeWachtwoord" class="form-control inputveldenhuiskleur" asp-for="OudeWachtwoord" type="password" />
+                <span class="input-group-text" id="toggleOldPassword">
+                    <i class="bi bi-eye-slash"></i>
+                </span>
+            </div>
+            <p class="text-danger">@ViewBag.foutBerincht</p>
+            <span asp-validation-for="OudeWachtwoord" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label for="NieuweWachtwoord" class="form-label">Nieuwe wachtwoord:</label>
+            <div class="input-group">
+                <input id="NieuweWachtwoord" class="form-control inputveldenhuiskleur" asp-for="NieuweWachtwoord" type="password" />
+                <span class="input-group-text" id="toggleNewPassword">
+                    <i class="bi bi-eye-slash"></i>
+                </span>
+            </div>
+            <span asp-validation-for="NieuweWachtwoord" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label for="HerhaaldeNieuweWachtwoord" class="form-label">Herhaal het nieuwe wachtwoord:</label>
+            <div class="input-group">
+                <input id="HerhaaldeNieuweWachtwoord" class="form-control inputveldenhuiskleur" asp-for="HerhaaldeNieuweWachtwoord" type="password" />
+                <span class="input-group-text" id="toggleRepeatPassword">
+                    <i class="bi bi-eye-slash"></i>
+                </span>
+            </div>
+            <span asp-validation-for="HerhaaldeNieuweWachtwoord" class="text-danger"></span>
+        </div>
+
+        <button type="submit" class="btn btn-primary huiskleur" style="margin-top:10px;">Wijzigen</button>
+
+        <br />
+
+        @if (Model != null && !string.IsNullOrEmpty(Model.ErrorMessage))
+        {
+            <div class="alert alert-danger">@Model.ErrorMessage</div>
+        }
+    </form>
+</div>
+
+
+
+@section Scripts {
+    <script>
+        // Functie om wachtwoord zichtbaar te maken
+        function togglePasswordVisibility(inputField, icon) {
+            if (inputField.type === "password") {
+                inputField.type = "text";  // whachtwoord tonen
+                icon.classList.remove("bi-eye-slash");
+                icon.classList.add("bi-eye");
+            } else {
+                inputField.type = "password";  // wachtwoord hiden
+                icon.classList.remove("bi-eye");
+                icon.classList.add("bi-eye-slash");
+            }
+        }
+
+        // Event listeners toevoegen aan de pictogrammen
+        document.getElementById('toggleOldPassword').addEventListener('click', function () {
+            togglePasswordVisibility(document.getElementById('OudeWachtwoord'), this.querySelector('i'));
+        });
+
+        document.getElementById('toggleNewPassword').addEventListener('click', function () {
+            togglePasswordVisibility(document.getElementById('NieuweWachtwoord'), this.querySelector('i'));
+        });
+
+        document.getElementById('toggleRepeatPassword').addEventListener('click', function () {
+            togglePasswordVisibility(document.getElementById('HerhaaldeNieuweWachtwoord'), this.querySelector('i'));
+        });
+    </script>
+}

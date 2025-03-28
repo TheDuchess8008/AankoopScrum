@@ -4,7 +4,10 @@
 
 @if (ViewBag.Naam is not null)
 {
-    <p class="text-white">Welkom @ViewBag.Naam!</p>
-    <a @* class="btn huiskleur text-white" *@ asp-controller = "Home" asp-action="Uitloggen">Uitloggen / </a>
-    <a asp-action="">Wachtwoord wijzigen</a>
+    <div class="d-flex align-items-center">
+        <p class="text-white mb-0 mr-2">Welkom @ViewBag.Naam!</p>
+        <a asp-controller="Home" asp-action="Uitloggen" class="text-white btn btn-primary huiskleur">Uitloggen</a>
+    </div>
 }
+
+

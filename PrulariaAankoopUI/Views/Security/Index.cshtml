@@ -3,5 +3,20 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Security</h1>
+<div class="text-lg-start">
+    @if (ViewBag.Naam is not null)
+    {
+        <h4>Welkom @ViewBag.Naam!</h4>
+
+    }
+
+    <br />
+    <p style="color: darkgreen">@ViewBag.bevestiging</p>
+    <br />
+
+    <a asp-controller="Security" asp-action="WachtWoordWijzigen" class="btn huiskleur">
+        Wijzig jouw wachtwoord
+    </a>
+</div>
+
 

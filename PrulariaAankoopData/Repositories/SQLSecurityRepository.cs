@@ -17,13 +17,27 @@ public class SQLSecurityRepository : ISecurityRepository
     }
     public async Task<List<Personeelslid>> GetAllePersoneelsleden()
     {
-        return await _context.Personeelsleden.Include(a => a.SecurityGroepen).Include(m => m.PersoneelslidAccount).ToListAsync();
+        return await _context.Personeelsleden
+                    .Include(a => a.SecurityGroepen)
+                    .Include(m => m.PersoneelslidAccount)
+                    .ToListAsync();
     }
 
     public async Task<Personeelslid> GetGebruikerEnCheckEmail(string email)
     {
         List<Personeelslid> personeelsleden = await GetAllePersoneelsleden();
         //Check email
-        return personeelsleden.Where(a => a.PersoneelslidAccount.Emailadres == email).FirstOrDefault();
+        return personeelsleden
+                .Where(a => a.PersoneelslidAccount.Emailadres == email)
+                .FirstOrDefault();
+    }
+
+    public async Task<Personeelslid?> GetIngelogdeLid(string voornaam, string familienaam) 
+    {
+        return await _context.Personeelsleden
+               .Include(a => a.SecurityGroepen)
+               .Include(m => m.PersoneelslidAccount)
+               .Where(p => p.Voornaam == voornaam && p.Familienaam == familienaam)
+               .FirstOrDefaultAsync();
     }
 }

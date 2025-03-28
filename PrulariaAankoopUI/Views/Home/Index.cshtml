@@ -3,38 +3,70 @@
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welkom bij de aankoop pagina</h1>
-</div>
+
 
 @if(ViewBag.Ingelogd == false)
 {
-    <div class="text-center">
-        <h3>Gelieve u in te loggen.</h3>
-    </div>
-
-    <form asp-action="CheckInloggegevens">
-        <div class="row">
-            <div class="col-md-6">
+   <div class="container d-flex justify-content-lg-start align-items-lg-start" style="min-height: 100vh;">
+        <div class="col-md-4">
+            <h4 style="color: darkgreen">Welkom bij de aankoop pagina. Gelieve u in te loggen.</h4>
+            <br />
+            <form asp-action="CheckInloggegevens">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
                 <div class="mb-3">
-                    <label>E-mailadres</label>
-                    <input asp-for="Email" />
+                    <label for="Email" class="form-label">E-mailadres</label>
+                    <input asp-for="Email" class="form-control inputveldenhuiskleur" />
                     <span asp-validation-for="Email" class="text-danger"></span>
                 </div>
-                <div class="mb-3">
-                    <label>Wachtwoord</label>
-                    <input asp-for="Wachtwoord" />
+
+                <div class="mb-3 position-relative">
+                    <label for="Wachtwoord" class="form-label">Wachtwoord</label>
+                    <div class="input-group">
+                        <input asp-for="Wachtwoord" id="Wachtwoord" class="form-control inputveldenhuiskleur" type="password" />
+                        <span class="input-group-text" id="togglePassword">
+                            <i class="bi bi-eye-slash"></i>
+                        </span>
+                    </div>
                     <span asp-validation-for="Wachtwoord" class="text-danger"></span>
                 </div>
+
                 <div class="d-flex gap-2 mt-3">
-                    <input type="submit" value="Inloggen" class="btn huiskleur" />
+                    <input type="submit" value="Inloggen" class="btn btn-primary huiskleur" />
                 </div>
-            </div>
+            </form>
         </div>
-    </form>
+    </div>
+      
 }
 else
 {
     <h4>Welkom @ViewBag.Naam!</h4>
+}
+
+@section Scripts {
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Functie om wachtwoord zichtbaar te maken
+            function togglePasswordVisibility(inputField, icon) {
+                if (inputField.type === "password") {
+                    inputField.type = "text";  // whachtwoord tonen
+                    icon.classList.remove("bi-eye-slash");
+                    icon.classList.add("bi-eye");
+                } else {
+                    inputField.type = "password";  // wachtwoord hiden
+                    icon.classList.remove("bi-eye");
+                    icon.classList.add("bi-eye-slash");
+                }
+            }
+
+            // Event listeners toevoegen aan de pictogrammen
+            const togglePasswordIcon = document.getElementById('togglePassword');
+            if (togglePasswordIcon) {
+                togglePasswordIcon.addEventListener('click', function () {
+                    togglePasswordVisibility(document.getElementById('Wachtwoord'), this.querySelector('i'));
+                });
+            }
+        });
+    </script>
 }

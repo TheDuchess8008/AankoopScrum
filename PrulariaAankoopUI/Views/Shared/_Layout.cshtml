@@ -39,12 +39,13 @@
                                 <a class="nav-link text-white" asp-area="" asp-controller="Security" asp-action="Index">Security</a>
                             </li>
                         </ul>
+                        <div>
+                            @await Component.InvokeAsync("Ingelogd")
+                        </div>
                     }
                 </div>
             </div>
-            <div>
-                @await Component.InvokeAsync("Ingelogd")
-            </div>
+            
         </nav>
     </header>
     <div class="container">

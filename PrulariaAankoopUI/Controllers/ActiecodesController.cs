@@ -117,7 +117,7 @@ namespace PrulariaAankoopUI.Controllers
             if (HttpContext.Session.GetString("Ingelogd") != null)
             {
                 var actiecode = await _actiecodesService
-.FirstOrDefaultAsync(m => m.ActiecodeId == id);
+                    .FirstOrDefaultAsync(m => m.ActiecodeId == id);
                 if (actiecode == null)
                 {
                     return NotFound();
