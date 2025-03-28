@@ -7,7 +7,7 @@ namespace PrulariaAankoopData.Models;
 public partial class Leverancier
 {
     public int LeveranciersId { get; set; }
-
+    [Required(ErrorMessage = "Leveranciernaam is verplicht.")]
     public string Naam { get; set; } = null!;
     [Display(Name = "Btw nummer")]
     public string BtwNummer { get; set; } = null!;
