@@ -12,6 +12,7 @@ else if (Model.Count == 1 && !Model.First().HeeftSubcategorieën)
                 <tr>
                     <th>Naam</th>
                     <th>Beschrijving</th>
+                    <th>Verwijderen</th>
                 </tr>
             </thead>
             <tbody>
@@ -20,6 +21,18 @@ else if (Model.Count == 1 && !Model.First().HeeftSubcategorieën)
                         <tr>
                             <td>@artikel.Naam</td>
                             <td>@artikel.Beschrijving</td>
+
+                            <td>
+                                <a asp-action="BevestigArtikelVerwijderen"
+                                   asp-route-artikelId="@artikel.ArtikelId"
+                                   asp-route-categorieId="@artikel.CategorieId"
+                                   class="text-danger" title="Categorie verwijderen">
+                                    <button class="btn btn-icon btn-delete">
+                                        <i class="bi bi-trash"></i>
+                                    </button>
+                                </a>
+                            </td>
+
                         </tr>
             }
             </tbody>
@@ -36,6 +49,7 @@ else
                         <tr>
                             <th>Naam</th>
                             <th>Beschrijving</th>
+                            <th>Verwijderen</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -44,6 +58,16 @@ else
                                 <tr>
                                     <td>@artikel.Naam</td>
                                     <td>@artikel.Beschrijving</td>
+                                    <td>
+                                        <a asp-action="BevestigArtikelVerwijderen"
+                                           asp-route-artikelId="@artikel.ArtikelId"
+                                            asp-route-categorieId="@artikel.CategorieId"
+                                           class="text-danger" title="Categorie verwijderen">
+                                            <button class="btn btn-icon btn-delete">
+                                                <i class="bi bi-trash"></i>
+                                            </button>
+                                        </a>
+                                    </td>
                                 </tr>
                 }
                     </tbody>

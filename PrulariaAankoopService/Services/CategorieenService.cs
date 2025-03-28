@@ -107,6 +107,23 @@ public class CategorieenService
 
 
 
+    // A.1300.Lesley
+    // RemoveArtikelVanCategorieAsync
+    public async Task<bool> RemoveArtikelVanCategorieAsync(int artikelId, Categorie categorie)
+    {
+        if (categorie == null)
+            throw new ArgumentException("Categorie is ongeldig.");
+
+        categorie = await _categorieenRepository.GetCategorieByIdMetHoofdEnSubcategorieenEnArtikelenAsync(categorie.CategorieId);
+        if (categorie == null)
+            throw new ArgumentException("Categorie niet gevonden.");
+
+        var artikel = categorie.Artikelen.FirstOrDefault(a => a.ArtikelId == artikelId);
+        if (artikel == null)
+            throw new ArgumentException("Artikel niet gevonden in deze categorie.");
+
+        return await _categorieenRepository.RemoveArtikelVanCategorieAsync(artikel, categorie);
+    }
 
 
 }

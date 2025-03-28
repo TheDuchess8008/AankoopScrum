@@ -401,5 +401,67 @@ public async Task<IActionResult> CategorieVerwijderenVanCategorie(int categorieI
 
 
 
+        // A.1300.Lesley
+        // BevestigArtikelVerwijderen
+        [HttpGet]
+        public async Task<IActionResult> BevestigArtikelVerwijderen(int artikelId, int categorieId)
+        {
+            try
+            {
+                var artikel = await _context.Artikelen.FindAsync(artikelId);
+                var categorie = await _context.Categorieen.FindAsync(categorieId);
+
+                if (artikel == null || categorie == null) return NotFound();
+
+                var viewModel = new ArtikelCategorieViewModel
+                {
+                    ArtikelId = artikelId,
+                    ArtikelNaam = artikel.Naam,
+                    CategorieId = categorieId,
+                    CategorieNaam = categorie.Naam
+                };
+
+                return View(viewModel);
+            }
+            catch (Exception ex)
+            {
+
+                return StatusCode(500, "Er is een interne fout opgetreden.");
+            }
+        }
+
+        // A.1300.Lesley
+        // ArtikelVerwijderenVanCategorie
+        [HttpPost]
+        public async Task<IActionResult> ArtikelVerwijderenVanCategorie(ArtikelCategorieViewModel model)
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    var errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage);
+                    return BadRequest(string.Join(", ", errors));
+                }
+
+                var categorie = await _categorieenService.GetCategorieByIdAsync(model.CategorieId);
+                if (categorie == null)
+                    return BadRequest("Categorie niet gevonden.");
+
+                bool success = await _categorieenService.RemoveArtikelVanCategorieAsync(model.ArtikelId, categorie);
+
+                if (!success)
+                    return BadRequest("Fout bij verwijderen van het artikel uit de categorie.");
+
+
+                return RedirectToAction("Details", new { id = model.CategorieId });
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, "Er is een interne fout opgetreden.");
+            }
+        }
+
+
+
     }
 }
