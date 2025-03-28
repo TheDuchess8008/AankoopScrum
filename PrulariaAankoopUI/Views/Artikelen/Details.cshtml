@@ -20,7 +20,7 @@
 <h1>Details</h1>
 
 <div>
-    <h4>Artikel</h4>
+    <h4>Artikel: @Model.Artikel.Naam</h4>
     <hr />
     <dl class="row">
         <dt class="col-sm-3">
@@ -28,12 +28,6 @@
         </dt>
         <dd class="col-sm-9">
             @Html.DisplayFor(model => model.Artikel.Ean)
-        </dd>
-        <dt class="col-sm-3">
-            @Html.DisplayNameFor(model => model.Artikel.Naam)
-        </dt>
-        <dd class="col-sm-9">
-            @Html.DisplayFor(model => model.Artikel.Naam)
         </dd>
         <dt class="col-sm-3">
             @Html.DisplayNameFor(model => model.Artikel.Beschrijving)
@@ -159,7 +153,7 @@
 
 
 <div>
-    <a asp-action="Edit" asp-route-id="@Model.Artikel.ArtikelId" class="btn huiskleur">Wijzigen</a>
+    <a asp-action="Edit" asp-route-id="@Model.Artikel.ArtikelId" class="btn huiskleur">Bewerken</a>
     <a asp-action="BevestigSetNonActief" asp-route-artikelId="@Model.Artikel.ArtikelId" class="btn btn-secondary huiskleur">Zet non-actief</a>
     <a asp-action="Index" class="btn btn-terug">Terug</a>
 </div>

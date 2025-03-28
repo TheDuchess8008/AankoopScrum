@@ -3,20 +3,24 @@ using System.ComponentModel.DataAnnotations;
 
 namespace PrulariaAankoopUI.Models;
 
-public class CategorieViewModel
+public class CategorieCategorieViewModel
 {
+    public Categorie Categorie { get; set; }
+    public Categorie GekozenCategorie { get; set; }
+
+
+    //*******************************************
     public int CategorieId { get; set; }
-    [Required(ErrorMessage = "De naam is verplicht.")]
-    [Display(Name = "Naam")]
+    [Display(Name = "Naam Van Categorie")]
     public string Naam { get; set; } = null!;
 
     public int? HoofdCategorieId { get; set; }
-    [Required(ErrorMessage = "De naam is verplicht.")]
-    [Display(Name = "Hoofdcategorie")]
+    [Display(Name = "Naam Van Hoofd Categorie")]
+
     public virtual Categorie? HoofdCategorie { get; set; }
 
     public virtual ICollection<Categorie> Subcategorieën { get; set; } = new List<Categorie>();
 
-    public List<Categorie> Categorieen { get; set; } = new List<Categorie>();
-    public CategorieArtikelViewModel ArtikelToevoegenForm { get; set; } = new();
+    public virtual ICollection<Artikel> Artikelen { get; set; } = new List<Artikel>();
+
 }

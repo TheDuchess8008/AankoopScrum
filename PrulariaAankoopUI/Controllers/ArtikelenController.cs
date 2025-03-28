@@ -72,9 +72,6 @@ namespace PrulariaAankoopUI.Controllers
             return RedirectToAction("Index", "Home");
         }
 
-
-
-
         // GET: Artikelen/Create
         public IActionResult Create()
         {
@@ -424,31 +421,24 @@ namespace PrulariaAankoopUI.Controllers
             try
             {
                 if (!ModelState.IsValid)
-            {
-                var errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage);
-                return BadRequest(string.Join(", ", errors));
-            }
-            var categorie = await _categorieenService.GetCategorieByIdAsync(model.CategorieId);
+                {
+                    var errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage);
+                    return BadRequest(string.Join(", ", errors));
+                }
+                var categorie = await _categorieenService.GetCategorieByIdAsync(model.CategorieId);
 
-            bool success = await _artikelenService.RemoveCategorieVanArtikelAsync(model.ArtikelId, categorie);
+                bool success = await _artikelenService.RemoveCategorieVanArtikelAsync(model.ArtikelId, categorie);
 
-            if (!success)
-                return BadRequest("Fout bij Verwijderen van de categorie.");
+                if (!success)
+                    return BadRequest("Fout bij Verwijderen van de categorie.");
 
-            return RedirectToAction("Details", new { id = model.ArtikelId });
+                return RedirectToAction("Details", new { id = model.ArtikelId });
             }
             catch (Exception ex)
             {
-                
+
                 return StatusCode(500, "Er is een interne fout opgetreden.");
             }
-
-
-}
-
-
-
-
-
+        }
     }
 }

@@ -4,7 +4,14 @@
     ViewData["Title"] = "Categorieën";
 }
 
-<h1>Categorieën</h1>
+<!-- Geef een succesbericht weer indien beschikbaar -->
+@if (TempData["Melding"] != null)
+{
+    <div class="alert alert-success">
+        @TempData["Melding"]
+    </div>
+}
+<h1>Categorieen</h1>
 
 <p>
     <a asp-action="Create" class="btn huiskleur">Toevoegen</a>
@@ -21,13 +28,13 @@
             <th style="width: 140px">
                 Aantal artikelen
             </th>
-            <th></th>
+            <th style="text-align: center">Acties</th>
         </tr>
     </thead>
     <tbody>
         @foreach (var item in Model.Categorieen)
         {
-            @if (item.Subcategorieën.Count() > 0)
+            @if (item.Subcategorieën.Count() > 0 || item.HoofdCategorieId == null)
             {
                 var hoofdcategorieId = item.CategorieId;
                 <tr>
@@ -65,7 +72,7 @@
                     </td>
 
                 </tr>
-                foreach (var subcategorie in item.Subcategorieën)
+                foreach (var subcategorie in item.Subcategorieën.OrderBy(s => s.Naam))
                 {
                     <tr>
                         <td>
@@ -93,7 +100,6 @@
                             <a asp-action="Details" asp-route-id="@subcategorie.CategorieId" title="Details bekijken"><button class="btn btn-icon btn-details"><i class="bi bi-eye"></i></button></a>
                             <a asp-action="Delete" asp-route-id="@subcategorie.CategorieId" title="Verwijderen"><button class="btn btn-icon btn-delete"><i class="bi bi-trash"></i></button></a>
                         </td>
-
                     </tr>
                 }
             }

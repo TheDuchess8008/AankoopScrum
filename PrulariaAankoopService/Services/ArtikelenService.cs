@@ -201,7 +201,10 @@ public class ArtikelenService
 
         return await _artikelenRepository.RemoveCategorieVanArtikelAsync(artikel, categorie);
     }
-
-
+    //A1200.2 Amaury: Haal artikels niet in huidige categorie op 
+    public async Task<List<Artikel>> GetNietGekoppeldeArtikelsVoorCategorieAsync(int categorieId)
+    {
+        return await _artikelenRepository.GetNietGekoppeldeArtikelsVoorCategorieAsync(categorieId);
+    }
 
 }

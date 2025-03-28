@@ -1,0 +1,18 @@
+﻿@model PrulariaAankoopUI.Models.CategorieCategorieViewModel
+
+@{
+    ViewData["Title"] = "Bevestig Categorie Toevoegen";
+}
+
+<h2>Bevestig Toevoegen</h2>
+
+
+<p>Wil je de categorie <strong>@Model.GekozenCategorie.Naam</strong> toevoegen als Subcategorie van <strong>@Model.Categorie.Naam</strong>?</p>
+
+<form asp-action="CategorieToevoegenAanCategorie" method="post">
+    <input type="hidden" name="CategorieId" value="@Model.Categorie.CategorieId" />
+    <input type="hidden" name="gekozenCategorieId" value="@Model.GekozenCategorie.CategorieId" />
+
+    <button type="submit" class="btn huiskleur">Bevestigen</button>
+    <a asp-action="Details" asp-route-id="@Model.Categorie.CategorieId" class="btn btn-secondary">Annuleren</a>
+</form> 
