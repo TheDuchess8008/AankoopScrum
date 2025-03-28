@@ -6,12 +6,12 @@ namespace PrulariaAankoopUI.Models;
 public class CategorieViewModel
 {
     public int CategorieId { get; set; }
-
+    [Required(ErrorMessage = "De naam is verplicht.")]
     [Display(Name = "Naam")]
     public string Naam { get; set; } = null!;
 
     public int? HoofdCategorieId { get; set; }
-
+    [Required(ErrorMessage = "De naam is verplicht.")]
     [Display(Name = "Hoofdcategorie")]
     public virtual Categorie? HoofdCategorie { get; set; }
 

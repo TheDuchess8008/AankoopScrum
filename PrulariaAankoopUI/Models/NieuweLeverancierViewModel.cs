@@ -3,17 +3,17 @@ using System.ComponentModel.DataAnnotations;
 
 public class NieuweLeverancierViewModel
 {
-    [Required]
+    [Required(ErrorMessage = "De naam van de leverancier is verplicht.")]
     public string Naam { get; set; } = null!;
 
-    [Required]
+    [Required(ErrorMessage = "Het BTW-nummer is verplicht.")]
     [Display(Name = "Btw nummer")]
     public string BtwNummer { get; set; } = null!;
 
-    [Required]
+    [Required(ErrorMessage = "De straatnaam is verplicht.")]
     public string Straat { get; set; } = null!;
 
-    [Required]
+    [Required(ErrorMessage = "Het huisnummer is verplicht.")]
     [Display(Name = "Huisnummer")]
     public string HuisNummer { get; set; } = null!;
 
@@ -29,17 +29,17 @@ public class NieuweLeverancierViewModel
     // Plaatsen dropdown (all places will be shown)
     public List<SelectListItem>? Plaatsen { get; set; }
 
-    [Required]
+    [Required(ErrorMessage = "Een plaats is verplicht.")]
     [Display(Name = "Plaats")]
     public int PlaatsId { get; set; }
 
     public string? Postcode { get; set; }
 
-    [Required]
+    [Required(ErrorMessage = "De familienaam van de contactpersoon is verplicht.")]
     [Display(Name = "Familienaam Van Contactpersoon")]
     public string FamilienaamContactpersoon { get; set; } = null!;
 
-    [Required]
+    [Required(ErrorMessage = "De voornaam van de contactpersoon is verplicht.")]
     [Display(Name = "Voornaam Van Contactpersoon")]
     public string VoornaamContactpersoon { get; set; } = null!;
 }
