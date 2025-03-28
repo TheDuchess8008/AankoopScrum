@@ -22,16 +22,13 @@
 }
 
 
-<h4>Categorie</h4>
+<h4>Categorie: @Model.Naam</h4>
 <hr />
 <div class="row">
     <!-- Linkse kolom: details van categorie -->
     <div class="col-md-6">
         <dl class="row">
-            <dt class="col-sm-4">Naam</dt>
-            <dd class="col-sm-8">@Model.Naam</dd>
-
-            @if (Model.HoofdCategorie != null)
+           @if (Model.HoofdCategorie != null)
             {
                 <dt class="col-sm-4">Hoofdcategorie</dt>
                 <dd class="col-sm-8">
