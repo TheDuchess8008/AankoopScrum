@@ -45,56 +45,64 @@ namespace PrulariaAankoopUI.Controllers
         // GET: Categorieen/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null)
-                return NotFound();
-
-            //var categorie = await _categorieenService.GetCategorieByIdAsync(id.Value);// ORIGINELE
-            var categorie = await _categorieenService.GetCategorieByIdMetHoofdEnSubcategorieenEnArtikelenAsync((int)id);//NIEUWE
-            if (categorie == null)
-                return NotFound();
-
-            // Get alle Artikelen nog niet gelinkt aan de huidige Categorie
-            var beschikbareArtikelen = 
-                await _artikelenService.GetNietGekoppeldeArtikelsVoorCategorieAsync(categorie.CategorieId);
-
-            var dropdownItems = beschikbareArtikelen.Select(a => new SelectListItem
+            if (HttpContext.Session.GetString("Ingelogd") != null) 
             {
-                Value = a.ArtikelId.ToString(),
-                Text = a.Naam + " " + a.Beschrijving.ToString()
-            }).ToList();
+                if (id == null)
+                    return NotFound();
 
-            var viewModel = new CategorieViewModel
-            {
-                CategorieId = categorie.CategorieId,
-                Naam = categorie.Naam,
-                HoofdCategorieId = categorie.HoofdCategorieId,
-                HoofdCategorie = categorie.HoofdCategorie,
-                Subcategorieën = categorie.Subcategorieën.ToList(),
+                //var categorie = await _categorieenService.GetCategorieByIdAsync(id.Value);// ORIGINELE
+                var categorie = await _categorieenService.GetCategorieByIdMetHoofdEnSubcategorieenEnArtikelenAsync((int)id);//NIEUWE
+                if (categorie == null)
+                    return NotFound();
 
-                ArtikelToevoegenForm = new CategorieArtikelViewModel
+                // Get alle Artikelen nog niet gelinkt aan de huidige Categorie
+                var beschikbareArtikelen =
+                    await _artikelenService.GetNietGekoppeldeArtikelsVoorCategorieAsync(categorie.CategorieId);
+
+                var dropdownItems = beschikbareArtikelen.Select(a => new SelectListItem
+                {
+                    Value = a.ArtikelId.ToString(),
+                    Text = a.Naam + " " + a.Beschrijving.ToString()
+                }).ToList();
+
+                var viewModel = new CategorieViewModel
                 {
                     CategorieId = categorie.CategorieId,
-                    CategorieNaam = categorie.Naam,
-                    BeschikbareArtikelen = dropdownItems
-                }
-            };
+                    Naam = categorie.Naam,
+                    HoofdCategorieId = categorie.HoofdCategorieId,
+                    HoofdCategorie = categorie.HoofdCategorie,
+                    Subcategorieën = categorie.Subcategorieën.ToList(),
 
-            var overigeCategorieen = await _categorieenService.GetOverigeCategorieen2Async((int)id);
-            ViewData["LijstOverigeCategorieId"] = new SelectList(overigeCategorieen, "CategorieId", "Naam");
+                    ArtikelToevoegenForm = new CategorieArtikelViewModel
+                    {
+                        CategorieId = categorie.CategorieId,
+                        CategorieNaam = categorie.Naam,
+                        BeschikbareArtikelen = dropdownItems
+                    }
+                };
 
-            var subCategorieen =  categorie.Subcategorieën;
-            //var subCategorieen = await _categorieenService.GetSubCategorieënAsync((int)id);
-            //var subCategorieen = await _categorieenService.GetOverigeCategorieen2Async((int)id);
-            ViewData["LijstSubCategorieenId"] = new SelectList(subCategorieen, "CategorieId", "Naam");
+                var overigeCategorieen = await _categorieenService.GetOverigeCategorieen2Async((int)id);
+                ViewData["LijstOverigeCategorieId"] = new SelectList(overigeCategorieen, "CategorieId", "Naam");
 
-           
+                var subCategorieen = categorie.Subcategorieën;
+                //var subCategorieen = await _categorieenService.GetSubCategorieënAsync((int)id);
+                //var subCategorieen = await _categorieenService.GetOverigeCategorieen2Async((int)id);
+                ViewData["LijstSubCategorieenId"] = new SelectList(subCategorieen, "CategorieId", "Naam");
 
-            return View(viewModel);
+
+
+                return View(viewModel);
+            }
+            return RedirectToAction("Index", "Home");
+            
         }
 
         [HttpGet]
         public async Task<IActionResult> Create()
         {
+            if (HttpContext.Session.GetString("Ingelogd") == null)
+                return RedirectToAction("Index", "Home");
+
             var hoofdCategorien = await _categorieenService.GetHoofdCategorien();
             var categorieToevoegenViewModel = new CategorieToevoegenViewModel()
             {
@@ -110,6 +118,8 @@ namespace PrulariaAankoopUI.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(CategorieToevoegenViewModel categorieToevoegenViewModel)
         {
+            if (HttpContext.Session.GetString("Ingelogd") == null)
+                return RedirectToAction("Index", "Home");
             if (ModelState.IsValid)
             {
                 bool categorieAlBestaat = await _categorieenService.CategorieMetNaamAlBestaat(categorieToevoegenViewModel.Naam);
@@ -137,8 +147,9 @@ namespace PrulariaAankoopUI.Controllers
         // GET: Categorieen/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (HttpContext.Session.GetString("Ingelogd") != null)
-            {
+            if (HttpContext.Session.GetString("Ingelogd") == null)
+                return RedirectToAction("Index", "Home");
+            
                 if (id == null)
                 {
                     return NotFound();
@@ -159,6 +170,7 @@ namespace PrulariaAankoopUI.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("CategorieId,Naam,HoofdCategorieId")] Categorie categorie)
         {
+
             if (id != categorie.CategorieId)
             {
                 return NotFound();
@@ -188,6 +200,7 @@ namespace PrulariaAankoopUI.Controllers
         // GET: Categorieen/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
+
             if (HttpContext.Session.GetString("Ingelogd") != null)
             {
                 if (id == null)
@@ -247,6 +260,8 @@ namespace PrulariaAankoopUI.Controllers
         [HttpGet]
         public async Task<IActionResult> VoegArtikelToe(int categorieId)
         {
+            if (HttpContext.Session.GetString("Ingelogd") == null)
+                return RedirectToAction("Index", "Home");
             var categorie = await _categorieenService.GetCategorieByIdAsync(categorieId);
             if (categorie == null) return NotFound();
 
@@ -268,6 +283,8 @@ namespace PrulariaAankoopUI.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> KoppelArtikelAanCategorie(CategorieViewModel model)
         {
+            if (HttpContext.Session.GetString("Ingelogd") == null)
+                return RedirectToAction("Index", "Home");
             var form = model.ArtikelToevoegenForm;
 
             if (form.ArtikelId == 0)
@@ -291,6 +308,8 @@ namespace PrulariaAankoopUI.Controllers
         [HttpPost]
         public async Task<IActionResult> BevestigCategorieToevoegen(int categorieId, int gekozenCategorieId)
         {
+            if (HttpContext.Session.GetString("Ingelogd") == null)
+                return RedirectToAction("Index", "Home");
             try
             {
                 var categorie = await _categorieenService.GetCategorieByIdMetHoofdEnSubcategorieenEnArtikelenAsync(categorieId);
@@ -322,6 +341,8 @@ namespace PrulariaAankoopUI.Controllers
         [HttpPost]
         public async Task<IActionResult> CategorieToevoegenAanCategorie(int categorieId, int gekozenCategorieId)
         {
+            if (HttpContext.Session.GetString("Ingelogd") == null)
+                return RedirectToAction("Index", "Home");
             try
             {
 
@@ -352,6 +373,8 @@ namespace PrulariaAankoopUI.Controllers
         [HttpPost]
         public async Task<IActionResult> BevestigCategorieVerwijderen(int categorieId, int gekozenCategorieId)
         {
+            if (HttpContext.Session.GetString("Ingelogd") == null)
+                return RedirectToAction("Index", "Home");
             try
             {
                 var categorie = await _categorieenService.GetCategorieByIdMetHoofdEnSubcategorieenEnArtikelenAsync(categorieId);

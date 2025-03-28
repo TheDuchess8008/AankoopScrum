@@ -243,10 +243,11 @@ input.form-control.huiskleur::placeholder {
 .input-group {
     background-color: #edf2e9;
     border-radius: 5px;
-   /* padding: 5px;*/
+    padding: 5px;
+   /* border: initial;*/
 }
 
 .form-control {
-    border: none;
+    /*border: none;*/
     /*background: transparent;*/
 }
