@@ -11,7 +11,10 @@
     }
 
     <br />
-    <p style="color: darkgreen">@ViewBag.bevestiging</p>
+    @if (TempData["WachtwoordGewijzigd"] != null)
+    {
+        <div class="alert alert-success">@TempData["WachtwoordGewijzigd"]</div>
+    }
     <br />
 
     <a asp-controller="Security" asp-action="WachtWoordWijzigen" class="btn huiskleur">

@@ -16,7 +16,7 @@ public class WachtwoordWijzigenViewModel
 
     [Required(ErrorMessage = "Bevestig het nieuwe wachtwoord.")]
     [DataType(DataType.Password)]
-    [Compare("NieuweWachtwoord", ErrorMessage = "De nieuwe wachtwoorden komen niet overeen.")]
+    [Compare("NieuweWachtwoord", ErrorMessage = "De herhaling van het nieuwe wachtwoord is incorrect.")]
     public string HerhaaldeNieuweWachtwoord { get; set; }
 
     public string ErrorMessage { get; set; } = string.Empty;

@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Org.BouncyCastle.Crypto.Generators;
 using PrulariaAankoopData.Models;
 using System;
 using System.Collections.Generic;
@@ -39,5 +40,11 @@ public class SQLSecurityRepository : ISecurityRepository
                .Include(m => m.PersoneelslidAccount)
                .Where(p => p.Voornaam == voornaam && p.Familienaam == familienaam)
                .FirstOrDefaultAsync();
+    }
+
+    public async Task PersoneelslidGegevensBewaren(Personeelslid personeelslid) 
+    {
+        _context.Personeelsleden.Update(personeelslid);
+        await _context.SaveChangesAsync();
     }
 }

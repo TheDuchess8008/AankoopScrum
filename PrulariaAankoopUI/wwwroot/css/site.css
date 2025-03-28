@@ -228,3 +228,25 @@ input.form-control.huiskleur::placeholder {
 #toggle-password:hover {
     color: #555; /* Darker color on hover */
 }
+
+.password-container {
+    width: 40%;
+    max-width: 500px;
+    min-width: 300px;
+    padding: 25px;
+   /* background: white;*/
+    /*background-color: #edf2e9;*/
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+}
+
+.input-group {
+    background-color: #edf2e9;
+    border-radius: 5px;
+   /* padding: 5px;*/
+}
+
+.form-control {
+    border: none;
+    /*background: transparent;*/
+}

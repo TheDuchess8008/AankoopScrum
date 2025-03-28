@@ -11,5 +11,6 @@ public interface ISecurityRepository
     Task<List<Personeelslid>> GetAllePersoneelsleden();
     Task<Personeelslid> GetGebruikerEnCheckEmail(string email);
     Task<Personeelslid?> GetIngelogdeLid(string voornaam, string familienaam);
-    
+    Task PersoneelslidGegevensBewaren(Personeelslid personeelslid);
+
 }

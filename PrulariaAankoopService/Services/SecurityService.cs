@@ -82,8 +82,9 @@ public class SecurityService
         {
             string nieuwGehashedPaswoord = BCrypt.Net.BCrypt.HashPassword(nieuwPaswoord);
             gebruiker.PersoneelslidAccount.Paswoord = nieuwGehashedPaswoord;
-            _context.Personeelsleden.Update(gebruiker);
-            await _context.SaveChangesAsync();
+            await _securityRepository.PersoneelslidGegevensBewaren(gebruiker);
+            //_context.Personeelsleden.Update(gebruiker);
+            //await _context.SaveChangesAsync();
             return true; 
         }
         catch (Exception ex)

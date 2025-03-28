@@ -63,8 +63,10 @@ public class SecurityController : Controller
                     if (_securityService.IsNieuwWachtwoordVerschillendVanOud(personeelslid, model.NieuweWachtwoord)) 
                     {
                         await _securityService.WijzigWachtwoord(personeelslid, model.NieuweWachtwoord);
-                        ViewBag.bevestiging = "Wachtwoord gewijzigd.";
-                        return View("Index", ViewBag.bevestiging);
+                     
+                        TempData["WachtwoordGewijzigd"] = "Wachtwoord werd sucessvol gewijzigd.";
+                        return RedirectToAction("Index");
+                        
                     }
                     else ViewBag.foutBerincht = "Het nieuwe wachtwoord mag niet hetzelfde zijn als het oude!";
                 }
