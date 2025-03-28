@@ -26,7 +26,7 @@ else if (Model.Count == 1 && !Model.First().HeeftSubcategorieën)
                                 <a asp-action="BevestigArtikelVerwijderen"
                                    asp-route-artikelId="@artikel.ArtikelId"
                                    asp-route-categorieId="@artikel.CategorieId"
-                                   class="text-danger" title="Categorie verwijderen">
+                                   class="text-danger" title="Artikel verwijderen">
                                     <button class="btn btn-icon btn-delete">
                                         <i class="bi bi-trash"></i>
                                     </button>
@@ -62,7 +62,7 @@ else
                                         <a asp-action="BevestigArtikelVerwijderen"
                                            asp-route-artikelId="@artikel.ArtikelId"
                                             asp-route-categorieId="@artikel.CategorieId"
-                                           class="text-danger" title="Categorie verwijderen">
+                                           class="text-danger" title="Artikel verwijderen">
                                             <button class="btn btn-icon btn-delete">
                                                 <i class="bi bi-trash"></i>
                                             </button>
