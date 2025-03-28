@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using PrulariaAankoop.Models;
 using PrulariaAankoopData.Repositories;
 using PrulariaAankoopService.Services;
@@ -40,7 +41,10 @@ namespace PrulariaAankoopUI.Components
                     Artikels = directeArtikels.Select(a => new ArtikelShortViewModel
                     {
                         Naam = a.Naam ?? "(Geen naam)",
-                        Beschrijving = a.Beschrijving ?? "(Geen beschrijving)"
+                        Beschrijving = a.Beschrijving ?? "(Geen beschrijving)",
+
+                        ArtikelId = a.ArtikelId, // NIEUW
+                        CategorieId = categorieId // NIEUW
                     }).ToList()
                 });
             }
@@ -50,19 +54,24 @@ namespace PrulariaAankoopUI.Components
             {
                 var subcats = categorie.Subcategorieën;
 
+                
+
                 foreach (var sub in subcats.OrderBy(s => s.Naam))
                 {
-                    var artikelsInSub = sub.Artikelen
-                        .Where(a => string.IsNullOrEmpty(zoekterm) ||
-                                    (!string.IsNullOrEmpty(a.Naam) &&
-                                     a.Naam.Contains(zoekterm, StringComparison.OrdinalIgnoreCase)))
-                        .OrderBy(a => a.Naam)
-                        .Select(a => new ArtikelShortViewModel
-                        {
-                            Naam = a.Naam ?? "(Geen naam)",
-                            Beschrijving = a.Beschrijving ?? "(Geen beschrijving)"
-                        })
-                        .ToList();
+                    var artikelsInSub = await _artikelRepository.GetArtikelsByCategorieIdAsync(sub.CategorieId, zoekterm); // NIEUW 
+
+                    // ORIGINEEL (Terugzetten ?)
+                    //var artikelsInSub = sub.Artikelen
+                    //    .Where(a => string.IsNullOrEmpty(zoekterm) ||
+                    //                (!string.IsNullOrEmpty(a.Naam) &&
+                    //                 a.Naam.Contains(zoekterm, StringComparison.OrdinalIgnoreCase)))
+                    //    .OrderBy(a => a.Naam)
+                    //    .Select(a => new ArtikelShortViewModel
+                    //    {
+                    //        Naam = a.Naam ?? "(Geen naam)",
+                    //        Beschrijving = a.Beschrijving ?? "(Geen beschrijving)"
+                    //    })
+                    //    .ToList();
 
                     if (artikelsInSub.Any())
                     {
@@ -70,7 +79,20 @@ namespace PrulariaAankoopUI.Components
                         {
                             SubcategorieNaam = sub.Naam,
                             HeeftSubcategorieën = true,
-                            Artikels = artikelsInSub
+                            //Artikels = artikelsInSub
+
+                            // NIEUW
+                            Artikels = artikelsInSub.Select(a => new ArtikelShortViewModel
+                            {
+                                Naam = a.Naam ?? "(Geen naam)",
+                                Beschrijving = a.Beschrijving ?? "(Geen beschrijving)",
+                                ArtikelId = a.ArtikelId,
+                                CategorieId = sub.CategorieId // Zorg ervoor dat CategorieId correct wordt ingesteld
+                            }).ToList() // NIEUW
+
+
+
+
                         });
                     }
                 }

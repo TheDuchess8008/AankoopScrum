@@ -70,6 +70,7 @@
 
     <!-- Rechtse kolom: Artikel toevoegen form -->
     <div class="col-md-6">
+        
         <h5>Artikel toevoegen aan deze categorie</h5>
 
         <form asp-action="KoppelArtikelAanCategorie" method="post">
@@ -87,7 +88,55 @@
             <button type="submit" class="btn huiskleur">Toevoegen</button>
         </form>
 
-    </div>
+
+        <h5>Subcategorie toevoegen aan deze categorie</h5>
+
+        <form asp-action="BevestigCategorieToevoegen" method="post">
+            @* <input type="hidden" asp-for="ArtikelToevoegenForm.CategorieId" /> *@
+            <input type="hidden" name="categorieId" value="@Model.CategorieId" />
+
+            <div class="mb-3">
+                <select name="GekozenCategorieId" class="form-control me-2" asp-items="ViewBag.LijstOverigeCategorieId">
+                    <option value="">-- Kies een categorie --</option>
+                </select>
+                <span asp-validation-for="CategorieId" class="text-danger"></span>
+            </div>
+
+            <button type="submit" class="btn huiskleur">Toevoegen</button>
+        </form>
+
+
+
+        <h5>Subcategorie verwijderen van deze categorie</h5>
+
+        <form asp-action="BevestigCategorieVerwijderen" method="post">
+            @* <input type="hidden" asp-for="ArtikelToevoegenForm.CategorieId" /> *@
+            <input type="hidden" name="categorieId" value="@Model.CategorieId" />
+
+            <div class="mb-3">
+                <select name="GekozenCategorieId" class="form-control me-2" 
+                asp-items="ViewBag.LijstSubCategorieenId">
+                        @* asp-items="@(new SelectList(Model.Subcategorieën, "CategorieId", "Naam"))"> *@
+                    <option value="">-- Kies een categorie --</option>
+                </select>
+                <span asp-validation-for="CategorieId" class="text-danger"></span>
+            </div>
+
+            <button type="submit" class="btn huiskleur">Verwijderen</button>
+        </form>
+
+
+
+
+
+
+
+
+
+
+
+
+    </div>@*einde rechtse kolom*@
 </div>
 
 

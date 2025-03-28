@@ -83,4 +83,47 @@ public class CategorieenService
         return await _artikelenRepository.AddArtikelAanCategorieAsync(artikelId, categorieId);
     }
 
+
+    // A.1500.Lesley
+    // GetOverigeCategorieenAsync
+    public async Task<List<Categorie>> GetOverigeCategorieen2Async(int categorieId)
+    {
+        return await _categorieenRepository.GetOverigeCategorieen2Async(categorieId);
+    }
+
+    // A.1500.Lesley
+    // GetCategorieByIdMetHoofdEnSubcategorieenEnArtikelenAsync
+    public async Task<Categorie> GetCategorieByIdMetHoofdEnSubcategorieenEnArtikelenAsync(int id)
+    {
+        return await _categorieenRepository.GetCategorieByIdMetHoofdEnSubcategorieenEnArtikelenAsync(id);
+    }
+
+    // A.1500.Lesley
+    // HoofdcategorieIdOpNullZettenAsync
+    public async Task HoofdcategorieIdOpNullZettenAsync(int categorieId)
+    {
+        await _categorieenRepository.HoofdcategorieIdOpNullZettenAsync(categorieId);
+    }
+
+
+
+    // A.1300.Lesley
+    // RemoveArtikelVanCategorieAsync
+    public async Task<bool> RemoveArtikelVanCategorieAsync(int artikelId, Categorie categorie)
+    {
+        if (categorie == null)
+            throw new ArgumentException("Categorie is ongeldig.");
+
+        categorie = await _categorieenRepository.GetCategorieByIdMetHoofdEnSubcategorieenEnArtikelenAsync(categorie.CategorieId);
+        if (categorie == null)
+            throw new ArgumentException("Categorie niet gevonden.");
+
+        var artikel = categorie.Artikelen.FirstOrDefault(a => a.ArtikelId == artikelId);
+        if (artikel == null)
+            throw new ArgumentException("Artikel niet gevonden in deze categorie.");
+
+        return await _categorieenRepository.RemoveArtikelVanCategorieAsync(artikel, categorie);
+    }
+
+
 }
