@@ -58,7 +58,7 @@ namespace PrulariaAankoopUI.Components
 
                 foreach (var sub in subcats.OrderBy(s => s.Naam))
                 {
-                    var artikelsInSub = await _artikelRepository.GetArtikelsByCategorieIdAsync(sub.CategorieId, zoekterm); // NIEUW
+                    var artikelsInSub = await _artikelRepository.GetArtikelsByCategorieIdAsync(sub.CategorieId, zoekterm); // NIEUW 
 
                     // ORIGINEEL (Terugzetten ?)
                     //var artikelsInSub = sub.Artikelen
