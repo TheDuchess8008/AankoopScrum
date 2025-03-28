@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.CodeAnalysis.FlowAnalysis.DataFlow;
 using Microsoft.EntityFrameworkCore;
 using PrulariaAankoopData.Models;
 using PrulariaAankoopData.Repositories;
@@ -17,12 +18,15 @@ namespace PrulariaAankoopUI.Controllers
         private readonly PrulariaComContext _context;
         private readonly CategorieenService _categorieenService;
         private readonly ArtikelenService _artikelenService;
+        private readonly ICategorieenRepository _categorieenRepository;
+
         public CategorieenController(PrulariaComContext context, CategorieenService categorieenService,
-            ArtikelenService artikelenService)
+            ArtikelenService artikelenService, ICategorieenRepository categorieenRepository)
         {
             _context = context;
             _categorieenService = categorieenService;
             _artikelenService = artikelenService;
+            _categorieenRepository = categorieenRepository;
         }
 
         // GET: Categorieen
@@ -40,7 +44,8 @@ namespace PrulariaAankoopUI.Controllers
             if (id == null)
                 return NotFound();
 
-            var categorie = await _categorieenService.GetCategorieByIdAsync(id.Value);
+            //var categorie = await _categorieenService.GetCategorieByIdAsync(id.Value);// ORIGINELE
+            var categorie = await _categorieenService.GetCategorieByIdMetHoofdEnSubcategorieenEnArtikelenAsync((int)id);//NIEUWE
             if (categorie == null)
                 return NotFound();
 
@@ -69,6 +74,16 @@ namespace PrulariaAankoopUI.Controllers
                     BeschikbareArtikelen = dropdownItems
                 }
             };
+
+            var overigeCategorieen = await _categorieenService.GetOverigeCategorieen2Async((int)id);
+            ViewData["LijstOverigeCategorieId"] = new SelectList(overigeCategorieen, "CategorieId", "Naam");
+
+            var subCategorieen =  categorie.Subcategorieën;
+            //var subCategorieen = await _categorieenService.GetSubCategorieënAsync((int)id);
+            //var subCategorieen = await _categorieenService.GetOverigeCategorieen2Async((int)id);
+            ViewData["LijstSubCategorieenId"] = new SelectList(subCategorieen, "CategorieId", "Naam");
+
+           
 
             return View(viewModel);
         }
@@ -259,5 +274,194 @@ namespace PrulariaAankoopUI.Controllers
 
             return RedirectToAction("Details", new { id = form.CategorieId });
         }
+
+
+        // A.1500.Lesley
+        // BevestigCategorieToevoegen
+        [HttpPost]
+        public async Task<IActionResult> BevestigCategorieToevoegen(int categorieId, int gekozenCategorieId)
+        {
+            try
+            {
+                var categorie = await _categorieenService.GetCategorieByIdMetHoofdEnSubcategorieenEnArtikelenAsync(categorieId);
+
+                var gekozenCategorie = await _categorieenService.GetCategorieByIdMetHoofdEnSubcategorieenEnArtikelenAsync(gekozenCategorieId);
+
+                if (categorie == null || gekozenCategorie == null) return NotFound();
+
+                var categorieCategorieViewModel = new CategorieCategorieViewModel
+                {
+                    Categorie = categorie,
+                    GekozenCategorie = gekozenCategorie
+                };
+
+                return View(categorieCategorieViewModel);
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, "Er is een interne fout opgetreden.");
+            }
+
+
+        }
+
+
+
+        // A.1500.Lesley
+        // CategorieToevoegenAanCategorie
+        [HttpPost]
+        public async Task<IActionResult> CategorieToevoegenAanCategorie(int categorieId, int gekozenCategorieId)
+        {
+            try
+            {
+
+
+                var categorie = await _categorieenService.GetCategorieByIdMetHoofdEnSubcategorieenEnArtikelenAsync(categorieId);
+
+                var gekozenCategorie = await _categorieenService.GetCategorieByIdMetHoofdEnSubcategorieenEnArtikelenAsync(gekozenCategorieId);
+
+
+
+
+                if (categorie == null || gekozenCategorie == null)
+                    return NotFound();
+
+                categorie.Subcategorieën.Add(gekozenCategorie);
+                await _categorieenRepository.SaveChangesAsync();
+
+                return RedirectToAction("Details", new { id = categorie.CategorieId });
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, "Er is een interne fout opgetreden.");
+            }
+        }
+
+        // A.1500.Lesley
+        // BevestigCategorieVerwijderen
+        [HttpPost]
+        public async Task<IActionResult> BevestigCategorieVerwijderen(int categorieId, int gekozenCategorieId)
+        {
+            try
+            {
+                var categorie = await _categorieenService.GetCategorieByIdMetHoofdEnSubcategorieenEnArtikelenAsync(categorieId);
+                var gekozenCategorie = await _categorieenService.GetCategorieByIdMetHoofdEnSubcategorieenEnArtikelenAsync(gekozenCategorieId);
+
+                if (categorie == null || gekozenCategorie == null) return NotFound();
+
+                var categorieCategorieViewModel = new CategorieCategorieViewModel
+                {
+                    Categorie = categorie,
+                    GekozenCategorie = gekozenCategorie
+                };
+
+                return View(categorieCategorieViewModel);
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, "Er is een interne fout opgetreden.");
+            }
+        }
+
+
+
+
+        // A.1500.Lesley
+        // CategorieVerwijderenVanCategorie
+        [HttpPost]
+public async Task<IActionResult> CategorieVerwijderenVanCategorie(int categorieId, int? gekozenCategorieId)
+{
+    try
+    {
+        var categorie = await _categorieenService.GetCategorieByIdMetHoofdEnSubcategorieenEnArtikelenAsync(categorieId);
+        var gekozenCategorie = await _categorieenService.GetCategorieByIdMetHoofdEnSubcategorieenEnArtikelenAsync((int)gekozenCategorieId);
+
+        if (categorie == null || gekozenCategorie == null)
+            return NotFound();
+
+        if (categorie.Subcategorieën.Contains(gekozenCategorie))
+        {
+
+
+            await _categorieenService.HoofdcategorieIdOpNullZettenAsync((int)gekozenCategorieId);
+
+            return RedirectToAction("Details", new { id = categorie.CategorieId });
+
+        }
+
+        return RedirectToAction("Details", new { id = categorie.CategorieId });
+    }
+    catch (Exception)
+    {
+        return StatusCode(500, "Er is een interne fout opgetreden.");
+    }
+}
+
+
+
+
+
+        // A.1300.Lesley
+        // BevestigArtikelVerwijderen
+        [HttpGet]
+        public async Task<IActionResult> BevestigArtikelVerwijderen(int artikelId, int categorieId)
+        {
+            try
+            {
+                var artikel = await _context.Artikelen.FindAsync(artikelId);
+                var categorie = await _context.Categorieen.FindAsync(categorieId);
+
+                if (artikel == null || categorie == null) return NotFound();
+
+                var viewModel = new ArtikelCategorieViewModel
+                {
+                    ArtikelId = artikelId,
+                    ArtikelNaam = artikel.Naam,
+                    CategorieId = categorieId,
+                    CategorieNaam = categorie.Naam
+                };
+
+                return View(viewModel);
+            }
+            catch (Exception ex)
+            {
+
+                return StatusCode(500, "Er is een interne fout opgetreden.");
+            }
+        }
+
+        // A.1300.Lesley
+        // ArtikelVerwijderenVanCategorie
+        [HttpPost]
+        public async Task<IActionResult> ArtikelVerwijderenVanCategorie(ArtikelCategorieViewModel model)
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    var errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage);
+                    return BadRequest(string.Join(", ", errors));
+                }
+
+                var categorie = await _categorieenService.GetCategorieByIdAsync(model.CategorieId);
+                if (categorie == null)
+                    return BadRequest("Categorie niet gevonden.");
+
+                bool success = await _categorieenService.RemoveArtikelVanCategorieAsync(model.ArtikelId, categorie);
+
+                if (!success)
+                    return BadRequest("Fout bij verwijderen van het artikel uit de categorie.");
+
+
+                return RedirectToAction("Details", new { id = model.CategorieId });
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, "Er is een interne fout opgetreden.");
+            }
+        }
+
+
+
     }
 }

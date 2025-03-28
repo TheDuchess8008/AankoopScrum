@@ -1,0 +1,20 @@
+﻿@model PrulariaAankoopUI.Models.ArtikelCategorieViewModel
+
+@{
+    ViewData["Title"] = "Bevestig Artikel Verwijderen";
+}
+
+
+<h2>Bevestig Verwijderen</h2>
+
+<p>Wil je het artikel <strong>@Model.ArtikelNaam</strong> verwijderen van de categorie <strong>@Model.CategorieNaam</strong>?</p>
+
+
+
+<form asp-action="ArtikelVerwijderenVanCategorie" method="post">
+    <input type="hidden" asp-for="ArtikelId" />
+    <input type="hidden" asp-for="CategorieId" />
+
+    <button type="submit" class="btn huiskleur">Bevestigen</button>
+    <a asp-action="Details" asp-route-id="@Model.ArtikelId" class="btn btn-secondary">Annuleren</a>
+</form>

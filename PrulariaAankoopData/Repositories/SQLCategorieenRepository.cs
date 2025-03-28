@@ -143,4 +143,76 @@ public class SQLCategorieenRepository : ICategorieenRepository
     {
         return await _context.Categorieen.Where(c => c.HoofdCategorieId == null || c.Subcategorieën.Count > 0).ToListAsync();
     }
+
+
+    // A.1500.Lesley
+    // GetOverigeCategorieenAsync
+    public async Task<List<Categorie>> GetOverigeCategorieen2Async(int categorieId)
+    {
+        // Haal alle categorieën inclusief hun subcategorieën en hoofdcategorieën op
+        var lijstCategorieen = await _context.Categorieen
+            .Include(c => c.Subcategorieën)
+            .Include(c => c.HoofdCategorie)
+            .ToListAsync();
+
+
+
+        var lijstCategorieenZonderSubcategorieenEnZonderNietLegeHoofdcategorieen = lijstCategorieen
+        .Where(c => c.HoofdCategorieId != categorieId)
+        .Where(c => !(c.HoofdCategorieId == null && c.Subcategorieën.Any()))
+        .ToList();
+
+
+        return lijstCategorieenZonderSubcategorieenEnZonderNietLegeHoofdcategorieen;
+    }
+
+
+    // A.1500.Lesley
+    // GetCategorieByIdMetHoofdEnSubcategorieenAsync
+    public async Task<Categorie> GetCategorieByIdMetHoofdEnSubcategorieenEnArtikelenAsync(int id)
+    {
+        //return await _context.Categorieen.FindAsync(id);
+        return await _context.Categorieen
+        .Include(c => c.HoofdCategorie)
+        .Include(a => a.Subcategorieën)
+        .Include(b => b.Artikelen)
+        .FirstOrDefaultAsync(m => m.CategorieId == id);
+    }
+
+    // A.1500.Lesley
+    // SaveChangesAsync
+    public async Task<int> SaveChangesAsync()
+    {
+        return await _context.SaveChangesAsync();
+    }
+
+    // A.1500.Lesley
+    // HoofdcategorieIdOpNullZettenAsync
+    public async Task HoofdcategorieIdOpNullZettenAsync(int categorieId)
+    {
+        var categorie = await _context.Categorieen.FirstOrDefaultAsync(c => c.CategorieId == categorieId);
+        if (categorie != null)
+        {
+            categorie.HoofdCategorieId = null;
+            await _context.SaveChangesAsync();
+        }
+    }
+
+
+    // A.1300.Lesley
+    // RemoveArtikelVanCategorieAsync
+    public async Task<bool> RemoveArtikelVanCategorieAsync(Artikel artikel, Categorie categorie)
+    {
+        if (categorie.Artikelen.Remove(artikel))
+        {
+            await _context.SaveChangesAsync();
+            return true;
+        }
+        return false;
+    }
+
+
+
+
+
 }
