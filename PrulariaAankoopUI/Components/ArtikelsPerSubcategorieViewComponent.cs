@@ -58,20 +58,20 @@ namespace PrulariaAankoopUI.Components
 
                 foreach (var sub in subcats.OrderBy(s => s.Naam))
                 {
-                    //var artikelsInSub = await _artikelRepository.GetArtikelsByCategorieIdAsync(sub.CategorieId, zoekterm); // NIEUW
+                    var artikelsInSub = await _artikelRepository.GetArtikelsByCategorieIdAsync(sub.CategorieId, zoekterm); // NIEUW
 
                     // ORIGINEEL (Terugzetten ?)
-                    var artikelsInSub = sub.Artikelen
-                        .Where(a => string.IsNullOrEmpty(zoekterm) ||
-                                    (!string.IsNullOrEmpty(a.Naam) &&
-                                     a.Naam.Contains(zoekterm, StringComparison.OrdinalIgnoreCase)))
-                        .OrderBy(a => a.Naam)
-                        .Select(a => new ArtikelShortViewModel
-                        {
-                            Naam = a.Naam ?? "(Geen naam)",
-                            Beschrijving = a.Beschrijving ?? "(Geen beschrijving)"
-                        })
-                        .ToList();
+                    //var artikelsInSub = sub.Artikelen
+                    //    .Where(a => string.IsNullOrEmpty(zoekterm) ||
+                    //                (!string.IsNullOrEmpty(a.Naam) &&
+                    //                 a.Naam.Contains(zoekterm, StringComparison.OrdinalIgnoreCase)))
+                    //    .OrderBy(a => a.Naam)
+                    //    .Select(a => new ArtikelShortViewModel
+                    //    {
+                    //        Naam = a.Naam ?? "(Geen naam)",
+                    //        Beschrijving = a.Beschrijving ?? "(Geen beschrijving)"
+                    //    })
+                    //    .ToList();
 
                     if (artikelsInSub.Any())
                     {
